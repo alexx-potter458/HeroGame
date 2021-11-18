@@ -9,7 +9,7 @@ public class Launcher {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
         configuration.setIdleFPS(60);
         configuration.useVsync(true);
-        configuration.setTitle("Hero Game 🐤🐥🐣");
+        configuration.setTitle("Hero Game ⚡");
         configuration.setWindowedMode(1920, 1080);
 
         new Lwjgl3Application(new Boot(), configuration);
