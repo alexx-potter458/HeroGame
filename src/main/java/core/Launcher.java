@@ -10,7 +10,11 @@ public class Launcher {
         configuration.setIdleFPS(60);
         configuration.useVsync(true);
         configuration.setTitle("Hero Game ⚡");
-        configuration.setWindowedMode(1920, 1080);
+        if(true) {
+            configuration.setWindowedMode(1920, 1080);
+        } else {
+            configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+        }
 
         new Lwjgl3Application(new Boot(), configuration);
     }
