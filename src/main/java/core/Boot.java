@@ -10,7 +10,6 @@ public class Boot extends Game {
     public static Boot bootInstance;
     private int screenWidth;
     private int screenHeight;
-    private OrthographicCamera camera;
 
     public Boot() {
         bootInstance = this;
@@ -21,7 +20,7 @@ public class Boot extends Game {
         this.screenHeight = Gdx.graphics.getHeight();
         this.screenWidth = Gdx.graphics.getWidth();
 
-        camera = new OrthographicCamera();
+        OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, screenWidth, screenHeight);
 
         setScreen(new StartScreen(camera));

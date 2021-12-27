@@ -14,11 +14,11 @@ import org.lwjgl.opengl.GL20;
 
 public abstract  class Screen extends ScreenAdapter {
 
-    private OrthographicCamera camera;
-    private SpriteBatch batch;
+    protected OrthographicCamera camera;
+    protected SpriteBatch batch;
     private World world;
 
-    private Box2DDebugRenderer box2DDebugRenderer;
+//    private Box2DDebugRenderer box2DDebugRenderer;
 
     public Screen(OrthographicCamera camera) {
         this.camera = camera;
@@ -27,7 +27,7 @@ public abstract  class Screen extends ScreenAdapter {
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0), false);
 
-        this.box2DDebugRenderer = new Box2DDebugRenderer();
+//        this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
     @Override
@@ -42,7 +42,7 @@ public abstract  class Screen extends ScreenAdapter {
         batch.end();
     }
 
-    private void update() {
+    protected void update() {
         world.step(1/60f, 6, 2);
         this.cameraUpdate();
         batch.setProjectionMatrix(camera.combined);
@@ -55,5 +55,9 @@ public abstract  class Screen extends ScreenAdapter {
     private void cameraUpdate() {
         this.camera.position.set(new Vector3(Boot.bootInstance.getScreenWidth() >> 1, Boot.bootInstance.getScreenHeight() >> 1, 0));
         camera.update();
+    }
+
+    public World getWorld() {
+        return world;
     }
 }
