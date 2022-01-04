@@ -6,7 +6,7 @@ public class Constants {
     public static final int FPS = 60;
     public static final boolean vSyncOn = true;
     public static final String gameName = "Hero Game ⚡";
-    public static final int resolutionHeight = 960;
+    public static final int resolutionHeight = 1080;
     public static final int resolutionWidth = 1920;
 
 }
