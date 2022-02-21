@@ -9,4 +9,7 @@ public class Constants {
     public static final int resolutionHeight = 1080;
     public static final int resolutionWidth = 1920;
 
+    public static final String loadingScreenStudioText = "POTTER STUDIOS\n      PRESENTS";
+    public static final String gameTitleCaps = "HERO GAME";
+
 }

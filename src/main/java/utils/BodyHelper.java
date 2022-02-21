@@ -13,22 +13,21 @@ public class BodyHelper {
         else
             bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        bodyDef.fixedRotation = true;
         bodyDef.position.set(x / Constants.PPM, y / Constants.PPM);
+        bodyDef.fixedRotation   = true;
 
-        Body body = world.createBody(bodyDef);
+        Body body               = world.createBody(bodyDef);
+        PolygonShape shape      = new PolygonShape();
 
-        PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2 / Constants.PPM, height / 2 / Constants.PPM);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = density;
+        FixtureDef fixtureDef   = new FixtureDef();
+        fixtureDef.shape        = shape;
+        fixtureDef.density      = density;
 
         body.createFixture(fixtureDef).setUserData(type);
         shape.dispose();
 
         return body;
     }
-
 }
