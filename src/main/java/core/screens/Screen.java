@@ -16,8 +16,7 @@ public abstract  class Screen extends ScreenAdapter {
 
     protected OrthographicCamera camera;
     protected SpriteBatch batch;
-    private World world;
-
+    private final World world;
 //    private Box2DDebugRenderer box2DDebugRenderer;
 
     public Screen(OrthographicCamera camera) {
@@ -38,14 +37,13 @@ public abstract  class Screen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-
         batch.end();
     }
 
     protected void update() {
-        world.step(1/60f, 6, 2);
+        this.world.step(1/60f, 6, 2);
         this.cameraUpdate();
-        batch.setProjectionMatrix(camera.combined);
+        this.batch.setProjectionMatrix(camera.combined);
 
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();

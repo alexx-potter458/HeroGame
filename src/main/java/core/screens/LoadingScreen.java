@@ -53,7 +53,7 @@ public class LoadingScreen extends Screen {
             banner.moveY(1);
         }
 
-        if(this.timer == 600) {
+        if(this.timer == 500) {
             Boot.bootInstance.setScreen(new StartScreen(this.camera, this.banner.getY()));
         }
     }

@@ -2,22 +2,17 @@ package core.screens;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import objects.Cloud;
+import objects.Clouds;
 import objects.TextBox;
 import utils.Constants;
 
 public class StartScreen extends Screen {
-
-    private final Cloud[] clouds;
-    private TextBox banner;
+    private final Clouds clouds;
+    private final TextBox banner;
 
     public StartScreen(OrthographicCamera camera) {
         super(camera);
-        this.clouds = new Cloud[4];
-        this.clouds[0] = new Cloud(this);
-        this.clouds[1] = new Cloud(this);
-        this.clouds[2] = new Cloud(this);
-        this.clouds[3] = new Cloud(this);
+        this.clouds = new Clouds(this);
         this.banner = new TextBox(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
     }
 
@@ -29,20 +24,18 @@ public class StartScreen extends Screen {
     @Override
     protected void update() {
         super.update();
-        banner.update();
-        for(Cloud cloud: clouds)
-            cloud.update();
+        this.clouds.update();
+        this.banner.update();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         this.batch.begin();
-        banner.render(this.batch);
 
-        for(Cloud cloud: clouds)
-            cloud.render(this.batch);
+        this.clouds.render(this.batch);
+        this.banner.render(this.batch);
+
         this.batch.end();
-
     }
 }
