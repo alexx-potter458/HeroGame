@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="60" tileheight="60" infinite="0" nextlayerid="2" nextobjectid="1">
- <tileset firstgid="1" source="../../tiles/tiles.tsx"/>
- <layer id="1" name="backgound" width="32" height="18">
-  <data encoding="base64" compression="zlib">
-   eJzVkoEJgDAMBAu6gtOJy3SVjtC53EEEhff5tFFbwYcnNpVcEg3BVizc9VQUMcI5HWapXCu+4qRK7g0f58Xnr/gqIos5vfn8/ZnVg29JcVux/6IUrv8BnzO9nyFmcb+CPWwrh3xmqr6Y7emBZ7b4VizNfoevevHsX+nO/hUP41Lhqx3smpxsq59dI1jxS/LwZ/ApZA7gUfgJ/2SpesysmXuwar7l1HpoXfOpN5S2THw=
-  </data>
- </layer>
-</map>

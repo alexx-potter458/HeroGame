@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="32" height="18" tilewidth="60" tileheight="60" infinite="0" nextlayerid="6" nextobjectid="15">
+ <tileset firstgid="1" source="../../tiles/tiles.tsx"/>
+ <objectgroup id="4" name="ground">
+  <object id="14" x="1918.08" y="955.966">
+   <polygon points="0,0 3.07384,-1.53692 1.92115,124.034 -1918.08,124.034 -1918.08,4.03442"/>
+  </object>
+ </objectgroup>
+ <layer id="5" name="grass" width="32" height="18">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIKhAzjw4JFg/0CDgfb/QNtPTTDQ7mcZYIzsd+YBwACRcQHw
+  </data>
+ </layer>
+</map>
