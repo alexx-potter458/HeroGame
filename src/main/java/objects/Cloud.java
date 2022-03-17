@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import core.screens.Screen;
-
 import utils.BodyHelper;
-import utils.Constants;
+import utils.Config;
 import utils.ObjectType;
 import core.Boot;
 
@@ -32,12 +31,12 @@ public class Cloud {
     }
 
     public void update() {
-        this.x = body.getPosition().x * Constants.PPM - (width >> 1);
-        this.y = body.getPosition().y * Constants.PPM - (height >> 1);
+        this.x = body.getPosition().x * Config.PPM - (width >> 1);
+        this.y = body.getPosition().y * Config.PPM - (height >> 1);
         this.body.setLinearVelocity( speedX,  0);
 
         if(x < -250) {
-            this.body.setTransform((Boot.bootInstance.getScreenWidth()) / Constants.PPM, getRandomCloudY() / Constants.PPM, 0);
+            this.body.setTransform((Boot.bootInstance.getScreenWidth()) / Config.PPM, getRandomCloudY() / Config.PPM, 0);
             this.speedX = getRandomCloudSpeed();
             this.setOpacity(0f);
         }

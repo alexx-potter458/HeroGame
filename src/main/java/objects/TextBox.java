@@ -46,6 +46,9 @@ public class TextBox {
         this.width  = layout.width / 2;
         this.height = layout.height / 2;
     }
+    public String getText() {
+        return this.text;
+    }
 
     public void setFontOpacity(double value) {
         Color rgba = new Color(1f,1f,1f, (float) value);
@@ -81,6 +84,14 @@ public class TextBox {
 
     public void setY(int value) {
          this.y = value;
+    }
+
+    public float getWidth() {
+        return this.width;
+    }
+
+    public  float getHeight() {
+        return this.height;
     }
 
 }

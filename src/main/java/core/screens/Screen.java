@@ -11,13 +11,14 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import core.Boot;
 import org.lwjgl.opengl.GL20;
+import utils.Config;
 
 public abstract  class Screen extends ScreenAdapter {
 
     protected OrthographicCamera camera;
     protected SpriteBatch batch;
     private final World world;
-//    private Box2DDebugRenderer box2DDebugRenderer;
+    private Box2DDebugRenderer box2DDebugRenderer;
 
     public Screen(OrthographicCamera camera) {
         this.camera = camera;
@@ -26,7 +27,7 @@ public abstract  class Screen extends ScreenAdapter {
         this.batch = new SpriteBatch();
         this.world = new World(new Vector2(0,0), false);
 
-//        this.box2DDebugRenderer = new Box2DDebugRenderer();
+        this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
     @Override
@@ -38,6 +39,7 @@ public abstract  class Screen extends ScreenAdapter {
 
         batch.begin();
         batch.end();
+        box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
     }
 
     protected void update() {

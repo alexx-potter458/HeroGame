@@ -13,13 +13,13 @@ public class BodyHelper {
         else
             bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        bodyDef.position.set(x / Constants.PPM, y / Constants.PPM);
+        bodyDef.position.set(x / Config.PPM, y / Config.PPM);
         bodyDef.fixedRotation   = true;
 
         Body body               = world.createBody(bodyDef);
         PolygonShape shape      = new PolygonShape();
 
-        shape.setAsBox(width / 2 / Constants.PPM, height / 2 / Constants.PPM);
+        shape.setAsBox(width / 2 / Config.PPM, height / 2 / Config.PPM);
 
         FixtureDef fixtureDef   = new FixtureDef();
         fixtureDef.shape        = shape;

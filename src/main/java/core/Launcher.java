@@ -4,6 +4,8 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import core.Database.Settings;
 import utils.Constants;
+import utils.Config;
+
 
 public class Launcher {
 
@@ -12,13 +14,13 @@ public class Launcher {
         set.loadSettings();
 
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setIdleFPS(Constants.FPS);
-        configuration.useVsync(Constants.vSyncOn);
+        configuration.setIdleFPS(Config.FPS);
+        configuration.useVsync(Config.vSyncOn);
         configuration.setTitle(Constants.gameName);
 
 
-        if(Constants.isWindow)
-            configuration.setWindowedMode(Constants.resolutionWidth, Constants.resolutionHeight);
+        if(Config.isWindow)
+            configuration.setWindowedMode(Config.resolutionWidth, Config.resolutionHeight);
         else
             configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 

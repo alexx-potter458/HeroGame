@@ -1,7 +1,6 @@
 package core.Database;
 
-import utils.Constants;
-
+import utils.Config;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +17,7 @@ public class Settings extends Database {
                 String name = rs.getString("name");
                 String value = rs.getString("value");
                 if(name.equals("isWindow"))
-                    Constants.isWindow = Boolean.parseBoolean(value);
+                    Config.isWindow = Boolean.parseBoolean(value);
             }
         } catch (SQLException e) {
             e.printStackTrace();
