@@ -11,8 +11,9 @@ public class TileMapHelper {
 
     }
 
-    public OrthogonalTiledMapRenderer setupMap() {
-        tiledMap = new TmxMapLoader().load("maps/startScreen/map.tmx");
+    public OrthogonalTiledMapRenderer setupMap(String path) {
+        this.tiledMap = new TmxMapLoader().load("maps/" + path + ".tmx");
         return new OrthogonalTiledMapRenderer(tiledMap);
     }
+
 }

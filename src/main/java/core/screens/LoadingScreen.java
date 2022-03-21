@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
 import objects.TextBox;
 import org.lwjgl.opengl.GL20;
+import utils.Config;
 import utils.Constants;
 
 public class LoadingScreen extends Screen {
@@ -49,7 +50,10 @@ public class LoadingScreen extends Screen {
         }
 
         if(timer > 250 && timer <= 450) {
-            this.backgroundColor.add(0.685f/255f,1.035f/255f, 1.2f/255f,0);
+            if(Config.time.equals(Constants.dayValue))
+                this.backgroundColor.add(0.685f/255f,1.035f/255f, 1.2f/255f,0);
+            else
+                this.backgroundColor.add(0.055f/255f,0.08f/255f, 0.19f/255f,0);
             banner.moveY(1);
         }
 

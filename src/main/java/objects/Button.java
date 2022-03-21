@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
-
 import core.Boot;
 import core.screens.Screen;
 import utils.BodyHelper;
@@ -13,11 +12,10 @@ import utils.Config;
 import utils.ObjectType;
 
 public class Button {
-    private final Body body;
     private Texture texture;
     private final Texture notPressedTexture;
     private final Texture pressedTexture;
-    private TextBox text;
+    private final TextBox text;
     private float x;
     private float y;
     private final float width;
@@ -29,7 +27,7 @@ public class Button {
         this.height  = 64;
         this.x = x;
         this.y = y;
-        this.body    = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
         this.notPressedTexture = new Texture("textures/button.png");
         this.pressedTexture = new Texture("textures/pressedButton.png");
         this.texture = this.notPressedTexture;
@@ -39,13 +37,9 @@ public class Button {
     }
 
     public void update() {
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) &&
-                (Gdx.input.getY() <= (Boot.bootInstance.getScreenHeight() - this.y) &&
-                        Gdx.input.getY() >= (Boot.bootInstance.getScreenHeight() -(this.y + this.height))) &&
-                (Gdx.input.getX() <=  (this.x + this.width) && Gdx.input.getX() >= this.x)) {
+        if(this.verifyButtonPressed()) {
             this.texture = this.pressedTexture;
-        }
-        else {
+        } else {
             this.texture = this.notPressedTexture;
         }
     }
@@ -55,4 +49,29 @@ public class Button {
         this.text.render(batch);
     }
 
+    private boolean verifyButtonPressed() {
+        return Gdx.input.isButtonPressed(Input.Buttons.LEFT) &&
+                (Gdx.input.getY() <= (Boot.bootInstance.getScreenHeight() - this.y) &&
+                (Gdx.input.getY() >= (Boot.bootInstance.getScreenHeight() - (this.y + this.height)))) &&
+                (Gdx.input.getX() <=  (this.x + this.width) && Gdx.input.getX() >= this.x);
+    }
+
+    private boolean verifyButtonJustPressed() {
+        return Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) &&
+                (Gdx.input.getY() <= (Boot.bootInstance.getScreenHeight() - this.y) &&
+                (Gdx.input.getY() >= (Boot.bootInstance.getScreenHeight() - (this.y + this.height)))) &&
+                (Gdx.input.getX() <=  (this.x + this.width) && Gdx.input.getX() >= this.x);
+    }
+
+    public boolean isPressed() {
+        return this.verifyButtonPressed();
+    }
+
+    public boolean isJustPressed() {
+        return this.verifyButtonJustPressed();
+    }
+
+    public void changeText(String newText) {
+        this.text.setText(newText);
+    }
 }
