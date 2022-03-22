@@ -1,7 +1,7 @@
 package objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import core.screens.Screen;
+import core.Screen.Screen;
 
 public class Clouds {
     private final Cloud[] clouds;

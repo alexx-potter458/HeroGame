@@ -1,4 +1,4 @@
-package core.screens;
+package core.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -49,7 +49,7 @@ public abstract  class Screen extends ScreenAdapter {
 
         this.batch.begin();
         this.batch.end();
-        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
+//        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
     }
 
     protected void update() {

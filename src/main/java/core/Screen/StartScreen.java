@@ -1,4 +1,4 @@
-package core.screens;
+package core.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,7 +10,7 @@ import utils.Constants;
 
 public class StartScreen extends Screen {
     private final Clouds clouds;
-    private final TextBox banner;
+    private final TextBox pageTitle;
     private final Button startButton;
     private final Button settingsButton;
     private final Button controlsButton;
@@ -19,24 +19,24 @@ public class StartScreen extends Screen {
     public StartScreen(OrthographicCamera camera) {
         super(camera, "startScreen/map");
         this.clouds         = new Clouds(this);
-        this.banner         = new TextBox(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
+        this.pageTitle = new TextBox(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
         this.startButton    = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
         this.settingsButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
         this.controlsButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
         this.quitButton     = new Button(this, 144, 160, Constants.quitButton);
-        this.banner.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
+        this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
     }
 
     public StartScreen(OrthographicCamera camera, int bannerY) {
         this(camera);
-        this.banner.setY(bannerY);
+        this.pageTitle.setY(bannerY);
     }
 
     @Override
     protected void update() {
         super.update();
         this.clouds.update();
-        this.banner.update();
+        this.pageTitle.update();
         this.startButton.update();
         this.settingsButton.update();
         this.controlsButton.update();
@@ -55,7 +55,7 @@ public class StartScreen extends Screen {
 
         this.batch.begin();
         this.clouds.render(this.batch);
-        this.banner.render(this.batch);
+        this.pageTitle.render(this.batch);
         this.startButton.render(this.batch);
         this.settingsButton.render(this.batch);
         this.controlsButton.render(this.batch);

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import core.Boot;
-import core.screens.Screen;
+import core.Screen.Screen;
 import utils.BodyHelper;
 import utils.Config;
 import utils.ObjectType;
