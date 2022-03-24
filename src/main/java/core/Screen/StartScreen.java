@@ -47,7 +47,13 @@ public class StartScreen extends Screen {
 
         if(this.settingsButton.isJustPressed())
             Boot.bootInstance.setScreen(new SettingsScreen(this.camera));
+
+        if(this.startButton.isJustPressed())
+            Boot.bootInstance.setScreen(new NewUserScreen(this.camera));
+
     }
+
+
 
     @Override
     public void render(float delta) {
