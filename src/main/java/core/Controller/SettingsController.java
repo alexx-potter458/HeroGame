@@ -1,6 +1,7 @@
 package core.Controller;
 
 import core.Database.SettingsDatabase;
+import objects.User;
 import utils.Config;
 import utils.Constants;
 
@@ -8,8 +9,11 @@ public class SettingsController {
     public void loadSettings() {
         SettingsDatabase settings = new SettingsDatabase();
         settings.loadSettings();
-        this.changeBackground();
 
+        UserController user = new UserController();
+        user.loadUser();
+
+        this.changeBackground();
     }
 
     private void changeBackground() {

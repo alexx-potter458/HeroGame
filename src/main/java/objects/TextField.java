@@ -9,12 +9,12 @@ import core.Boot;
 import core.Screen.Screen;
 import utils.BodyHelper;
 import utils.Config;
+import utils.KeyListener;
 import utils.ObjectType;
 
 public class TextField {
 
     private Texture texture;
-    private final Texture notPressedTexture;
     private final Texture pressedTexture;
     private final TextBox text;
     private float x;
@@ -22,18 +22,20 @@ public class TextField {
     private final float width;
     private final float height;
     private boolean writingActive;
+    private final KeyListener keys;
 
     public TextField(Screen screen, int x, int y) {
         this.text = new TextBox("", x, y, 'm');
         writingActive = false;
-        this.width   = 256;
+        this.width   = 360;
         this.height  = 64;
         this.x = x;
         this.y = y;
         Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
-        this.notPressedTexture = new Texture("textures/textFieldNotPressed.png");
+        Texture notPressedTexture = new Texture("textures/textFieldNotPressed.png");
         this.pressedTexture = new Texture("textures/textFieldPressed.png");
-        this.texture = this.notPressedTexture;
+        this.texture = notPressedTexture;
+        this.keys = new KeyListener();
 
         this.x = body.getPosition().x * Config.PPM - (width /2);
         this.y = body.getPosition().y * Config.PPM - (height /2);
@@ -46,7 +48,13 @@ public class TextField {
         }
 
         if(writingActive) {
-            Gdx.input.isKeyPressed(Input.Keys.ANY_KEY);
+            char c = keys.keyPressed();
+            if(c!='`') {
+                text.addChar(c);
+            }
+
+            if(Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE))
+                text.removeLastChar();
         }
     }
 
@@ -64,6 +72,10 @@ public class TextField {
 
     public boolean isJustPressed() {
         return this.verifyButtonJustPressed();
+    }
+
+    public String getText() {
+        return this.text.getText();
     }
 
 }

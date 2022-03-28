@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.Boot;
+import org.apache.commons.lang3.StringUtils;
 
 public class TextBox {
     private BitmapFont font;
@@ -12,7 +13,7 @@ public class TextBox {
     private String text;
     private float width;
     private float height;
-    private int x;
+    private final int x;
     private int y;
 
     public TextBox(String text, int x, int y, char size) {
@@ -34,10 +35,6 @@ public class TextBox {
 
     public void moveY(int value) {
         this.y += value;
-    }
-
-    public void moveX(int value) {
-        this.x += value;
     }
 
     public void setText(String value) {
@@ -86,12 +83,12 @@ public class TextBox {
          this.y = value;
     }
 
-    public float getWidth() {
-        return this.width;
+    public void addChar(char c) {
+        this.setText(this.getText() + c);
     }
 
-    public  float getHeight() {
-        return this.height;
+    public void removeLastChar() {
+         this.setText(StringUtils.chop(this.getText()));
     }
 
 }

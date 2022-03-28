@@ -6,6 +6,7 @@ import core.Boot;
 import objects.Button;
 import objects.Clouds;
 import objects.TextBox;
+import objects.User;
 import utils.Constants;
 
 public class StartScreen extends Screen {
@@ -48,8 +49,12 @@ public class StartScreen extends Screen {
         if(this.settingsButton.isJustPressed())
             Boot.bootInstance.setScreen(new SettingsScreen(this.camera));
 
-        if(this.startButton.isJustPressed())
-            Boot.bootInstance.setScreen(new NewUserScreen(this.camera));
+        if(this.startButton.isJustPressed()) {
+            if(!User.user.isFirstTime())
+                Boot.bootInstance.setScreen(new NewUserScreen(this.camera));
+            else
+                Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
+        }
 
     }
 

@@ -1,9 +1,8 @@
 package core.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import core.Boot;
+import core.Controller.UserController;
 import objects.Button;
 import objects.TextBox;
 import objects.TextField;
@@ -14,7 +13,7 @@ public class NewUserScreen extends Screen {
     private final Button createUserButton;
     private final TextBox pageTitle;
     private final  TextBox nicknameLabel;
-    private TextField nicknameField;
+    private final TextField nicknameField;
 
     public NewUserScreen(OrthographicCamera camera) {
         super(camera,"startScreen/map");
@@ -38,8 +37,15 @@ public class NewUserScreen extends Screen {
         if(this.backButton.isJustPressed())
             Boot.bootInstance.setScreen(new StartScreen(this.camera));
 
-        if(this.createUserButton.isJustPressed())
-            Boot.bootInstance.setScreen(new StartScreen(this.camera));
+        if(this.createUserButton.isJustPressed()) {
+            UserController user = new UserController();
+            if(!nicknameField.getText().equals("")) {
+                user.createUser(nicknameField.getText());
+                Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
+            }
+
+
+        }
     }
 
     @Override
