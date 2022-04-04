@@ -12,6 +12,7 @@ import utils.Constants;
 public class StartScreen extends Screen {
     private final Clouds clouds;
     private final TextBox pageTitle;
+    private final TextBox greetingsBanner;
     private final Button startButton;
     private final Button settingsButton;
     private final Button controlsButton;
@@ -26,6 +27,11 @@ public class StartScreen extends Screen {
         this.controlsButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
         this.quitButton     = new Button(this, 144, 160, Constants.quitButton);
         this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
+        String greetingMessage = "";
+        if(!User.user.isFirstTime()) {
+            greetingMessage = "Hello, " + User.user.getNickname();
+        }
+        this.greetingsBanner = new TextBox(greetingMessage, 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
     }
 
     public StartScreen(OrthographicCamera camera, int bannerY) {
@@ -37,6 +43,7 @@ public class StartScreen extends Screen {
     protected void update() {
         super.update();
         this.clouds.update();
+        this.greetingsBanner.update();
         this.pageTitle.update();
         this.startButton.update();
         this.settingsButton.update();
@@ -50,15 +57,12 @@ public class StartScreen extends Screen {
             Boot.bootInstance.setScreen(new SettingsScreen(this.camera));
 
         if(this.startButton.isJustPressed()) {
-            if(!User.user.isFirstTime())
+            if(User.user.isFirstTime())
                 Boot.bootInstance.setScreen(new NewUserScreen(this.camera));
             else
                 Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
         }
-
     }
-
-
 
     @Override
     public void render(float delta) {
@@ -66,6 +70,7 @@ public class StartScreen extends Screen {
 
         this.batch.begin();
         this.clouds.render(this.batch);
+        this.greetingsBanner.render(this.batch);
         this.pageTitle.render(this.batch);
         this.startButton.render(this.batch);
         this.settingsButton.render(this.batch);

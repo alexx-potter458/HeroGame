@@ -8,7 +8,7 @@ public class UserController {
         UserDatabase userDatabase = new UserDatabase();
         boolean userCreated = userDatabase.loadUser();
         if(!userCreated) {
-            User noUser = new User(0,"", 0, 0, 0, 1);
+            new User(0,"", 0, 0, 0, 1);
         }
     }
 
@@ -16,5 +16,11 @@ public class UserController {
         UserDatabase userDatabase = new UserDatabase();
         userDatabase.createUser(nickname);
         this.loadUser();
+    }
+
+    public void deleteUser() {
+        UserDatabase userDatabase = new UserDatabase();
+        userDatabase.deleteAllUsers();
+        new User(0,"", 0, 0, 0, 1);
     }
 }

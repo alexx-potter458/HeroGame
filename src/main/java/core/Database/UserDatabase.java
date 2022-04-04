@@ -9,37 +9,57 @@ import java.sql.Statement;
 public class UserDatabase extends Database {
 
     public boolean loadUser() {
-        Connection conn = this.connect();
-        User user;
+        try(Connection conn = this.connect()) {
+            try(Statement stm = conn.createStatement()) {
 
-        try {
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * from user LIMIT 1;");
-            if (rs.next()) {
-                new User(   rs.getInt("id"),
+                ResultSet rs = stm.executeQuery("SELECT * from user ORDER BY id DESC LIMIT 1;");
+                if (rs.next()) {
+                    new User(   rs.getInt("id"),
                             rs.getString("nickname"),
                             rs.getInt("money"),
                             rs.getInt("level"),
                             rs.getInt("score"),
                             rs.getInt("firstTime"));
-                return true;
+                    return true;
+                }
+
+                rs.close();
+                return false;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
             }
 
-            conn.close();
-            return false;
-        } catch (SQLException e) {
+        }   catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
     public void createUser(String nickname) {
-        String query = "INSERT INTO user(nickname, firstTime) VALUES('" + nickname + "', 0)";
-        Connection conn = this.connect();
-        try {
-            Statement stm = conn.createStatement();
-            stm.executeUpdate(query);
-            conn.close();
+        String query = "INSERT INTO user(nickname, money, firstTime) VALUES('" + nickname + "', 100, 0)";
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAllUsers() {
+        String query = "DELETE FROM user;";
+
+        try(Connection conn = this.connect()) {
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
