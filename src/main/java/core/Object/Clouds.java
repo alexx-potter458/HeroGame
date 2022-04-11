@@ -1,4 +1,4 @@
-package objects;
+package core.Object;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.Screen.Screen;

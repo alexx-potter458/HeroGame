@@ -1,4 +1,4 @@
-package objects;
+package core.Object;
 
 
 import com.badlogic.gdx.graphics.Texture;
@@ -24,9 +24,9 @@ public class Character {
         this.width   = 160;
         this.height  = 170;
         Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
-        this.stationary = new Texture("textures/characters/stationary/stitch.png");
-        this.ready = new Texture("textures/characters/stationary/stitch.png");
-        this.running = new Texture("textures/characters/stationary/stitch.png");
+        this.stationary = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.ready = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.running = new Texture("textures/characters/stitch/stationary/stitch.png");
         this.texture = this.stationary;
     }
 

@@ -2,9 +2,9 @@ package core.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import objects.Button;
-import objects.TextBox;
-import objects.User;
+import core.Object.Button;
+import core.Object.TextBox;
+import core.Model.User;
 import utils.Constants;
 
 public class StoreScreen extends Screen {
@@ -39,11 +39,11 @@ public class StoreScreen extends Screen {
             Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
 
         if(this.heroButton.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreCategoryScreen(this.camera, Constants.heroes));
+            Boot.bootInstance.setScreen(new StoreHeroScreen(this.camera));
         if(this.spellButton.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreCategoryScreen(this.camera, Constants.spells));
+            Boot.bootInstance.setScreen(new StoreSpellScreen(this.camera));
         if(this.heroPowerButton.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreCategoryScreen(this.camera, Constants.powers));
+            Boot.bootInstance.setScreen(new StorePowerScreen(this.camera));
     }
 
     @Override

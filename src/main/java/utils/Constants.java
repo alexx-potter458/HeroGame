@@ -18,7 +18,10 @@ public class Constants {
     public static final String settingsButton = "Settings";
     public static final String controlsButton = "Controls";
     public static final String quitButton = "Quit";
+    public static final String upButton = "Up";
+    public static final String downButton = "Down";
     public static final String backButton = "Back";
+
     public static final String storeButtonLabel = "Store";
     public static final String charButtonLabel = "Your hero";
     public static final String heroesLabel = "Heroes";
@@ -41,6 +44,5 @@ public class Constants {
     public static final String heroes = "heroes";
     public static final String spells = "spells";
     public static final String powers = "powers";
-
 
 }

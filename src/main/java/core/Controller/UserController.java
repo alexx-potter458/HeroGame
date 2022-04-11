@@ -1,7 +1,7 @@
 package core.Controller;
 
 import core.Database.UserDatabase;
-import objects.User;
+import core.Model.User;
 
 public class UserController {
     public void loadUser() {

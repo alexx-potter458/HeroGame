@@ -1,7 +1,6 @@
 package core.Controller;
 
 import core.Database.SettingsDatabase;
-import objects.User;
 import utils.Config;
 import utils.Constants;
 

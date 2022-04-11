@@ -3,10 +3,10 @@ package core.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
 import core.Controller.UserController;
-import objects.Button;
-import objects.Character;
-import objects.TextBox;
-import objects.User;
+import core.Object.Button;
+import core.Object.Character;
+import core.Object.TextBox;
+import core.Model.User;
 import utils.Constants;
 
 public class LobbyScreen extends Screen {
@@ -19,7 +19,7 @@ public class LobbyScreen extends Screen {
     private final TextBox pageTitle;
     private final Button charButton;
     private final Button storeButton;
-    private final Character hero;
+    private final Character character;
 
 
     public LobbyScreen(OrthographicCamera camera) {
@@ -30,7 +30,7 @@ public class LobbyScreen extends Screen {
         this.levelsButton   = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2 - 80) , Constants.newUserButton);
         this.charButton     = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.charButtonLabel);
         this.storeButton    = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.storeButtonLabel);
-        this.hero           = new Character(this, Boot.bootInstance.getScreenWidth()/2 - 80, Boot.bootInstance.getScreenHeight()/2 + 86);
+        this.character = new Character(this, Boot.bootInstance.getScreenWidth()/2 - 80, Boot.bootInstance.getScreenHeight()/2 + 86);
         this.moneyBanner = new TextBox(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.levelBanner = new TextBox(Constants.levelBannerLabel + User.user.getLevel() , 256,  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.scoreBanner = new TextBox(Constants.scoreBannerLabel + User.user.getScore(), 256,  (Boot.bootInstance.getScreenHeight()) - 240, 'm');
@@ -48,7 +48,7 @@ public class LobbyScreen extends Screen {
         this.pageTitle.update();
         this.charButton.update();
         this.storeButton.update();
-        this.hero.update();
+        this.character.update();
 
         if(this.backButton.isJustPressed())
             Boot.bootInstance.setScreen(new StartScreen(this.camera));
@@ -72,7 +72,7 @@ public class LobbyScreen extends Screen {
         super.render(delta);
         this.batch.begin();
         this.levelsButton.render(this.batch);
-        this.hero.render(this.batch);
+        this.character.render(this.batch);
         this.moneyBanner.render(this.batch);
         this.levelBanner.render(this.batch);
         this.scoreBanner.render(this.batch);

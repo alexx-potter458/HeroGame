@@ -1,6 +1,6 @@
 package core.Database;
 
-import objects.User;
+import core.Model.User;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

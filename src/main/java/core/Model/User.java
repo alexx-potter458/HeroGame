@@ -1,4 +1,4 @@
-package objects;
+package core.Model;
 
 public class User {
     public static User user;

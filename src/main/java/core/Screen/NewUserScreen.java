@@ -3,9 +3,9 @@ package core.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
 import core.Controller.UserController;
-import objects.Button;
-import objects.TextBox;
-import objects.TextField;
+import core.Object.Button;
+import core.Object.TextBox;
+import core.Object.TextField;
 import utils.Constants;
 
 public class NewUserScreen extends Screen {

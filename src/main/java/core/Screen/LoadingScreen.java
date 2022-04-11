@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import objects.TextBox;
+import core.Object.TextBox;
 import org.lwjgl.opengl.GL20;
 import utils.Config;
 import utils.Constants;

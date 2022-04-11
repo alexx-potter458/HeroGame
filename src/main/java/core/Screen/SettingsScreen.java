@@ -3,8 +3,8 @@ package core.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
 import core.Controller.SettingsController;
-import objects.Button;
-import objects.TextBox;
+import core.Object.Button;
+import core.Object.TextBox;
 import utils.Config;
 import utils.Constants;
 

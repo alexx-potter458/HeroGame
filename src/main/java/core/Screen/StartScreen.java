@@ -3,10 +3,10 @@ package core.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import objects.Button;
-import objects.Clouds;
-import objects.TextBox;
-import objects.User;
+import core.Object.Button;
+import core.Object.Clouds;
+import core.Object.TextBox;
+import core.Model.User;
 import utils.Constants;
 
 public class StartScreen extends Screen {
