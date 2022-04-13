@@ -25,7 +25,8 @@ public class HeroDatabase extends Database {
                             rs.getInt("price"),
                             rs.getInt("speed"),
                             rs.getInt("hitPower"),
-                            rs.getInt("jumpPower")));
+                            rs.getInt("jumpPower"),
+                            rs.getString("description")));
                 }
 
                 rs.close();

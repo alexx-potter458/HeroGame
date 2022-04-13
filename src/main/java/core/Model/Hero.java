@@ -11,18 +11,20 @@ public class Hero {
     private int speed;
     private int hitPower;
     private  int jumpPower;
+    private String description;
 
-    public Hero(int id, String name, String nameSlug, int baseHealth, int width, int height, int price, int speed, int hitPower, int jumpPower) {
+    public Hero(int id, String name, String nameSlug, int baseHealth, int width, int height, int price, int speed, int hitPower, int jumpPower, String description) {
         this.id = id;
         this.name = name;
         this.nameSlug = nameSlug;
         this.baseHealth = baseHealth;
         this.width = width;
         this.height = height;
-        this.price = height;
+        this.price = price;
         this.speed = speed;
         this.hitPower = hitPower;
         this.jumpPower = jumpPower;
+        this.description = description;
     }
 
     public int getId() {
@@ -97,6 +99,38 @@ public class Hero {
         this.jumpPower = jumpPower;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", nameSlug='" + nameSlug + '\'' +
+                ", baseHealth=" + baseHealth +
+                ", width=" + width +
+                ", height=" + height +
+                ", price=" + price +
+                ", speed=" + speed +
+                ", hitPower=" + hitPower +
+                ", jumpPower=" + jumpPower +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
 
 

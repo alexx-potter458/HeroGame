@@ -4,6 +4,7 @@ package core.Object;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
+import core.Model.Hero;
 import core.Screen.Screen;
 import utils.BodyHelper;
 import utils.ObjectType;
@@ -23,6 +24,19 @@ public class Character {
         this.y = y;
         this.width   = 160;
         this.height  = 170;
+        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        this.stationary = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.ready = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.running = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.texture = this.stationary;
+    }
+
+    public Character(Screen screen, Hero hero, int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.width = hero.getWidth();
+        this.height = hero.getHeight();
+
         Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
         this.stationary = new Texture("textures/characters/stitch/stationary/stitch.png");
         this.ready = new Texture("textures/characters/stitch/stationary/stitch.png");

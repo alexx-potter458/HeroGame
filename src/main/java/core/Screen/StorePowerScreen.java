@@ -6,6 +6,7 @@ import core.Controller.HeroController;
 import core.Model.Hero;
 import core.Model.User;
 import core.Object.Button;
+import core.Object.Character;
 import core.Object.TextBox;
 import utils.Constants;
 
@@ -25,7 +26,7 @@ public class StorePowerScreen extends Screen {
         this.downButton     = new Button(this, (Boot.bootInstance.getScreenWidth()/2), 256, Constants.downButton);
         this.backButton     = new Button(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.heroButtons    = new ArrayList<>();
-        this.upButton       = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 256, Constants.upButton);
+        this.upButton       = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
         this.pageTitle      = new TextBox(Constants.PowersScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.moneyBanner = new TextBox(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.heroes = (new HeroController().getAllHeroes());

@@ -20,6 +20,7 @@ public class Constants {
     public static final String quitButton = "Quit";
     public static final String upButton = "Up";
     public static final String downButton = "Down";
+    public static final String buyButton = "Buy";
     public static final String backButton = "Back";
 
     public static final String storeButtonLabel = "Store";
