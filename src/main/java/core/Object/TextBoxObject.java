@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.Boot;
 import org.apache.commons.lang3.StringUtils;
 
-public class TextBox {
+public class TextBoxObject {
     private BitmapFont font;
     private final GlyphLayout layout;
     private String text;
@@ -16,7 +16,7 @@ public class TextBox {
     private final int x;
     private int y;
 
-    public TextBox(String text, int x, int y, char size) {
+    public TextBoxObject(String text, int x, int y, char size) {
         this.setFontSize(size);
         this.text   = text;
         this.x      = x;

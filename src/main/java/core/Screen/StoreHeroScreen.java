@@ -5,97 +5,99 @@ import core.Boot;
 import core.Controller.HeroController;
 import core.Model.Hero;
 import core.Model.User;
-import core.Object.Button;
-import core.Object.Character;
-import core.Object.TextBox;
+import core.Object.ButtonObject;
+import core.Object.HeroObject;
+import core.Object.TextBoxObject;
 import utils.Constants;
 
 import java.util.ArrayList;
 
 public class StoreHeroScreen extends Screen {
-    private final Button backButton;
-    private final Button upButton;
-    private final ArrayList<Button> heroButtons;
-    private final Button downButton;
-    private final TextBox pageTitle;
-    private TextBox moneyBanner;
+    private final ButtonObject backButtonObject;
+    private final ButtonObject upButtonObject;
+    private final ArrayList<ButtonObject> heroButtonObjects;
+    private final ButtonObject downButtonObject;
+    private final TextBoxObject pageTitle;
+    private final TextBoxObject moneyBanner;
     ArrayList<Hero> heroes;
     private int heroArrayIndex;
     private int selectedHeroIndex;
-    private Character selectedCharacter;
+    private HeroObject selectedHeroObject;
     private Hero selectedHero;
-    private TextBox heroDescription;
-    private TextBox heroName;
-    private Button buyButton;
+    private TextBoxObject heroDescription;
+    private TextBoxObject heroName;
+    private ButtonObject buyButtonObject;
 
 
 
     public StoreHeroScreen(OrthographicCamera camera) {
         super(camera,"storeCategoryScreen/map");
-        this.downButton     = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
-        this.backButton     = new Button(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
-        this.heroButtons    = new ArrayList<>();
-        this.upButton       = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
-        this.pageTitle      = new TextBox(Constants.HeroesScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.moneyBanner = new TextBox(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
+        this.downButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
+        this.backButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.heroButtonObjects = new ArrayList<>();
+        this.upButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
+        this.pageTitle      = new TextBoxObject(Constants.HeroesScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
+        this.moneyBanner = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.heroes = (new HeroController().getAllHeroes());
         this.selectedHeroIndex = -1;
-        for(int i = 0; i < 5; i++) {
-            heroButtons.add(new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
+        for(int i = 0; i < Math.min(heroes.size(), 5); i++) {
+            heroButtonObjects.add(new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
         }
 
-        heroArrayIndex = 0;
-        for(int i = heroArrayIndex; i < (Math.min(heroes.size(), 5)); i++) {
-            heroButtons.get(i).changeText(heroes.get(i).getName());
+        this.heroArrayIndex = 0;
+        for(int i = this.heroArrayIndex; i < (Math.min(heroes.size(), 5)); i++) {
+            heroButtonObjects.get(i).changeText(heroes.get(i).getName());
         }
     }
 
     @Override
     protected void update() {
         super.update();
-        this.backButton.update();
-        this.upButton.update();
-        this.downButton.update();
+        this.backButtonObject.update();
+        this.upButtonObject.update();
+        this.downButtonObject.update();
         this.pageTitle.update();
         this.moneyBanner.update();
         if(this.selectedHero != null) {
             this.heroDescription.update();
             this.heroName.update();
-            this.selectedCharacter.update();
-            this.buyButton.update();
+            this.selectedHeroObject.update();
+            this.buyButtonObject.update();
 
-            if(this.buyButton.isJustPressed() && User.user.getMoney() >= this.selectedHero.getPrice()) {
+            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedHero.getPrice()) {
                 HeroController heroController = new HeroController();
                 heroController.buy(this.selectedHero);
-                moneyBanner.setText((User.user.getMoney() - this.selectedHero.getPrice())+"");
+                moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedHero.getPrice()) + " bucks");
             }
         }
 
-        for(Button button: heroButtons)
-            button.update();
-        if(this.backButton.isJustPressed())
+        for(ButtonObject buttonObject : heroButtonObjects)
+            buttonObject.update();
+        if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new StoreScreen(this.camera));
 
-        if(this.downButton.isJustPressed() && heroes.size() > 5 + heroArrayIndex)
+        if(this.downButtonObject.isJustPressed() && heroes.size() > 5 + heroArrayIndex) {
             this.heroArrayIndex++;
             for(int i = heroArrayIndex; i < 5 + this.heroArrayIndex; i++) {
-                heroButtons.get(i- this.heroArrayIndex).changeText(heroes.get(i).getName());
+                heroButtonObjects.get(i- this.heroArrayIndex).changeText(heroes.get(i).getName());
             }
-
-        if(this.upButton.isJustPressed() && this.heroArrayIndex > 0)
-            this.heroArrayIndex--;
-            for(int i = heroArrayIndex; i < 5 + this.heroArrayIndex; i++) {
-                heroButtons.get(i- this.heroArrayIndex).changeText(heroes.get(i).getName());
         }
 
-        for(int i = 0; i < 5; i++) {
-            if(heroButtons.get(i).isJustPressed()) {
+        if(this.upButtonObject.isJustPressed() && this.heroArrayIndex > 0){
+            this.heroArrayIndex--;
+            for(int i = heroArrayIndex; i < 5 + this.heroArrayIndex; i++) {
+                heroButtonObjects.get(i- this.heroArrayIndex).changeText(heroes.get(i).getName());
+            }
+        }
+
+        for(int i = 0; i < Math.min(heroes.size(), 5); i++) {
+            if(heroButtonObjects.get(i).isJustPressed()) {
                 this.selectedHeroIndex = this.heroArrayIndex + i;
                 this.selectedHero = this.heroes.get(this.selectedHeroIndex);
-                this.heroName = new TextBox(this.selectedHero.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
-                this.heroDescription = new TextBox(this.selectedHero.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
-                this.selectedCharacter = new Character(this, this.selectedHero, 200, 300);
-                this.buyButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                this.heroName = new TextBoxObject(this.selectedHero.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
+                this.heroDescription = new TextBoxObject(this.selectedHero.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
+                this.selectedHeroObject = new HeroObject(this, this.selectedHero, 200, 300);
+                this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
             }
         }
     }
@@ -105,18 +107,18 @@ public class StoreHeroScreen extends Screen {
         super.render(delta);
         this.batch.begin();
         this.moneyBanner.render(this.batch);
-        this.backButton.render(this.batch);
-        this.downButton.render(this.batch);
-        this.upButton.render(this.batch);
+        this.backButtonObject.render(this.batch);
+        this.downButtonObject.render(this.batch);
+        this.upButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
         if(this.selectedHero != null) {
             this.heroDescription.render(this.batch);
             this.heroName.render(this.batch);
-            this.selectedCharacter.render(this.batch);
-            this.buyButton.render(this.batch);
+            this.selectedHeroObject.render(this.batch);
+            this.buyButtonObject.render(this.batch);
         }
-        for(Button button: heroButtons)
-            button.render(this.batch);
+        for(ButtonObject buttonObject : heroButtonObjects)
+            buttonObject.render(this.batch);
         this.batch.end();
     }
 }

@@ -12,11 +12,11 @@ import utils.Config;
 import utils.KeyListener;
 import utils.ObjectType;
 
-public class TextField {
+public class TextFieldObject {
 
     private Texture texture;
     private final Texture pressedTexture;
-    private final TextBox text;
+    private final TextBoxObject text;
     private float x;
     private float y;
     private final float width;
@@ -24,8 +24,8 @@ public class TextField {
     private boolean writingActive;
     private final KeyListener keys;
 
-    public TextField(Screen screen, int x, int y) {
-        this.text = new TextBox("", x, y, 'm');
+    public TextFieldObject(Screen screen, int x, int y) {
+        this.text = new TextBoxObject("", x, y, 'm');
         writingActive = false;
         this.width   = 360;
         this.height  = 64;

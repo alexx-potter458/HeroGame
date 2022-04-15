@@ -3,35 +3,35 @@ package core.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import core.Object.Button;
-import core.Object.Clouds;
-import core.Object.TextBox;
+import core.Object.ButtonObject;
+import core.Object.CloudsObject;
+import core.Object.TextBoxObject;
 import core.Model.User;
 import utils.Constants;
 
 public class StartScreen extends Screen {
-    private final Clouds clouds;
-    private final TextBox pageTitle;
-    private final TextBox greetingsBanner;
-    private final Button startButton;
-    private final Button settingsButton;
-    private final Button controlsButton;
-    private final Button quitButton;
+    private final CloudsObject cloudsObject;
+    private final TextBoxObject pageTitle;
+    private final TextBoxObject greetingsBanner;
+    private final ButtonObject startButtonObject;
+    private final ButtonObject settingsButtonObject;
+    private final ButtonObject controlsButtonObject;
+    private final ButtonObject quitButtonObject;
 
     public StartScreen(OrthographicCamera camera) {
         super(camera, "startScreen/map");
-        this.clouds         = new Clouds(this);
-        this.pageTitle = new TextBox(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
-        this.startButton    = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
-        this.settingsButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
-        this.controlsButton = new Button(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
-        this.quitButton     = new Button(this, 144, 160, Constants.quitButton);
+        this.cloudsObject = new CloudsObject(this);
+        this.pageTitle = new TextBoxObject(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
+        this.startButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
+        this.settingsButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
+        this.controlsButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
+        this.quitButtonObject = new ButtonObject(this, 144, 160, Constants.quitButton);
         this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
         String greetingMessage = "";
         if(!User.user.isFirstTime()) {
             greetingMessage = "Hello, " + User.user.getNickname();
         }
-        this.greetingsBanner = new TextBox(greetingMessage, 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
+        this.greetingsBanner = new TextBoxObject(greetingMessage, 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
     }
 
     public StartScreen(OrthographicCamera camera, int bannerY) {
@@ -42,21 +42,21 @@ public class StartScreen extends Screen {
     @Override
     protected void update() {
         super.update();
-        this.clouds.update();
+        this.cloudsObject.update();
         this.greetingsBanner.update();
         this.pageTitle.update();
-        this.startButton.update();
-        this.settingsButton.update();
-        this.controlsButton.update();
-        this.quitButton.update();
+        this.startButtonObject.update();
+        this.settingsButtonObject.update();
+        this.controlsButtonObject.update();
+        this.quitButtonObject.update();
 
-        if(this.quitButton.isPressed())
+        if(this.quitButtonObject.isPressed())
             Gdx.app.exit();
 
-        if(this.settingsButton.isJustPressed())
+        if(this.settingsButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new SettingsScreen(this.camera));
 
-        if(this.startButton.isJustPressed()) {
+        if(this.startButtonObject.isJustPressed()) {
             if(User.user.isFirstTime())
                 Boot.bootInstance.setScreen(new NewUserScreen(this.camera));
             else
@@ -69,13 +69,13 @@ public class StartScreen extends Screen {
         super.render(delta);
 
         this.batch.begin();
-        this.clouds.render(this.batch);
+        this.cloudsObject.render(this.batch);
         this.greetingsBanner.render(this.batch);
         this.pageTitle.render(this.batch);
-        this.startButton.render(this.batch);
-        this.settingsButton.render(this.batch);
-        this.controlsButton.render(this.batch);
-        this.quitButton.render(this.batch);
+        this.startButtonObject.render(this.batch);
+        this.settingsButtonObject.render(this.batch);
+        this.controlsButtonObject.render(this.batch);
+        this.quitButtonObject.render(this.batch);
         this.batch.end();
     }
 }

@@ -9,7 +9,7 @@ import core.Screen.Screen;
 import utils.BodyHelper;
 import utils.ObjectType;
 
-public class Character {
+public class HeroObject {
     private Texture texture;
     private final Texture stationary;
     private final Texture ready;
@@ -19,7 +19,7 @@ public class Character {
     private final float width;
     private final float height;
 
-    public Character(Screen screen, int x, int y) {
+    public HeroObject(Screen screen, int x, int y) {
         this.x = x;
         this.y = y;
         this.width   = 160;
@@ -31,7 +31,7 @@ public class Character {
         this.texture = this.stationary;
     }
 
-    public Character(Screen screen, Hero hero, int x, int y) {
+    public HeroObject(Screen screen, Hero hero, int x, int y) {
         this.x = x;
         this.y = y;
         this.width = hero.getWidth();

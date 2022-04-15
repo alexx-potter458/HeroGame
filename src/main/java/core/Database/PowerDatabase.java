@@ -19,7 +19,8 @@ public class PowerDatabase extends Database {
                     powers.add(new Power(   rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("nameSlug"),
-                            rs.getInt("price")));
+                            rs.getInt("price"),
+                            rs.getString("description")));
                 }
 
                 rs.close();

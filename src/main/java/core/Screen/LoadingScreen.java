@@ -4,14 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import core.Object.TextBox;
+import core.Object.TextBoxObject;
 import org.lwjgl.opengl.GL20;
 import utils.Config;
 import utils.Constants;
 
 public class LoadingScreen extends Screen {
     private final Color backgroundColor;
-    private final TextBox banner;
+    private final TextBoxObject banner;
     private float fontOpacity = 0f;
     private float fontOpacityChanger = 0.01f;
     private int timer = 0;
@@ -20,7 +20,7 @@ public class LoadingScreen extends Screen {
         super(camera);
         this.backgroundColor = new Color(0,0,0,1);
 
-        this.banner = new TextBox(Constants.loadingScreenStudioText, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'm');
+        this.banner = new TextBoxObject(Constants.loadingScreenStudioText, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'm');
         banner.setFontOpacity(this.fontOpacity);
     }
 

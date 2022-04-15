@@ -20,7 +20,9 @@ public class SpellDatabase extends Database {
                             rs.getString("name"),
                             rs.getString("nameSlug"),
                             rs.getInt("hitPower"),
-                            rs.getInt("price")));
+                            rs.getInt("price"),
+                            rs.getString("description")));
+
                 }
 
                 rs.close();

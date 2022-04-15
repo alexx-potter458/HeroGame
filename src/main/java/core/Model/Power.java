@@ -5,12 +5,15 @@ public class Power {
     private String name;
     private String nameSlug;
     private int price;
+    private String description;
 
-    public Power(int id, String name, String nameSlug, int price) {
+
+    public Power(int id, String name, String nameSlug, int price, String description) {
         this.id = id;
         this.name = name;
         this.nameSlug = nameSlug;
         this.price = price;
+        this.description = description;
     }
 
     public int getId() {
@@ -43,5 +46,13 @@ public class Power {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

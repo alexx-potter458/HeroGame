@@ -9,7 +9,7 @@ import utils.Config;
 import utils.ObjectType;
 import core.Boot;
 
-public class Cloud {
+public class CloudObject {
     private final Body body;
     private final Texture texture;
     private float x;
@@ -19,7 +19,7 @@ public class Cloud {
     private final int width;
     private final int height;
 
-    public Cloud(Screen screen) {
+    public CloudObject(Screen screen) {
         this.x       = this.getRandomCloudX();
         this.y       = this.getRandomCloudY();
         this.speedX  = this.getRandomCloudSpeed();

@@ -6,13 +6,15 @@ public class Spell {
     private String nameSlug;
     private int hitPower;
     private int price;
+    private String description;
 
-    public Spell(int id, String name, String nameSlug, int hitPower, int price) {
+    public Spell(int id, String name, String nameSlug, int hitPower, int price, String description) {
         this.id = id;
         this.name = name;
         this.nameSlug = nameSlug;
         this.hitPower = hitPower;
         this.price = price;
+        this.description = description;
     }
 
     public int getId() {
@@ -53,5 +55,13 @@ public class Spell {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -11,18 +11,18 @@ import utils.BodyHelper;
 import utils.Config;
 import utils.ObjectType;
 
-public class Button {
+public class ButtonObject {
     private Texture texture;
     private final Texture notPressedTexture;
     private final Texture pressedTexture;
-    private final TextBox text;
+    private final TextBoxObject text;
     private float x;
     private float y;
     private final float width;
     private final float height;
 
-    public Button(Screen screen, int x, int y, String text) {
-        this.text = new TextBox(text, x, y, 'm');
+    public ButtonObject(Screen screen, int x, int y, String text) {
+        this.text = new TextBoxObject(text, x, y, 'm');
         this.width   = 256;
         this.height  = 64;
         this.x = x;
