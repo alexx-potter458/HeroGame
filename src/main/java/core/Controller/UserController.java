@@ -23,4 +23,11 @@ public class UserController {
         userDatabase.deleteAllUsers();
         new User(0,"", 0, 0, 0, 1);
     }
+
+    public void setMoney(int money) {
+        UserDatabase userDatabase = new UserDatabase();
+
+        userDatabase.setMoney(User.user.getId(), money);
+        this.loadUser();
+    }
 }

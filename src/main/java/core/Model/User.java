@@ -51,4 +51,24 @@ public class User {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public int getFirstTime() {
+        return firstTime;
+    }
+
+    public void setFirstTime(int firstTime) {
+        this.firstTime = firstTime;
+    }
 }

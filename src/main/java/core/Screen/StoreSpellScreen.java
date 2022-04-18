@@ -27,9 +27,7 @@ public class StoreSpellScreen extends Screen {
     private TextBoxObject spellName;
     private ButtonObject buyButtonObject;
     private TextBoxObject spellDescription;
-
-
-
+    private TextBoxObject spellPrice;
 
     public StoreSpellScreen(OrthographicCamera camera) {
         super(camera,"storeCategoryScreen/map");
@@ -62,6 +60,7 @@ public class StoreSpellScreen extends Screen {
         if(this.selectedSpell != null) {
             this.spellDescription.update();
             this.spellName.update();
+            this.spellPrice.update();
             this.selectedSpellObject.update();
             this.buyButtonObject.update();
 
@@ -99,6 +98,8 @@ public class StoreSpellScreen extends Screen {
                 this.spellDescription = new TextBoxObject(this.selectedSpell.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
                 this.selectedSpellObject = new SpellObject(this, this.selectedSpell, 200, 400);
                 this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                this.spellPrice = new TextBoxObject("Price: " + this.selectedSpell.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+
             }
         }
     }
@@ -113,6 +114,7 @@ public class StoreSpellScreen extends Screen {
         this.upButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
         if(this.selectedSpell != null) {
+            this.spellPrice.render(this.batch);
             this.spellDescription.render(this.batch);
             this.spellName.render(this.batch);
             this.selectedSpellObject.render(this.batch);

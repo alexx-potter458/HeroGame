@@ -2,6 +2,7 @@ package core.Controller;
 
 import core.Database.HeroDatabase;
 import core.Model.Hero;
+import core.Model.User;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,10 @@ public class HeroController {
     }
 
     public void buy(Hero hero) {
-        System.out.println(hero);
-        System.out.println("trebuie facuta si acutalizarea de bani");
+        HeroDatabase heroDatabase = new HeroDatabase();
+        UserController userController = new UserController();
+        heroDatabase.resetUserHeroes();
+        heroDatabase.buyHero(User.user.getId(), hero.getId());
+        userController.setMoney(User.user.getMoney() - hero.getPrice());
     }
 }

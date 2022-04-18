@@ -42,4 +42,50 @@ public class HeroDatabase extends Database {
             return null;
         }
     }
+
+    public void makePrimary(int id, int idHero) {
+        String query = "UPDATE userHero SET isPrimary = 1  WHERE userId = " + id + " AND heroId = " + idHero;
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resetUserHeroes() {
+
+            String query = "UPDATE userHero SET isPrimary = 0  WHERE isPrimary = 1";
+
+            try(Connection conn = this.connect()){
+                try(Statement stm = conn.createStatement()) {
+                    stm.executeUpdate(query);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+    }
+
+
+
+    public void buyHero(int userId, int heroId) {
+        String query = "INSERT INTO userHero(userId, heroId, isPrimary) VALUES('" + userId + "','" + heroId + "', 1)";
+
+        try(Connection conn = this.connect()) {
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+
+        }
+    }
 }

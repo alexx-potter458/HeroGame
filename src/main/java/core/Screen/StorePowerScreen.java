@@ -27,6 +27,7 @@ public class StorePowerScreen extends Screen {
     private TextBoxObject powerName;
     private ButtonObject buyButtonObject;
     private TextBoxObject powerDescription;
+    private TextBoxObject powerPrice;
 
 
 
@@ -62,6 +63,7 @@ public class StorePowerScreen extends Screen {
         if(this.selectedPower != null) {
             this.powerDescription.update();
             this.powerName.update();
+            this.powerPrice.update();
             this.selectedPowerObject.update();
             this.buyButtonObject.update();
 
@@ -99,6 +101,8 @@ public class StorePowerScreen extends Screen {
                 this.powerDescription = new TextBoxObject(this.selectedPower.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
                 this.selectedPowerObject = new PowerObject(this, this.selectedPower, 200, 300);
                 this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                this.powerPrice = new TextBoxObject("Price: " + this.selectedPower.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+
             }
         }
     }
@@ -113,6 +117,7 @@ public class StorePowerScreen extends Screen {
         this.upButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
         if(this.selectedPower != null) {
+            this.powerPrice.render(this.batch);
             this.powerDescription.render(this.batch);
             this.powerName.render(this.batch);
             this.selectedPowerObject.render(this.batch);

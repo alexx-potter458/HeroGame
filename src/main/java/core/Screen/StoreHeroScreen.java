@@ -26,6 +26,7 @@ public class StoreHeroScreen extends Screen {
     private Hero selectedHero;
     private TextBoxObject heroDescription;
     private TextBoxObject heroName;
+    private TextBoxObject heroPrice;
     private ButtonObject buyButtonObject;
 
 
@@ -61,13 +62,14 @@ public class StoreHeroScreen extends Screen {
         if(this.selectedHero != null) {
             this.heroDescription.update();
             this.heroName.update();
+            this.heroPrice.update();
             this.selectedHeroObject.update();
             this.buyButtonObject.update();
 
             if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedHero.getPrice()) {
+                moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedHero.getPrice()) + " bucks");
                 HeroController heroController = new HeroController();
                 heroController.buy(this.selectedHero);
-                moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedHero.getPrice()) + " bucks");
             }
         }
 
@@ -96,6 +98,7 @@ public class StoreHeroScreen extends Screen {
                 this.selectedHero = this.heroes.get(this.selectedHeroIndex);
                 this.heroName = new TextBoxObject(this.selectedHero.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
                 this.heroDescription = new TextBoxObject(this.selectedHero.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
+                this.heroPrice = new TextBoxObject("Price: " + this.selectedHero.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
                 this.selectedHeroObject = new HeroObject(this, this.selectedHero, 200, 300);
                 this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
             }
@@ -113,6 +116,7 @@ public class StoreHeroScreen extends Screen {
         this.pageTitle.render(this.batch);
         if(this.selectedHero != null) {
             this.heroDescription.render(this.batch);
+            this.heroPrice.render(this.batch);
             this.heroName.render(this.batch);
             this.selectedHeroObject.render(this.batch);
             this.buyButtonObject.render(this.batch);
