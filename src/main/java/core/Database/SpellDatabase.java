@@ -38,4 +38,18 @@ public class SpellDatabase extends Database {
             return null;
         }
     }
+
+    public void buySpell(int userId, int heroId, int spellId) {
+        String query = "INSERT INTO userHeroSpell(idUser, idHero, idSpell) VALUES('" + userId + "','" + heroId + "', " + spellId + ")";
+
+        try(Connection conn = this.connect()) {
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+    }
 }

@@ -1,8 +1,8 @@
 package core.Controller;
 
 import core.Database.SpellDatabase;
-import core.Model.Hero;
 import core.Model.Spell;
+import core.Model.User;
 
 import java.util.ArrayList;
 
@@ -12,8 +12,11 @@ public class SpellController {
         return (new SpellDatabase().loadAllSpells());
     }
 
-    public void buy(Spell hero) {
-        System.out.println(hero);
-        System.out.println("trebuie facuta si acutalizarea de bani");
+    public void buy(Spell spell) {
+        SpellDatabase spellDatabase = new SpellDatabase();
+        HeroController heroController = new HeroController();
+        UserController userController = new UserController();
+        spellDatabase.buySpell(User.user.getId(), heroController.getMainHero().getId(), spell.getId());
+        userController.setMoney(User.user.getMoney() - spell.getPrice());
     }
 }

@@ -11,6 +11,9 @@ public class HeroController {
     public ArrayList<Hero> getAllHeroes() {
         return (new HeroDatabase()).loadAllHeroes();
     }
+    public Hero getMainHero() {
+        return (new HeroDatabase()).getMainHero();
+    }
 
     public void buy(Hero hero) {
         HeroDatabase heroDatabase = new HeroDatabase();
@@ -18,5 +21,9 @@ public class HeroController {
         heroDatabase.resetUserHeroes();
         heroDatabase.buyHero(User.user.getId(), hero.getId());
         userController.setMoney(User.user.getMoney() - hero.getPrice());
+    }
+
+    public int getHeroPowerId(Hero mainHero, int id) {
+        return (new HeroDatabase()).getHeroPowerId(mainHero, id);
     }
 }

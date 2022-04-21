@@ -43,6 +43,39 @@ public class HeroDatabase extends Database {
         }
     }
 
+    public Hero getMainHero() {
+        try(Connection conn = this.connect()) {
+
+            try(Statement stm = conn.createStatement()) {
+                ResultSet rs = stm.executeQuery("SELECT hero.* FROM hero, userHero WHERE userHero.heroId = hero.id AND userHero.isPrimary = 1;");
+                if(rs.next()) {
+                    return new Hero(   rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("nameSlug"),
+                            rs.getInt("baseHealth"),
+                            rs.getInt("width"),
+                            rs.getInt("height"),
+                            rs.getInt("price"),
+                            rs.getInt("speed"),
+                            rs.getInt("hitPower"),
+                            rs.getInt("jumpPower"),
+                            rs.getString("description"));
+                }
+                rs.close();
+
+                return null;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }   catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void makePrimary(int id, int idHero) {
         String query = "UPDATE userHero SET isPrimary = 1  WHERE userId = " + id + " AND heroId = " + idHero;
 
@@ -73,8 +106,6 @@ public class HeroDatabase extends Database {
 
     }
 
-
-
     public void buyHero(int userId, int heroId) {
         String query = "INSERT INTO userHero(userId, heroId, isPrimary) VALUES('" + userId + "','" + heroId + "', 1)";
 
@@ -85,7 +116,30 @@ public class HeroDatabase extends Database {
                 e.printStackTrace();
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public Integer getHeroPowerId(Hero mainHero, int id) {
+        try(Connection conn = this.connect()) {
+
+            try(Statement stm = conn.createStatement()) {
+                ResultSet rs = stm.executeQuery("SELECT * FROM heroPower WHERE idHero = " + mainHero.getId() + " AND idPower = " + id + ";");
+                if(rs.next()) {
+                    return rs.getInt("id");
+                }
+                rs.close();
+
+                return null;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }   catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
