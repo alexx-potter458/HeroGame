@@ -2,7 +2,8 @@ package core.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
-import core.Controller.UserController;
+import core.Controller.HeroController;
+import core.Model.Hero;
 import core.Object.ButtonObject;
 import core.Object.HeroObject;
 import core.Object.TextBoxObject;
@@ -30,7 +31,12 @@ public class LobbyScreen extends Screen {
         this.levelsButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2 - 80) , Constants.newUserButton);
         this.charButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.charButtonLabel);
         this.storeButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.storeButtonLabel);
-        this.heroObject = new HeroObject(this, Boot.bootInstance.getScreenWidth()/2 - 80, Boot.bootInstance.getScreenHeight()/2 + 86);
+
+        Hero hero = new HeroController().getMainHero();
+        if(hero != null)
+            this.heroObject = new HeroObject(this, hero,Boot.bootInstance.getScreenWidth()/2 - hero.getWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 86);
+        else
+            this.heroObject = new HeroObject(this);
         this.moneyBanner = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.levelBanner = new TextBoxObject(Constants.levelBannerLabel + User.user.getLevel() , 256,  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.scoreBanner = new TextBoxObject(Constants.scoreBannerLabel + User.user.getScore(), 256,  (Boot.bootInstance.getScreenHeight()) - 240, 'm');
@@ -53,6 +59,9 @@ public class LobbyScreen extends Screen {
         if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new StartScreen(this.camera));
 
+        if(this.charButtonObject.isJustPressed())
+            Boot.bootInstance.setScreen(new HeroScreen(this.camera));
+
         if(this.storeButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new StoreScreen(this.camera));
 
@@ -61,9 +70,7 @@ public class LobbyScreen extends Screen {
         }
 
         if(this.resetButtonObject.isJustPressed()) {
-            UserController userController = new UserController();
-            userController.deleteUser();
-            Boot.bootInstance.setScreen(new StartScreen(this.camera));
+            Boot.bootInstance.setScreen(new ResetScreen(this.camera));
         }
     }
 

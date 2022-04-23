@@ -63,7 +63,11 @@ public abstract  class Screen extends ScreenAdapter {
     }
 
     private void cameraUpdate() {
-        this.camera.position.set(new Vector3(Boot.bootInstance.getScreenWidth() >> 1, Boot.bootInstance.getScreenHeight() >> 1, 0));
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            camera.position.x -= 3;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.position.x += 3;
+        }
         camera.update();
     }
 

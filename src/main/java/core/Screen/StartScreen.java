@@ -56,6 +56,9 @@ public class StartScreen extends Screen {
         if(this.settingsButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new SettingsScreen(this.camera));
 
+        if(this.controlsButtonObject.isJustPressed())
+            Boot.bootInstance.setScreen(new ControlsScreen(this.camera));
+
         if(this.startButtonObject.isJustPressed()) {
             if(User.user.isFirstTime())
                 Boot.bootInstance.setScreen(new NewUserScreen(this.camera));

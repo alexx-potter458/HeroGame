@@ -21,4 +21,7 @@ public class PowerController {
         userController.setMoney(User.user.getMoney() - power.getPrice());
     }
 
+    public ArrayList<Power> getBoughtPowers() {
+        return (new PowerDatabase()).loadBoughtPowers();
+    }
 }

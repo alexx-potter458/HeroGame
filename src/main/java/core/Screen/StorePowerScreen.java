@@ -28,19 +28,22 @@ public class StorePowerScreen extends Screen {
     private ButtonObject buyButtonObject;
     private TextBoxObject powerDescription;
     private TextBoxObject powerPrice;
+    private final boolean storeMode;
 
-
-
-
-    public StorePowerScreen(OrthographicCamera camera) {
+    public StorePowerScreen(OrthographicCamera camera, boolean storeMode) {
         super(camera,"storeCategoryScreen/map");
-        this.downButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
-        this.backButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.downButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
+        this.backButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.powerButtonObjects = new ArrayList<>();
-        this.upButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
-        this.pageTitle      = new TextBoxObject(Constants.HeroesScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.moneyBanner = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
-        this.powers = (new PowerController().getAllPowers());
+        this.upButtonObject     = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
+        this.pageTitle          = new TextBoxObject(Constants.PowersScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
+        this.moneyBanner        = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
+        this.storeMode          = storeMode;
+
+        if (this.storeMode)
+            this.powers         = (new PowerController().getAllPowers());
+        else
+            this.powers         = new PowerController().getBoughtPowers();
         this.selectedPowerIndex = -1;
         for(int i = 0; i < Math.min(powers.size(), 5); i++) {
             powerButtonObjects.add(new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
@@ -67,17 +70,22 @@ public class StorePowerScreen extends Screen {
             this.selectedPowerObject.update();
             this.buyButtonObject.update();
 
-            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedPower.getPrice()) {
+            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedPower.getPrice() && storeMode) {
                 PowerController powerController = new PowerController();
                 powerController.buy(this.selectedPower);
                 moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedPower.getPrice()) + " bucks");
+            } else if(this.buyButtonObject.isJustPressed()) {
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
             }
         }
 
         for(ButtonObject buttonObject : powerButtonObjects)
             buttonObject.update();
         if(this.backButtonObject.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            if(this.storeMode)
+                Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            else
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
 
         if(this.downButtonObject.isJustPressed() && powers.size() > 5 + this.powerArrayIndex) {
             this.powerArrayIndex++;
@@ -100,9 +108,13 @@ public class StorePowerScreen extends Screen {
                 this.powerName = new TextBoxObject(this.selectedPower.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
                 this.powerDescription = new TextBoxObject(this.selectedPower.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
                 this.selectedPowerObject = new PowerObject(this, this.selectedPower, 200, 300);
-                this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
-                this.powerPrice = new TextBoxObject("Price: " + this.selectedPower.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
-
+                if (this.storeMode) {
+                    this.powerPrice = new TextBoxObject("Price: " + this.selectedPower.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                } else {
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.selectButton);
+                    this.powerPrice = new TextBoxObject("",0,  0, 's');
+                }
             }
         }
     }

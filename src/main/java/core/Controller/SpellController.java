@@ -19,4 +19,8 @@ public class SpellController {
         spellDatabase.buySpell(User.user.getId(), heroController.getMainHero().getId(), spell.getId());
         userController.setMoney(User.user.getMoney() - spell.getPrice());
     }
+
+    public ArrayList<Spell> getBoughtSpells() {
+        return (new SpellDatabase().loadBoughtSpells());
+    }
 }

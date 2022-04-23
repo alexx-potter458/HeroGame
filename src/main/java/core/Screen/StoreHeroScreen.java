@@ -29,17 +29,24 @@ public class StoreHeroScreen extends Screen {
     private TextBoxObject heroPrice;
     private ButtonObject buyButtonObject;
 
+    private final boolean storeMode;
 
 
-    public StoreHeroScreen(OrthographicCamera camera) {
+    public StoreHeroScreen(OrthographicCamera camera, boolean storeMode) {
         super(camera,"storeCategoryScreen/map");
+        this.storeMode = storeMode;
         this.downButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
         this.backButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.heroButtonObjects = new ArrayList<>();
         this.upButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
         this.pageTitle      = new TextBoxObject(Constants.HeroesScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.moneyBanner = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
-        this.heroes = (new HeroController().getAllHeroes());
+
+        if(this.storeMode)
+            this.heroes = (new HeroController().getAllHeroes());
+        else
+            this.heroes = (new HeroController().getBoughtHeroes());
+
         this.selectedHeroIndex = -1;
         for(int i = 0; i < Math.min(heroes.size(), 5); i++) {
             heroButtonObjects.add(new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
@@ -49,6 +56,7 @@ public class StoreHeroScreen extends Screen {
         for(int i = this.heroArrayIndex; i < (Math.min(heroes.size(), 5)); i++) {
             heroButtonObjects.get(i).changeText(heroes.get(i).getName());
         }
+
     }
 
     @Override
@@ -66,17 +74,24 @@ public class StoreHeroScreen extends Screen {
             this.selectedHeroObject.update();
             this.buyButtonObject.update();
 
-            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedHero.getPrice()) {
+            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedHero.getPrice() && storeMode) {
                 moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedHero.getPrice()) + " bucks");
                 HeroController heroController = new HeroController();
                 heroController.buy(this.selectedHero);
+            } else if (this.buyButtonObject.isJustPressed()) {
+                HeroController heroController = new HeroController();
+                heroController.makeHeroPrimary(this.selectedHero);
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
             }
         }
 
         for(ButtonObject buttonObject : heroButtonObjects)
             buttonObject.update();
         if(this.backButtonObject.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            if(storeMode)
+                Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            else
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
 
         if(this.downButtonObject.isJustPressed() && heroes.size() > 5 + heroArrayIndex) {
             this.heroArrayIndex++;
@@ -98,9 +113,14 @@ public class StoreHeroScreen extends Screen {
                 this.selectedHero = this.heroes.get(this.selectedHeroIndex);
                 this.heroName = new TextBoxObject(this.selectedHero.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
                 this.heroDescription = new TextBoxObject(this.selectedHero.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
-                this.heroPrice = new TextBoxObject("Price: " + this.selectedHero.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
                 this.selectedHeroObject = new HeroObject(this, this.selectedHero, 200, 300);
-                this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                if(storeMode){
+                    this.heroPrice = new TextBoxObject("Price: " + this.selectedHero.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                } else {
+                    this.heroPrice = new TextBoxObject("",0,  0, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.selectButton);
+                }
             }
         }
     }

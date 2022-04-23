@@ -26,4 +26,14 @@ public class HeroController {
     public int getHeroPowerId(Hero mainHero, int id) {
         return (new HeroDatabase()).getHeroPowerId(mainHero, id);
     }
+
+    public ArrayList<Hero> getBoughtHeroes() {
+        return (new HeroDatabase()).loadBoughtHeroes();
+    }
+
+    public void makeHeroPrimary(Hero selectedHero) {
+        HeroDatabase heroDatabase = new HeroDatabase();
+        heroDatabase.resetUserHeroes();
+        heroDatabase.makePrimary(User.user.getId(), selectedHero.getId());
+    }
 }

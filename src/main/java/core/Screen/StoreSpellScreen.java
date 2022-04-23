@@ -29,7 +29,9 @@ public class StoreSpellScreen extends Screen {
     private TextBoxObject spellDescription;
     private TextBoxObject spellPrice;
 
-    public StoreSpellScreen(OrthographicCamera camera) {
+    private final boolean storeMode;
+
+    public StoreSpellScreen(OrthographicCamera camera, boolean storeMode) {
         super(camera,"storeCategoryScreen/map");
         this.downButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
         this.backButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
@@ -37,7 +39,13 @@ public class StoreSpellScreen extends Screen {
         this.upButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 320, Constants.upButton);
         this.pageTitle      = new TextBoxObject(Constants.SpellsScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.moneyBanner = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
-        this.spells = (new SpellController().getAllSpells());
+
+        this.storeMode = storeMode;
+
+        if(this.storeMode)
+            this.spells = (new SpellController().getAllSpells());
+        else
+            this.spells = (new SpellController().getBoughtSpells());
         this.selectedSpellIndex = -1;
         for(int i = 0; i < Math.min(spells.size(), 5); i++) {
             spellButtonObjects.add(new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
@@ -64,17 +72,22 @@ public class StoreSpellScreen extends Screen {
             this.selectedSpellObject.update();
             this.buyButtonObject.update();
 
-            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedSpell.getPrice()) {
+            if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedSpell.getPrice() && storeMode) {
                 SpellController spellController = new SpellController();
                 spellController.buy(this.selectedSpell);
                 moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedSpell.getPrice()) + " bucks");
+            } else if(this.buyButtonObject.isJustPressed()) {
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
             }
         }
 
         for(ButtonObject buttonObject : spellButtonObjects)
             buttonObject.update();
         if(this.backButtonObject.isJustPressed())
-            Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            if(this.storeMode)
+                Boot.bootInstance.setScreen(new StoreScreen(this.camera));
+            else
+                Boot.bootInstance.setScreen(new HeroScreen(this.camera));
 
         if(this.downButtonObject.isJustPressed() && spells.size() > 5 + this.spellArrayIndex) {
             this.spellArrayIndex++;
@@ -97,9 +110,13 @@ public class StoreSpellScreen extends Screen {
                 this.spellName = new TextBoxObject(this.selectedSpell.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
                 this.spellDescription = new TextBoxObject(this.selectedSpell.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
                 this.selectedSpellObject = new SpellObject(this, this.selectedSpell, 200, 400);
-                this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
-                this.spellPrice = new TextBoxObject("Price: " + this.selectedSpell.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
-
+                if(storeMode) {
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                    this.spellPrice = new TextBoxObject("Price: " + this.selectedSpell.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+                } else {
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.selectButton);
+                    this.spellPrice = new TextBoxObject("", 0,  0, 's');
+                }
             }
         }
     }
