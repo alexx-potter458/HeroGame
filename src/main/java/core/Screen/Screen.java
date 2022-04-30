@@ -21,19 +21,28 @@ public abstract  class Screen extends ScreenAdapter {
     private final World world;
     private final Box2DDebugRenderer box2DDebugRenderer;
     protected OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
+    private boolean gameMode;
+    private TileMapHelper tileMapHelper;
 
     public Screen(OrthographicCamera camera) {
-        this.camera = camera;
+        this.camera             = camera;
         this.camera.position.set(new Vector3(Boot.bootInstance.getScreenWidth() >> 1, Boot.bootInstance.getScreenHeight() >> 1, 0));
-        this.batch = new SpriteBatch();
-        this.world = new World(new Vector2(0,0), false);
+        this.batch              = new SpriteBatch();
+        this.world              = new World(new Vector2(0,-30), false);
         this.box2DDebugRenderer = new Box2DDebugRenderer();
     }
 
     public Screen(OrthographicCamera camera, String mapPath) {
         this(camera);
+        this.gameMode                   = false;
+        this.tileMapHelper              = new TileMapHelper(this, false);
+        this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(mapPath);
+    }
 
-        TileMapHelper tileMapHelper     = new TileMapHelper();
+    public Screen(OrthographicCamera camera, String mapPath, boolean gameMode) {
+        this(camera);
+        this.gameMode                   = gameMode;
+        this.tileMapHelper              = new TileMapHelper(this, true);
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(mapPath);
     }
 
@@ -49,12 +58,14 @@ public abstract  class Screen extends ScreenAdapter {
 
         this.batch.begin();
         this.batch.end();
-//        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
+
+        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
     }
 
     protected void update() {
         this.world.step(1/60f, 6, 2);
         this.cameraUpdate();
+
         this.batch.setProjectionMatrix(camera.combined);
         this.pressedButtons();
 
@@ -62,17 +73,17 @@ public abstract  class Screen extends ScreenAdapter {
             this.orthogonalTiledMapRenderer.setView(camera);
     }
 
-    private void cameraUpdate() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.position.x -= 3;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.position.x += 3;
-        }
+    protected void cameraUpdate() {
+        new Vector3(Boot.bootInstance.getScreenWidth() >> 1, Boot.bootInstance.getScreenHeight() >> 1, 0);
         camera.update();
     }
 
     public World getWorld() {
         return world;
+    }
+
+    public TileMapHelper getTileMapHelper() {
+        return tileMapHelper;
     }
 
     private void pressedButtons() {

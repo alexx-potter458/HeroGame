@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class KeyListener {
-
     public char keyPressed() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.A))
             return 'A';

@@ -1,5 +1,5 @@
 package utils;
 
 public enum ObjectType {
-    CLOUD, WALL, BUTTON
+    CLOUD, WALL, BUTTON, GROUND, HERO, ENEMY, BULLET, REWARD, NONOBJECT
 }

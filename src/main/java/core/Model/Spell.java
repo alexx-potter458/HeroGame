@@ -64,4 +64,5 @@ public class Spell {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

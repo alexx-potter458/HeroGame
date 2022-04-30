@@ -10,17 +10,18 @@ import utils.Config;
 import utils.Constants;
 
 public class LoadingScreen extends Screen {
-    private final Color backgroundColor;
+    private final Color         backgroundColor;
     private final TextBoxObject banner;
-    private float fontOpacity = 0f;
-    private float fontOpacityChanger = 0.01f;
-    private int timer = 0;
+    private float               fontOpacity         = 0f;
+    private float               fontOpacityChanger  = 0.01f;
+    private int                 timer               = 0;
 
     public LoadingScreen(OrthographicCamera camera) {
         super(camera);
-        this.backgroundColor = new Color(0,0,0,1);
 
-        this.banner = new TextBoxObject(Constants.loadingScreenStudioText, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'm');
+        this.backgroundColor    = new Color(0,0,0,1);
+        this.banner             = new TextBoxObject(Constants.loadingScreenStudioText, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'm');
+
         banner.setFontOpacity(this.fontOpacity);
     }
 
@@ -42,10 +43,11 @@ public class LoadingScreen extends Screen {
         }
 
         if(this.timer == 250) {
-            this.fontOpacity = 0f;
+            this.fontOpacity        = 0f;
             this.fontOpacityChanger = 0.02f;
             this.banner.changeFontSize('l');
-            String text2 = Constants.gameTitleCaps;
+
+            String text2            = Constants.gameTitleCaps;
             this.banner.setTextAndOpacity(text2, this.fontOpacity);
         }
 
@@ -73,4 +75,5 @@ public class LoadingScreen extends Screen {
         banner.render(this.batch);
         batch.end();
     }
+
 }

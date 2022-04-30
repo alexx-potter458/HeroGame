@@ -21,7 +21,7 @@ public class PowerObject {
         this.width = 20;
         this.height = 20;
 
-        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
         this.texture = new Texture("textures/characters/stitch/stationary/stitch.png");
     }
 

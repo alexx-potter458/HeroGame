@@ -31,7 +31,7 @@ public class TextFieldObject {
         this.height  = 64;
         this.x = x;
         this.y = y;
-        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
         Texture notPressedTexture = new Texture("textures/textFieldNotPressed.png");
         this.pressedTexture = new Texture("textures/textFieldPressed.png");
         this.texture = notPressedTexture;
