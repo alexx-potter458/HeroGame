@@ -13,10 +13,11 @@ import utils.Config;
 import utils.ObjectType;
 
 public class HeroObject {
-    private final Texture   texture;
-    private final Texture   stationary;
-    private final Texture   ready;
-    private final Texture   running;
+    private Texture         texture;
+    private final Texture   firstRight;
+    private final Texture   firstLeft;
+    private final Texture   secondRight;
+    private final Texture   secondLeft;
     private float           x;
     private float           y;
     private float           velocityX;
@@ -26,6 +27,9 @@ public class HeroObject {
     private final float     height;
     private Body            body;
     private int             jumpCounter;
+    private float           oldVelY;
+    private String          direction;
+    private int             timer;
 
     public HeroObject(Screen screen) {
         this.x           = 0;
@@ -34,29 +38,36 @@ public class HeroObject {
         this.height      = 0;
         this.velocityX   = 0;
         this.velocityY   = 0;
+        this.timer       = 0;
         this.speed       = 0;
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
-        this.stationary  = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.ready       = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.running     = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.texture     = this.stationary;
+        this.firstRight = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.secondRight = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.firstLeft = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.secondLeft = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.texture     = this.firstRight;
         this.jumpCounter = 0;
+        this.direction   = "R";
     }
 
     public HeroObject(Screen screen, Hero hero, int x, int y) {
         this.x           = x;
         this.y           = y;
+        this.direction   = "FR";
+        this.timer       = 0;
         this.width       = hero.getWidth();
         this.height      = hero.getHeight();
         this.velocityX   = 0;
         this.velocityY   = 0;
         this.speed       = hero.getSpeed();
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 2, screen.getWorld(), ObjectType.HERO);
-        this.stationary  = new Texture("textures/characters/" + hero.getNameSlug() + "/stationary/" + hero.getNameSlug() + ".png");
-        this.ready       = new Texture("textures/characters/" + hero.getNameSlug() + "/stationary/" + hero.getNameSlug() + ".png");
-        this.running     = new Texture("textures/characters/" + hero.getNameSlug() + "/stationary/" + hero.getNameSlug() + ".png");
-        this.texture     = this.stationary;
+        this.firstRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstRight.png");
+        this.firstLeft = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstLeft.png");
+        this.secondRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondRight.png");
+        this.secondLeft = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondLeft.png");
+        this.texture     = this.firstRight;
         this.jumpCounter = 0;
+        this.oldVelY     = 0;
     }
 
     public void update() {
@@ -69,13 +80,26 @@ public class HeroObject {
     }
 
     public void checkUserInput() {
+        if(timer == 100)
+            timer = 0;
+
+        timer ++;
         this.velocityX = 0;
 
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.velocityX = 1;
 
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.getBody().getPosition().x >=  (this.width / (Config.PPM * 2)))
+            if(timer % 13 == 0 ) {
+                this.goRight();
+            }
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.getBody().getPosition().x >=  (this.width / (Config.PPM * 2))) {
             this.velocityX = -1;
+            if(timer % 13 == 0) {
+                this.goLeft();
+            }
+        }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && this.jumpCounter < 2) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
@@ -83,11 +107,33 @@ public class HeroObject {
             jumpCounter++;
         }
 
-        if(body.getLinearVelocity().y == 0) {
+        if(body.getLinearVelocity().y == 0 && this.oldVelY < 0) {
             jumpCounter = 0;
         }
 
+        this.oldVelY = body.getLinearVelocity().y;
+
         body.setLinearVelocity(velocityX * speed, body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25);
+    }
+
+    private void goLeft() {
+        if(this.direction.contains("FL")) {
+            this.direction  = "SL";
+            this.texture    = this.secondLeft;
+        } else {
+            this.direction  = "FL";
+            this.texture    = this.firstLeft;
+        }
+    }
+
+    private void goRight() {
+        if(this.direction.contains("FR")) {
+            this.direction  = "SR";
+            this.texture    = this.secondRight;
+        } else {
+            this.direction  = "FR";
+            this.texture    = this.firstRight;
+        }
     }
 
     public Body getBody() {
