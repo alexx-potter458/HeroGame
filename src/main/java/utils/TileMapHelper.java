@@ -3,14 +3,19 @@ package utils;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import core.Object.HealthBoxObject;
+import core.Object.MoneyBoxObject;
+import core.Screen.GameScreen;
 import core.Screen.Screen;
 
 public class TileMapHelper {
@@ -36,9 +41,24 @@ public class TileMapHelper {
     }
 
     private void parseMapObjects(MapObjects mapObjects) {
-        for(MapObject object: mapObjects)
+        for(MapObject object: mapObjects) {
             if(object instanceof PolygonMapObject)
                 createStaticBody((PolygonMapObject) object);
+
+            if(object instanceof RectangleMapObject) {
+                Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+                String rectangleName = object.getName();
+
+                if(rectangleName.equals("HH")) {
+                    ((GameScreen) this.screen).addHealthBox( new HealthBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2));
+                }
+
+                if(rectangleName.equals("MY_XP")) {
+                    ((GameScreen) this.screen).addMoneyBox( new MoneyBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2));
+                }
+            }
+        }
+
     }
 
     private void createStaticBody(PolygonMapObject object) {

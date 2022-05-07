@@ -16,13 +16,13 @@ import utils.Config;
 import utils.TileMapHelper;
 
 public abstract  class Screen extends ScreenAdapter {
-    protected OrthographicCamera camera;
-    protected SpriteBatch batch;
-    private final World world;
-    private final Box2DDebugRenderer box2DDebugRenderer;
-    protected OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
-    private boolean gameMode;
-    private TileMapHelper tileMapHelper;
+    protected OrthographicCamera            camera;
+    protected SpriteBatch                   batch;
+    private final World                     world;
+    private final Box2DDebugRenderer        box2DDebugRenderer;
+    protected OrthogonalTiledMapRenderer    orthogonalTiledMapRenderer;
+    private boolean                         gameMode;
+    private TileMapHelper                   tileMapHelper;
 
     public Screen(OrthographicCamera camera) {
         this.camera             = camera;
@@ -42,7 +42,7 @@ public abstract  class Screen extends ScreenAdapter {
     public Screen(OrthographicCamera camera, String mapPath, boolean gameMode) {
         this(camera);
         this.gameMode                   = gameMode;
-        this.tileMapHelper              = new TileMapHelper(this, true);
+        this.tileMapHelper              = new TileMapHelper(this, this.gameMode);
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(mapPath);
     }
 
@@ -59,7 +59,7 @@ public abstract  class Screen extends ScreenAdapter {
         this.batch.begin();
         this.batch.end();
 
-//        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
+        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
     }
 
     protected void update() {
@@ -86,7 +86,7 @@ public abstract  class Screen extends ScreenAdapter {
         return tileMapHelper;
     }
 
-    private void pressedButtons() {
+    protected void pressedButtons() {
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
