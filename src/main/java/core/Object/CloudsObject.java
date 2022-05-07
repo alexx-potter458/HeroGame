@@ -29,6 +29,7 @@ public class CloudsObject {
     private int getRandomCloudNumber() {
         return (int) Math.floor(Math.random() * 2) + 4;
     }
+
 }
 
 

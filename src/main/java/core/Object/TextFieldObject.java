@@ -14,42 +14,41 @@ import utils.ObjectType;
 
 public class TextFieldObject {
 
-    private Texture texture;
-    private final Texture pressedTexture;
+    private Texture             texture;
+    private final Texture       pressedTexture;
     private final TextBoxObject text;
-    private float x;
-    private float y;
-    private final float width;
-    private final float height;
-    private boolean writingActive;
-    private final KeyListener keys;
+    private float               x;
+    private float               y;
+    private final float         width;
+    private final float         height;
+    private boolean             writingActive;
+    private final KeyListener   keys;
 
     public TextFieldObject(Screen screen, int x, int y) {
-        this.text = new TextBoxObject("", x, y, 'm');
-        writingActive = false;
-        this.width   = 360;
-        this.height  = 64;
-        this.x = x;
-        this.y = y;
-        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
+        this.text                 = new TextBoxObject("", x, y, 'm');
+        writingActive             = false;
+        this.width                = 360;
+        this.height               = 64;
+        this.x                    = x;
+        this.y                    = y;
+        Body body                 = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
         Texture notPressedTexture = new Texture("textures/textFieldNotPressed.png");
-        this.pressedTexture = new Texture("textures/textFieldPressed.png");
-        this.texture = notPressedTexture;
-        this.keys = new KeyListener();
-
-        this.x = body.getPosition().x * Config.PPM - (width /2);
-        this.y = body.getPosition().y * Config.PPM - (height /2);
+        this.pressedTexture       = new Texture("textures/textFieldPressed.png");
+        this.texture              = notPressedTexture;
+        this.keys                 = new KeyListener();
+        this.x                    = body.getPosition().x * Config.PPM - (width /2);
+        this.y                    = body.getPosition().y * Config.PPM - (height /2);
     }
 
     public void update() {
         if(this.isJustPressed()) {
             this.writingActive = !this.writingActive;
-            this.texture = this.pressedTexture;
+            this.texture       = this.pressedTexture;
         }
 
         if(writingActive) {
             char c = keys.keyPressed();
-            if(c!='`') {
+            if(c != '`') {
                 text.addChar(c);
             }
 

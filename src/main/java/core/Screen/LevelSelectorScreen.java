@@ -13,8 +13,6 @@ public class LevelSelectorScreen extends Screen {
         super(camera,"mapSelectorScreen/map");
         this.backButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.levelButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 355, "level1");
-
-
     }
 
     @Override

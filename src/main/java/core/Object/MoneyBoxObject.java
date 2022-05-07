@@ -17,6 +17,7 @@ public class MoneyBoxObject {
     private final float   height;
     private final Body    body;
     private boolean       toDestroy;
+    private boolean       destroyed;
 
     public MoneyBoxObject(Screen screen, float x, float y) {
         this.width      = 60;
@@ -28,18 +29,22 @@ public class MoneyBoxObject {
         this.x          = body.getPosition().x * Config.PPM - (width /2);
         this.y          = body.getPosition().y * Config.PPM - (height /2);
         this.toDestroy  = false;
+        this.destroyed  = false;
     }
 
     public void update() {
     }
 
     public void render(SpriteBatch batch) {
-        if(!toDestroy)
+        if(!toDestroy && !destroyed)
             batch.draw(texture, x, y, width, height);
     }
 
     public Fixture getFixture() {
-        return this.body.getFixtureList().get(0);
+        if(this.body.getFixtureList().size > 0)
+            return this.body.getFixtureList().get(0);
+        else
+            return null;
     }
 
     public void flaggedToDestroy() {
@@ -53,6 +58,15 @@ public class MoneyBoxObject {
     public void safeDestroy() {
         if (toDestroy && this.body.getFixtureList().size > 0)
             body.destroyFixture(this.body.getFixtureList().get(0));
+        this.setDestroyed();
+    }
+
+    public void setDestroyed() {
+        destroyed = true;
+    }
+
+    public boolean isDestroyed() {
+        return this.destroyed;
     }
 
 }

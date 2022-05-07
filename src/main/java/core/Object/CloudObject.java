@@ -67,4 +67,5 @@ public class CloudObject {
     public void setOpacity(float value) {
         this.opacity = value;
     }
+
 }

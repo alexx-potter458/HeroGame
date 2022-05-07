@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="87" height="38" tilewidth="60" tileheight="60" infinite="0" nextlayerid="3" nextobjectid="171">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="87" height="38" tilewidth="60" tileheight="60" infinite="0" nextlayerid="3" nextobjectid="174">
  <tileset firstgid="1" source="../../tiles/tiles.tsx"/>
  <layer id="1" name="background" width="87" height="38">
   <data encoding="csv">
@@ -478,5 +478,8 @@
   <object id="169" x="780" y="240">
    <polygon points="0,0 300,0 300,60 0,60 0,0"/>
   </object>
+  <object id="171" name="MY_XP" x="780" y="1860" width="60" height="60"/>
+  <object id="172" name="HH" x="1320" y="1740" width="60" height="60"/>
+  <object id="173" name="MY_XP" x="1500" y="1560" width="60" height="60"/>
  </objectgroup>
 </map>

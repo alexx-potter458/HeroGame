@@ -12,28 +12,27 @@ import utils.Config;
 import utils.ObjectType;
 
 public class ButtonObject {
-    private Texture texture;
-    private final Texture notPressedTexture;
-    private final Texture pressedTexture;
+    private Texture             texture;
+    private final Texture       notPressedTexture;
+    private final Texture       pressedTexture;
     private final TextBoxObject text;
-    private float x;
-    private float y;
-    private final float width;
-    private final float height;
+    private float               x;
+    private float               y;
+    private final float         width;
+    private final float         height;
 
     public ButtonObject(Screen screen, int x, int y, String text) {
-        this.text = new TextBoxObject(text, x, y, 'm');
-        this.width   = 256;
-        this.height  = 64;
-        this.x = x;
-        this.y = y;
-        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
-        this.notPressedTexture = new Texture("textures/button.png");
-        this.pressedTexture = new Texture("textures/pressedButton.png");
-        this.texture = this.notPressedTexture;
-
-        this.x = body.getPosition().x * Config.PPM - (width /2);
-        this.y = body.getPosition().y * Config.PPM - (height /2);
+        this.text               = new TextBoxObject(text, x, y, 'm');
+        this.width              = 256;
+        this.height             = 64;
+        this.x                  = x;
+        this.y                  = y;
+        Body body               = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        this.notPressedTexture  = new Texture("textures/button.png");
+        this.pressedTexture     = new Texture("textures/pressedButton.png");
+        this.texture            = this.notPressedTexture;
+        this.x                  = body.getPosition().x * Config.PPM - (width /2);
+        this.y                  = body.getPosition().y * Config.PPM - (height /2);
     }
 
     public void update() {
@@ -74,4 +73,5 @@ public class ButtonObject {
     public void changeText(String newText) {
         this.text.setText(newText);
     }
+
 }
