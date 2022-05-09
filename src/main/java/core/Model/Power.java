@@ -1,18 +1,17 @@
 package core.Model;
 
 public class Power {
-    private int id;
-    private String name;
-    private String nameSlug;
-    private int price;
-    private String description;
-
+    private int          id;
+    private String       name;
+    private final String nameSlug;
+    private final int    price;
+    private final String description;
 
     public Power(int id, String name, String nameSlug, int price, String description) {
-        this.id = id;
-        this.name = name;
-        this.nameSlug = nameSlug;
-        this.price = price;
+        this.id          = id;
+        this.name        = name;
+        this.nameSlug    = nameSlug;
+        this.price       = price;
         this.description = description;
     }
 
@@ -36,23 +35,12 @@ public class Power {
         return nameSlug;
     }
 
-    public void setNameSlug(String nameSlug) {
-        this.nameSlug = nameSlug;
-    }
-
     public int getPrice() {
         return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

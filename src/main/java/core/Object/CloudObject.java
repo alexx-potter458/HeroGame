@@ -10,14 +10,14 @@ import utils.ObjectType;
 import core.Boot;
 
 public class CloudObject {
-    private final Body body;
-    private final Texture texture;
-    private float x;
-    private float y;
-    private float speedX;
-    private float opacity;
-    private final int width;
-    private final int height;
+    private final Body      body;
+    private final Texture   texture;
+    private float           x;
+    private float           y;
+    private float           speedX;
+    private float           opacity;
+    private final int       width;
+    private final int       height;
 
     public CloudObject(Screen screen) {
         this.x       = this.getRandomCloudX();
@@ -27,7 +27,7 @@ public class CloudObject {
         this.height  = 135;
         this.opacity = 0f;
         this.body    = BodyHelper.createBody(x, y, width, height, 0, 1, screen.getWorld(), ObjectType.CLOUD);
-        this.texture = new Texture("textures/cloud.png");
+        this.texture = new Texture("textures/icons/cloud.png");
     }
 
     public void update() {

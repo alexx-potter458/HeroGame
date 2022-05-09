@@ -54,5 +54,5 @@ public class Constants {
     public static String backwardBtn                    = "ARW LEFT";
     public static String spellsBtn                      = "1, 2, 3...9";
     public static String powersBtn                      = "P";
-
+    public static String goButton                       = "GO";
 }

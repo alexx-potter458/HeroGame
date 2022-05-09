@@ -87,9 +87,8 @@ public abstract  class Screen extends ScreenAdapter {
     }
 
     protected void pressedButtons() {
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
-        }
     }
 
 }

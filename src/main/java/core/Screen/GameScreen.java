@@ -1,5 +1,7 @@
 package core.Screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -7,10 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import core.Boot;
 import core.Controller.HeroController;
 import core.Model.Hero;
-import core.Object.HealthBoxObject;
-import core.Object.HeroObject;
-import core.Object.MoneyBoxObject;
-import core.Object.TextBoxObject;
+import core.Object.*;
 import utils.Config;
 import utils.ContactListenerHelper;
 import java.util.ArrayList;
@@ -20,22 +19,46 @@ public class GameScreen extends Screen {
     private final Hero                  hero;
     private int                         heroHealth;
     private int                         heroMoney;
+    private int                         heroExperience;
+    private int                         openedChests;
+    private int                         totalChests;
     private ArrayList<HealthBoxObject>  healthBoxes;
     private ArrayList<MoneyBoxObject>   moneyBoxes;
-    private TextBoxObject               healthTextBox;
-    private TextBoxObject               moneyTextBox;
-    private SpriteBatch                 contentBatch;
+    private final TextBoxObject         experienceTextBox;
+    private final TextBoxObject         healthTextBox;
+    private final TextBoxObject         moneyTextBox;
+    private final SpriteBatch           contentBatch;
+    private final IconObject            moneyIcon;
+    private final IconObject            heartIcon;
+    private final IconObject            xpIcon;
+    private final IconObject            chestsIcon;
+    private final TextBoxObject         openedChestsTextBox;
 
     public GameScreen(OrthographicCamera camera, int level) {
         super(camera,"levels/level" + level, true);
         this.getWorld().setContactListener( new ContactListenerHelper(this));
-        this.contentBatch   = new SpriteBatch();
-        this.hero           = new HeroController().getMainHero();
-        this.heroHealth     = this.hero.getBaseHealth();
-        this.heroMoney      = 0;
-        this.heroObject     = new HeroObject(this, this.hero, 300, Boot.bootInstance.getScreenHeight()/2 + 86);
-        this.moneyTextBox   = new TextBoxObject("Money: " + this.heroMoney + " bucks", 192, Boot.bootInstance.getScreenHeight() - 64, 's');
-        this.healthTextBox  = new TextBoxObject("Health: " + heroHealth + " / " + this.hero.getBaseHealth(), 192, Boot.bootInstance.getScreenHeight() - 128, 's');
+        this.contentBatch        = new SpriteBatch();
+        this.hero                = new HeroController().getMainHero();
+        this.heroHealth          = this.hero.getBaseHealth();
+        this.heroMoney           = 0;
+        this.heroExperience      = 0;
+        this.heroObject          = new HeroObject(this, this.hero, 300, Boot.bootInstance.getScreenHeight()/2 + 86);
+        this.moneyTextBox        = new TextBoxObject( this.heroMoney + " bucks", 172, Boot.bootInstance.getScreenHeight() - 100, 's');
+        this.moneyIcon           = new IconObject("coin", 48, Boot.bootInstance.getScreenHeight() - 100, 38, 38);
+        this.experienceTextBox   = new TextBoxObject( this.heroExperience + " pts", 142, Boot.bootInstance.getScreenHeight() - 154, 's');
+        this.heartIcon           = new IconObject("heart", 48, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
+        this.healthTextBox       = new TextBoxObject( heroHealth + " / " + this.hero.getBaseHealth(), 172, Boot.bootInstance.getScreenHeight() - 48, 's');
+        this.xpIcon              = new IconObject("star", 48, Boot.bootInstance.getScreenHeight() - 154, 38, 38);
+        this.openedChests        = 0;
+        this.chestsIcon          = new IconObject("chest", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
+        this.totalChests         = 0;
+
+        if(this.healthBoxes != null)
+            this.totalChests += this.healthBoxes.size();
+        if(this.moneyBoxes != null)
+            this.totalChests += this.moneyBoxes.size();
+
+        this.openedChestsTextBox = new TextBoxObject( this.openedChests + " / " + this.totalChests, Boot.bootInstance.getScreenWidth() - 80, Boot.bootInstance.getScreenHeight() - 48, 's');
     }
 
     @Override
@@ -56,6 +79,7 @@ public class GameScreen extends Screen {
         this.healthTextBox.update();
         this.heroObject.checkUserInput();
 
+        this.checkHealthStatus();
         this.passTheFinishLine();
     }
 
@@ -77,8 +101,14 @@ public class GameScreen extends Screen {
         batch.end();
 
         contentBatch.begin();
+        this.moneyIcon.render(this.contentBatch);
+        this.heartIcon.render(this.contentBatch);
+        this.xpIcon.render(this.contentBatch);
+        this.chestsIcon.render(this.contentBatch);
+        this.openedChestsTextBox.render(this.contentBatch);
         this.healthTextBox.render(this.contentBatch);
         this.moneyTextBox.render(this.contentBatch);
+        this.experienceTextBox.render(this.contentBatch);
         contentBatch.end();
     }
 
@@ -107,9 +137,17 @@ public class GameScreen extends Screen {
         camera.update();
     }
 
+    @Override
+    protected void pressedButtons() {
+        super.pressedButtons();
+
+        if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE))
+            Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+    }
+
     private void passTheFinishLine() {
         if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
-            Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroHealth));
     }
 
     public void addHealthBox(HealthBoxObject healthBox) {
@@ -124,6 +162,11 @@ public class GameScreen extends Screen {
             this.moneyBoxes = new ArrayList<>();
 
         this.moneyBoxes.add(moneyBox);
+    }
+
+    private void checkHealthStatus() {
+        if(this.heroHealth <= 0)
+            Boot.bootInstance.setScreen(new LostScreen(this.camera));
     }
 
     public void moneyBoxContact(Fixture fixture) {
@@ -141,19 +184,27 @@ public class GameScreen extends Screen {
     }
 
     private void beforeWorldStepUpdate() {
-        for(MoneyBoxObject object: moneyBoxes)
-            if(object.isToDestroy() && !object.isDestroyed()) {
-                object.safeDestroy();
-                this.heroMoney += 25;
-                this.moneyTextBox.setText("Money: " + this.heroMoney + " bucks");
-            }
+        if(moneyBoxes != null)
+            for(MoneyBoxObject object: moneyBoxes)
+                if(object.isToDestroy() && !object.isDestroyed()) {
+                    object.safeDestroy();
+                    this.heroMoney += 25;
+                    this.heroExperience += 15;
+                    this.openedChests += 1;
+                    this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
+                    this.moneyTextBox.setText(this.heroMoney + " bucks");
+                    this.experienceTextBox.setText(this.heroExperience + " pts");
+                }
 
-        for(HealthBoxObject object: healthBoxes)
-            if(object.isToDestroy() && !object.isDestroyed()) {
-                object.safeDestroy();
-                this.heroHealth += 10;
-                this.healthTextBox.setText("Health: " + heroHealth + " / " + this.hero.getBaseHealth());
-            }
+        if(healthBoxes != null)
+            for(HealthBoxObject object: healthBoxes)
+                if(object.isToDestroy() && !object.isDestroyed()) {
+                    object.safeDestroy();
+                    this.heroHealth += 1;
+                    this.openedChests += 1;
+                    this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
+                    this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+                }
     }
 
 }
