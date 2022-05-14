@@ -33,8 +33,9 @@ public class GameScreen extends Screen {
     private final IconObject            xpIcon;
     private final IconObject            chestsIcon;
     private final TextBoxObject         openedChestsTextBox;
+    private final int                   baseScore;
 
-    public GameScreen(OrthographicCamera camera, int level) {
+    public GameScreen(OrthographicCamera camera, int level, int baseScore) {
         super(camera,"levels/level" + level, true);
         this.getWorld().setContactListener( new ContactListenerHelper(this));
         this.contentBatch        = new SpriteBatch();
@@ -42,6 +43,7 @@ public class GameScreen extends Screen {
         this.heroHealth          = this.hero.getBaseHealth();
         this.heroMoney           = 0;
         this.heroExperience      = 0;
+        this.baseScore           = baseScore;
         this.heroObject          = new HeroObject(this, this.hero, 300, Boot.bootInstance.getScreenHeight()/2 + 86);
         this.moneyTextBox        = new TextBoxObject( this.heroMoney + " bucks", 172, Boot.bootInstance.getScreenHeight() - 100, 's');
         this.moneyIcon           = new IconObject("coin", 48, Boot.bootInstance.getScreenHeight() - 100, 38, 38);
@@ -142,12 +144,12 @@ public class GameScreen extends Screen {
         super.pressedButtons();
 
         if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE))
-            Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+            Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
     }
 
     private void passTheFinishLine() {
         if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
-            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroHealth));
+            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroHealth, this.baseScore));
     }
 
     public void addHealthBox(HealthBoxObject healthBox) {

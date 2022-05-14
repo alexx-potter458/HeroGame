@@ -65,6 +65,34 @@ public class UserDatabase extends Database {
         }
     }
 
+    public void setLevel(int id, int level) {
+        String query = "UPDATE user SET level = " + level + " WHERE id=" + id;
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setExperience(int id, int experience) {
+        String query = "UPDATE user SET score = " + experience + " WHERE id=" + id;
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setMoney(int id, int money) {
         String query = "UPDATE user SET money = " + money + " WHERE id=" + id;
 

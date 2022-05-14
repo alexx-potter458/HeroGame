@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class LevelSelectorScreen extends Screen {
     private final ButtonObject            backButtonObject;
-    private ButtonObject                  startButtonObject;
+    private final ButtonObject            startButtonObject;
     private final ArrayList<Level>        levels;
     private final ButtonObject            upButtonObject;
     private final ArrayList<ButtonObject> levelButtonObjects;
@@ -22,9 +22,12 @@ public class LevelSelectorScreen extends Screen {
     private Level                         selectedLevel;
     private TextBoxObject                 levelName;
     private TextBoxObject                 levelUnlocked;
+    private final TextBoxObject           pageTitle;
+
 
     public LevelSelectorScreen(OrthographicCamera camera) {
         super(camera,"mapSelectorScreen/map");
+        this.pageTitle           = new TextBoxObject(Constants.LevelsScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.backButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.startButtonObject  = new ButtonObject(this, Boot.bootInstance.getScreenWidth() - 320, Boot.bootInstance.getScreenHeight() / 2, "");
         this.downButtonObject   = new ButtonObject(this, 320, (Boot.bootInstance.getScreenHeight()) - 820, Constants.downButton);
@@ -48,6 +51,7 @@ public class LevelSelectorScreen extends Screen {
         this.startButtonObject.update();
         this.upButtonObject.update();
         this.downButtonObject.update();
+        this.pageTitle.update();
 
         for(ButtonObject buttonObject : levelButtonObjects)
             buttonObject.update();
@@ -60,6 +64,7 @@ public class LevelSelectorScreen extends Screen {
         super.render(delta);
 
         this.batch.begin();
+        this.pageTitle.render(this.batch);
         this.backButtonObject.render(this.batch);
         this.upButtonObject.render(this.batch);
         this.downButtonObject.render(this.batch);
@@ -70,7 +75,8 @@ public class LevelSelectorScreen extends Screen {
         if(this.selectedLevel != null) {
             this.levelUnlocked.render(this.batch);
             this.levelName.render(this.batch);
-            this.startButtonObject.render(this.batch);
+            if(this.selectedLevel.getUnlocked() == 1)
+                this.startButtonObject.render(this.batch);
         }
 
         this.batch.end();
@@ -80,8 +86,8 @@ public class LevelSelectorScreen extends Screen {
         if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
 
-        if(this.startButtonObject.isJustPressed() && this.selectedLevel != null)
-            Boot.bootInstance.setScreen(new GameScreen(this.camera, this.selectedLevelIndex + 1));
+        if(this.startButtonObject.isJustPressed() && this.selectedLevel != null && this.selectedLevel.getUnlocked() == 1)
+            Boot.bootInstance.setScreen(new GameScreen(this.camera, this.selectedLevelIndex + 1, this.selectedLevel.getBaseScore()));
 
         if(this.downButtonObject.isJustPressed() && levels.size() > 5 + this.levelArrayIndex) {
             this.levelArrayIndex++;
@@ -102,8 +108,8 @@ public class LevelSelectorScreen extends Screen {
             if(levelButtonObjects.get(i).isJustPressed()) {
                 this.selectedLevelIndex  = this.levelArrayIndex + i;
                 this.selectedLevel       = this.levels.get(this.selectedLevelIndex);
-                this.levelName           = new TextBoxObject(this.selectedLevel.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
-                this.levelUnlocked       = new TextBoxObject((this.selectedLevel.getUnlocked() == 1? "Unlocked": "Locked"),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
+                this.levelName           = new TextBoxObject(this.selectedLevel.getName(),620,  (Boot.bootInstance.getScreenHeight()/2) + 20, 's');
+                this.levelUnlocked       = new TextBoxObject((this.selectedLevel.getUnlocked() == 1? "Unlocked": "Locked"),620,  (Boot.bootInstance.getScreenHeight()/2) - 20, 's');
             }
         }
 

@@ -55,4 +55,7 @@ public class Constants {
     public static String spellsBtn                      = "1, 2, 3...9";
     public static String powersBtn                      = "P";
     public static String goButton                       = "GO";
+    public static String LevelsScreenTitle              = "LEVEL SELECTOR";
+    public static String Won                            = "YOU WON";
+    public static String Lost                           = "YOU LOST";
 }

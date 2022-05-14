@@ -10,4 +10,9 @@ public class LevelController {
     public ArrayList<Level> getAllLevels() {
         return new LevelDatabase().getAllLevels();
     }
+
+    public void unlockNextLevel() {
+        new LevelDatabase().unlockNextLevel();
+    }
+
 }
