@@ -58,4 +58,5 @@ public class Constants {
     public static String LevelsScreenTitle              = "LEVEL SELECTOR";
     public static String Won                            = "YOU WON";
     public static String Lost                           = "YOU LOST";
+
 }

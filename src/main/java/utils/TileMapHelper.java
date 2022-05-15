@@ -13,20 +13,31 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import core.Controller.RewardController;
+import core.Model.Reward;
 import core.Object.HealthBoxObject;
 import core.Object.MoneyBoxObject;
 import core.Screen.GameScreen;
 import core.Screen.Screen;
 
+import java.util.ArrayList;
+
 public class TileMapHelper {
     private final Screen  screen;
     private final boolean isGame;
     private Integer       mapWidth;
+    private int           level;
 
     public TileMapHelper(Screen screen, boolean isGame) {
-        this.isGame    = isGame;
-        this.screen    = screen;
-        this.mapWidth  = 0;
+        this.isGame   = isGame;
+        this.screen   = screen;
+        this.mapWidth = 0;
+        this.level    = -1;
+    }
+
+    public TileMapHelper(Screen screen, boolean isGame, int level) {
+        this(screen, isGame);
+        this.level = level;
     }
 
     public OrthogonalTiledMapRenderer setupMap(String path) {
@@ -41,6 +52,10 @@ public class TileMapHelper {
     }
 
     private void parseMapObjects(MapObjects mapObjects) {
+        RewardController rwc            = new RewardController();
+        ArrayList<Reward> moneyRewards  = rwc.getMoneyRewards(this.level);
+        ArrayList<Reward> healthRewards = rwc.getHealthRewards(this.level);
+
         for(MapObject object: mapObjects) {
             if(object instanceof PolygonMapObject)
                 createStaticBody((PolygonMapObject) object);
@@ -49,16 +64,13 @@ public class TileMapHelper {
                 Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
                 String rectangleName = object.getName();
 
-                if(rectangleName.equals("HH")) {
-                    ((GameScreen) this.screen).addHealthBox( new HealthBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2));
-                }
+                if(rectangleName.equals("HH"))
+                    ((GameScreen) this.screen).addHealthBox( new HealthBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, healthRewards.get((int)(Math.random() * (healthRewards.size())))));
 
-                if(rectangleName.equals("MY_XP")) {
-                    ((GameScreen) this.screen).addMoneyBox( new MoneyBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2));
-                }
+                if(rectangleName.equals("MY_XP"))
+                    ((GameScreen) this.screen).addMoneyBox( new MoneyBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, moneyRewards.get((int)(Math.random() * (moneyRewards.size())))));
             }
         }
-
     }
 
     private void createStaticBody(PolygonMapObject object) {

@@ -118,9 +118,8 @@ public class StoreHeroScreen extends Screen {
         if(this.downButtonObject.isJustPressed() && heroes.size() > 5 + heroArrayIndex) {
             this.heroArrayIndex++;
 
-            for(int i = heroArrayIndex; i < 5 + this.heroArrayIndex; i++) {
+            for(int i = heroArrayIndex; i < 5 + this.heroArrayIndex; i++)
                 heroButtonObjects.get(i- this.heroArrayIndex).changeText(heroes.get(i).getName());
-            }
         }
 
         if(this.upButtonObject.isJustPressed() && this.heroArrayIndex > 0){

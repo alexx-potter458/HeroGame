@@ -36,8 +36,9 @@ public class GameScreen extends Screen {
     private final int                   baseScore;
 
     public GameScreen(OrthographicCamera camera, int level, int baseScore) {
-        super(camera,"levels/level" + level, true);
+        super(camera,"levels/level" + level, true, level);
         this.getWorld().setContactListener( new ContactListenerHelper(this));
+
         this.contentBatch        = new SpriteBatch();
         this.hero                = new HeroController().getMainHero();
         this.heroHealth          = this.hero.getBaseHealth();
@@ -190,8 +191,8 @@ public class GameScreen extends Screen {
             for(MoneyBoxObject object: moneyBoxes)
                 if(object.isToDestroy() && !object.isDestroyed()) {
                     object.safeDestroy();
-                    this.heroMoney += 25;
-                    this.heroExperience += 15;
+                    this.heroMoney += object.getReward().getValue();
+                    this.heroExperience += object.getReward().getValue();
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
                     this.moneyTextBox.setText(this.heroMoney + " bucks");
@@ -202,7 +203,7 @@ public class GameScreen extends Screen {
             for(HealthBoxObject object: healthBoxes)
                 if(object.isToDestroy() && !object.isDestroyed()) {
                     object.safeDestroy();
-                    this.heroHealth += 1;
+                    this.heroHealth += object.getReward().getValue();
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
                     this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());

@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class Database {
-
     public Connection connect() {
         try {
             Class.forName("org.sqlite.JDBC");
@@ -21,4 +20,5 @@ public abstract class Database {
             return null;
         }
     }
+
 }

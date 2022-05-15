@@ -116,9 +116,8 @@ public class StoreSpellScreen extends Screen {
 
         if(this.downButtonObject.isJustPressed() && spells.size() > 5 + this.spellArrayIndex) {
             this.spellArrayIndex++;
-            for(int i = this.spellArrayIndex; i < 5 + this.spellArrayIndex; i++) {
+            for(int i = this.spellArrayIndex; i < 5 + this.spellArrayIndex; i++)
                 spellButtonObjects.get(i- this.spellArrayIndex).changeText(spells.get(i).getName());
-            }
         }
 
         if(this.upButtonObject.isJustPressed() && this.spellArrayIndex > 0) {
@@ -150,9 +149,9 @@ public class StoreSpellScreen extends Screen {
         if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedSpell.getPrice() && storeMode) {
             new SpellController().buy(this.selectedSpell);
             moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedSpell.getPrice()) + " bucks");
-        } else if(this.buyButtonObject.isJustPressed()) {
+        } else if(this.buyButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new HeroScreen(this.camera));
-        }
+
     }
 
 }

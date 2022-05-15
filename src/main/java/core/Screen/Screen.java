@@ -46,6 +46,13 @@ public abstract  class Screen extends ScreenAdapter {
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(mapPath);
     }
 
+    public Screen(OrthographicCamera camera, String mapPath, boolean gameMode, int level) {
+        this(camera);
+        this.gameMode                   = gameMode;
+        this.tileMapHelper              = new TileMapHelper(this, this.gameMode, level);
+        this.orthogonalTiledMapRenderer = tileMapHelper.setupMap(mapPath);
+    }
+
     @Override
     public void render(float delta) {
         this.update();

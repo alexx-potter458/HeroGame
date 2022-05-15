@@ -7,9 +7,9 @@ public class Level {
     private final int    baseScore;
 
     public Level(int id, String name, int unlocked, int baseScore) {
-        this.id = id;
-        this.name = name;
-        this.unlocked = unlocked;
+        this.id        = id;
+        this.name      = name;
+        this.unlocked  = unlocked;
         this.baseScore = baseScore;
     }
 

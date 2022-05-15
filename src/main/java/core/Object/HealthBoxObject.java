@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import core.Model.Reward;
 import core.Screen.Screen;
 import utils.BodyHelper;
 import utils.Config;
@@ -18,8 +19,9 @@ public class HealthBoxObject {
     private final Body    body;
     private boolean       toDestroy;
     private boolean       destroyed;
+    private final Reward  reward;
 
-    public HealthBoxObject(Screen screen, float x, float y) {
+    public HealthBoxObject(Screen screen, float x, float y, Reward reward) {
         this.width      = 60;
         this.height     = 60;
         this.x          = x;
@@ -30,6 +32,7 @@ public class HealthBoxObject {
         this.y          = body.getPosition().y * Config.PPM - (height /2);
         this.toDestroy  = false;
         this.destroyed  = false;
+        this.reward     = reward;
     }
 
     public void update() {
@@ -67,6 +70,10 @@ public class HealthBoxObject {
 
     public boolean isDestroyed() {
         return this.destroyed;
+    }
+
+    public Reward getReward() {
+        return reward;
     }
 
 }

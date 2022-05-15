@@ -22,17 +22,13 @@ public class SpellDatabase extends Database {
                             rs.getInt("hitPower"),
                             rs.getInt("price"),
                             rs.getString("description")));
-
                 }
-
                 rs.close();
                 return spells;
-
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -84,4 +80,5 @@ public class SpellDatabase extends Database {
             return null;
         }
     }
+
 }

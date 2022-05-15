@@ -1,13 +1,11 @@
 package core.Object;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import core.Boot;
 import org.apache.commons.lang3.StringUtils;
-import utils.Config;
 
 public class TextBoxObject {
     private BitmapFont        font;
@@ -15,7 +13,7 @@ public class TextBoxObject {
     private String            text;
     private float             width;
     private float             height;
-    private int               x;
+    private final int         x;
     private int               y;
 
     public TextBoxObject(String text, int x, int y, char size) {

@@ -8,22 +8,20 @@ public class CloudsObject {
 
     public CloudsObject(Screen screen) {
         this.cloudObjects = new CloudObject[this.getRandomCloudNumber()];
-        for(int i = 0; i< this.cloudObjects.length; i++){
+        for(int i = 0; i< this.cloudObjects.length; i++)
             this.cloudObjects[i] = new CloudObject(screen);
-        }
     }
 
     public void update() {
-        for(CloudObject cloudObject : this.cloudObjects){
+        for(CloudObject cloudObject : this.cloudObjects) {
             cloudObject.update();
             cloudObject.addOpacity(1f/120f);
         }
     }
 
     public void render(SpriteBatch batch) {
-        for(CloudObject cloudObject : this.cloudObjects){
+        for(CloudObject cloudObject : this.cloudObjects)
             cloudObject.render(batch);
-        }
     }
 
     private int getRandomCloudNumber() {
@@ -31,5 +29,3 @@ public class CloudsObject {
     }
 
 }
-
-

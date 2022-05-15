@@ -36,11 +36,10 @@ public class ButtonObject {
     }
 
     public void update() {
-        if(this.verifyButtonPressed()) {
+        if(this.verifyButtonPressed())
             this.texture = this.pressedTexture;
-        } else {
+         else
             this.texture = this.notPressedTexture;
-        }
     }
 
     public void render(SpriteBatch batch) {

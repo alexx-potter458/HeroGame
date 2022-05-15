@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SettingsDatabase extends Database {
-
     public void loadSettings() {
         try(Connection conn = this.connect()){
             try(Statement stm = conn.createStatement()) {
@@ -44,7 +43,6 @@ public class SettingsDatabase extends Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void toggleDisplayMode(int value) {
@@ -61,5 +59,5 @@ public class SettingsDatabase extends Database {
             e.printStackTrace();
         }
     }
-}
 
+}

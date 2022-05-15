@@ -152,9 +152,8 @@ public class StorePowerScreen extends Screen {
         if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedPower.getPrice() && storeMode) {
             new PowerController().buy(this.selectedPower);
             moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedPower.getPrice()) + " bucks");
-        } else if(this.buyButtonObject.isJustPressed()) {
+        } else if(this.buyButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new HeroScreen(this.camera));
-        }
     }
 
 }

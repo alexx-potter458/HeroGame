@@ -8,25 +8,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class PowerDatabase extends Database {
-
     public ArrayList<Power> loadAllPowers() {
         try(Connection conn = this.connect()) {
-
             ArrayList<Power> powers = new ArrayList<>();
 
             try(Statement stm = conn.createStatement()) {
                 ResultSet rs = stm.executeQuery("SELECT power.* FROM power, heroPower, userHero, userHeroPower WHERE userHeroPower.idHeroPower != heroPower.id AND heroPower.idPower = power.id AND userHero.heroId = heroPower.idHero AND userHero.isPrimary = 1;");
-                while(rs.next()) {
-                    powers.add(new Power(   rs.getInt("id"),
+                while(rs.next())
+                    powers.add(new Power(
+                            rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("nameSlug"),
                             rs.getInt("price"),
                             rs.getString("description")));
-                }
 
                 rs.close();
                 return powers;
-
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;
@@ -54,22 +51,20 @@ public class PowerDatabase extends Database {
 
     public ArrayList<Power> loadBoughtPowers() {
         try(Connection conn = this.connect()) {
-
             ArrayList<Power> powers = new ArrayList<>();
 
             try(Statement stm = conn.createStatement()) {
                 ResultSet rs = stm.executeQuery("SELECT power.* FROM power, heroPower, userHero, userHeroPower WHERE userHeroPower.idHeroPower = heroPower.id AND heroPower.idPower = power.id AND userHero.heroId = heroPower.idHero AND userHero.isPrimary = 1;");
-                while(rs.next()) {
-                    powers.add(new Power(   rs.getInt("id"),
+                while(rs.next())
+                    powers.add(new Power(
+                            rs.getInt("id"),
                             rs.getString("name"),
                             rs.getString("nameSlug"),
                             rs.getInt("price"),
                             rs.getString("description")));
-                }
 
                 rs.close();
                 return powers;
-
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;
@@ -80,4 +75,5 @@ public class PowerDatabase extends Database {
             return null;
         }
     }
+
 }

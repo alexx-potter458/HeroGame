@@ -24,7 +24,6 @@ public class HeroScreen extends Screen {
     public HeroScreen(OrthographicCamera camera) {
         super(camera,"storeCategoryScreen/map", true);
         Hero hero                   = new HeroController().getMainHero();
-
         this.pageTitle              = new TextBoxObject(Constants.HeroScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.backButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.heroButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.heroesLabel);

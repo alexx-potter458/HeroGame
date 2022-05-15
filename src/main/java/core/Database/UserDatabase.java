@@ -14,7 +14,8 @@ public class UserDatabase extends Database {
 
                 ResultSet rs = stm.executeQuery("SELECT * from user ORDER BY id DESC LIMIT 1;");
                 if (rs.next()) {
-                    new User(   rs.getInt("id"),
+                    new User(
+                            rs.getInt("id"),
                             rs.getString("nickname"),
                             rs.getInt("money"),
                             rs.getInt("level"),

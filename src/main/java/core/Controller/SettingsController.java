@@ -6,21 +6,17 @@ import utils.Constants;
 
 public class SettingsController {
     public void loadSettings() {
-        SettingsDatabase settings = new SettingsDatabase();
-        settings.loadSettings();
-
-        UserController user = new UserController();
-        user.loadUser();
+        new SettingsDatabase().loadSettings();
+        new UserController().loadUser();
 
         this.changeBackground();
     }
 
     private void changeBackground() {
-        if(Config.time.equals(Constants.dayValue)) {
+        if(Config.time.equals(Constants.dayValue))
             Config.bgColor = Config.bgDayColor;
-        } else {
+         else
             Config.bgColor = Config.bgNightColor;
-        }
     }
 
     public void toggleDisplayMode() {

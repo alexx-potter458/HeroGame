@@ -11,12 +11,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 
 public class Boot extends Game {
 
-    public static Boot bootInstance;
-    private int screenWidth;
-    private int screenHeight;
-    BitmapFont fontSmall;
-    BitmapFont fontMedium;
-    BitmapFont fontLarge;
+    public static Boot  bootInstance;
+    private int         screenWidth;
+    private int         screenHeight;
+    BitmapFont          fontSmall;
+    BitmapFont          fontMedium;
+    BitmapFont          fontLarge;
 
     public Boot() {
         bootInstance = this;
@@ -25,7 +25,7 @@ public class Boot extends Game {
     @Override
     public void create() {
         this.screenHeight = Gdx.graphics.getHeight();
-        this.screenWidth = Gdx.graphics.getWidth();
+        this.screenWidth  = Gdx.graphics.getWidth();
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/mainFont.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -34,13 +34,13 @@ public class Boot extends Game {
         parameter.borderColor = Color.BLACK;
 
         parameter.size = 16;
-        fontSmall = generator.generateFont(parameter);
+        fontSmall      = generator.generateFont(parameter);
 
         parameter.size = 32;
-        fontMedium = generator.generateFont(parameter);
+        fontMedium     = generator.generateFont(parameter);
 
         parameter.size = 64;
-        fontLarge = generator.generateFont(parameter);
+        fontLarge      = generator.generateFont(parameter);
 
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, screenWidth, screenHeight);
@@ -61,4 +61,5 @@ public class Boot extends Game {
     public BitmapFont getFontMedium() { return this.fontMedium; }
 
     public BitmapFont getFontLarge() { return this.fontLarge; }
+
 }

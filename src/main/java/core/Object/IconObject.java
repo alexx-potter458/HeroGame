@@ -25,4 +25,5 @@ public class IconObject {
         batch.draw(texture, x, y, width, height);
     }
 
+
 }

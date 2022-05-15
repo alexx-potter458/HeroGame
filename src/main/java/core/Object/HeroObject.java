@@ -23,9 +23,10 @@ public class HeroObject {
     private float           velocityX;
     private final float     velocityY;
     private final float     speed;
+    private final float     jumpPower;
     private final float     width;
     private final float     height;
-    private Body            body;
+    private final Body      body;
     private int             jumpCounter;
     private float           oldVelY;
     private String          direction;
@@ -39,6 +40,7 @@ public class HeroObject {
         this.velocityX   = 0;
         this.velocityY   = 0;
         this.timer       = 0;
+        this.jumpPower   = 0;
         this.speed       = 0;
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
         this.firstRight = new Texture("textures/characters/stitch/stationary/stitch.png");
@@ -60,6 +62,7 @@ public class HeroObject {
         this.velocityX   = 0;
         this.velocityY   = 0;
         this.speed       = hero.getSpeed();
+        this.jumpPower   = hero.getJumpPower();
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 2, screen.getWorld(), ObjectType.HERO);
         this.firstRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstRight.png");
         this.firstLeft = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstLeft.png");
@@ -87,29 +90,27 @@ public class HeroObject {
         this.velocityX = 0;
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.velocityX = 1;
+            this.velocityX = this.speed;
 
-            if(timer % 13 == 0 ) {
+            if(timer % 13 == 0 )
                 this.goRight();
-            }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.getBody().getPosition().x >=  (this.width / (Config.PPM * 2))) {
-            this.velocityX = -1;
-            if(timer % 13 == 0) {
+            this.velocityX = -1 * this.speed;
+
+            if(timer % 13 == 0)
                 this.goLeft();
-            }
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && this.jumpCounter < 2) {
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
-            body.applyLinearImpulse(new Vector2(0, body.getMass() * 18), body.getPosition(), true);
+            body.applyLinearImpulse(new Vector2(0, body.getMass() * this.jumpPower), body.getPosition(), true);
             jumpCounter++;
         }
 
-        if(body.getLinearVelocity().y == 0 && this.oldVelY < 0) {
+        if(body.getLinearVelocity().y <= 0 && body.getLinearVelocity().y >= -0.01 && this.oldVelY <= 0)
             jumpCounter = 0;
-        }
 
         this.oldVelY = body.getLinearVelocity().y;
 
@@ -138,10 +139,6 @@ public class HeroObject {
 
     public Body getBody() {
         return body;
-    }
-
-    public void setBody(Body body) {
-        this.body = body;
     }
 
 }

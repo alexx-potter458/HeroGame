@@ -7,17 +7,18 @@ import core.Model.User;
 import java.util.ArrayList;
 
 public class HeroController {
-
     public ArrayList<Hero> getAllHeroes() {
         return (new HeroDatabase()).loadAllHeroes();
     }
+
     public Hero getMainHero() {
         return (new HeroDatabase()).getMainHero();
     }
 
     public void buy(Hero hero) {
-        HeroDatabase heroDatabase = new HeroDatabase();
+        HeroDatabase heroDatabase     = new HeroDatabase();
         UserController userController = new UserController();
+
         heroDatabase.resetUserHeroes();
         heroDatabase.buyHero(User.user.getId(), hero.getId());
         userController.setMoney(User.user.getMoney() - hero.getPrice());
@@ -33,6 +34,7 @@ public class HeroController {
 
     public void makeHeroPrimary(Hero selectedHero) {
         HeroDatabase heroDatabase = new HeroDatabase();
+
         heroDatabase.resetUserHeroes();
         heroDatabase.makePrimary(User.user.getId(), selectedHero.getId());
     }

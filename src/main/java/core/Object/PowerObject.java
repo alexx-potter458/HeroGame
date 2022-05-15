@@ -16,11 +16,11 @@ public class PowerObject {
     private final float height;
 
     public PowerObject(Screen screen, Power power, int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.width = 20;
-        this.height = 20;
-        Body body = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
+        this.x       = x;
+        this.y       = y;
+        this.width   = 20;
+        this.height  = 20;
+        Body body    = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
         this.texture = new Texture("textures/characters/stitch/stationary/stitch.png");
     }
 

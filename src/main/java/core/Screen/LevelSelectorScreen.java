@@ -7,7 +7,6 @@ import core.Model.Level;
 import core.Object.ButtonObject;
 import core.Object.TextBoxObject;
 import utils.Constants;
-
 import java.util.ArrayList;
 
 public class LevelSelectorScreen extends Screen {
@@ -23,7 +22,6 @@ public class LevelSelectorScreen extends Screen {
     private TextBoxObject                 levelName;
     private TextBoxObject                 levelUnlocked;
     private final TextBoxObject           pageTitle;
-
 
     public LevelSelectorScreen(OrthographicCamera camera) {
         super(camera,"mapSelectorScreen/map");
@@ -115,4 +113,5 @@ public class LevelSelectorScreen extends Screen {
 
         this.startButtonObject.changeText(Constants.goButton);
     }
+
 }

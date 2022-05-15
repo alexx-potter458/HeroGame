@@ -15,12 +15,12 @@ public class ControlsScreen extends Screen {
     private final TextBoxObject spells;
     private final TextBoxObject power;
     private final TextBoxObject pageTitle;
-    private final ButtonObject jump;
-    private final ButtonObject front;
-    private final ButtonObject down;
-    private final ButtonObject back;
-    private final ButtonObject powersBtn;
-    private final ButtonObject spellsBtn;
+    private final ButtonObject  jump;
+    private final ButtonObject  front;
+    private final ButtonObject  down;
+    private final ButtonObject  back;
+    private final ButtonObject  powersBtn;
+    private final ButtonObject  spellsBtn;
 
     public ControlsScreen(OrthographicCamera camera) {
         super(camera,"startScreen/map");
