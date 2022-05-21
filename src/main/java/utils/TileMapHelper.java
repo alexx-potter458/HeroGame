@@ -13,8 +13,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import core.Controller.EnemyController;
 import core.Controller.RewardController;
+import core.Model.Enemy;
 import core.Model.Reward;
+import core.Object.EnemyObject;
 import core.Object.HealthBoxObject;
 import core.Object.MoneyBoxObject;
 import core.Screen.GameScreen;
@@ -55,6 +58,7 @@ public class TileMapHelper {
         RewardController rwc            = new RewardController();
         ArrayList<Reward> moneyRewards  = rwc.getMoneyRewards(this.level);
         ArrayList<Reward> healthRewards = rwc.getHealthRewards(this.level);
+        ArrayList<Enemy> enemies        = new EnemyController().getEnemiesByLevel(this.level);
 
         for(MapObject object: mapObjects) {
             if(object instanceof PolygonMapObject)
@@ -69,6 +73,9 @@ public class TileMapHelper {
 
                 if(rectangleName.equals("MY_XP"))
                     ((GameScreen) this.screen).addMoneyBox( new MoneyBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, moneyRewards.get((int)(Math.random() * (moneyRewards.size())))));
+
+                if(rectangleName.equals("E"))
+                    ((GameScreen) this.screen).addEnemy( new EnemyObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, enemies.get((int)(Math.random() * enemies.size()))));
             }
         }
     }
@@ -79,7 +86,7 @@ public class TileMapHelper {
         Body body       = screen.getWorld().createBody(bodyDef);
         Shape shape     = createPolygonShape(object);
 
-        body.createFixture(shape, 1000);
+        body.createFixture(shape, 1000).setUserData("OBSTACLE");
         shape.dispose();
     }
 

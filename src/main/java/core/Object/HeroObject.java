@@ -141,4 +141,16 @@ public class HeroObject {
         return body;
     }
 
+    public String getDirection() {
+        return this.direction;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
 }

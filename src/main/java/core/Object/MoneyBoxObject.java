@@ -59,7 +59,7 @@ public class MoneyBoxObject {
     }
 
     public void safeDestroy() {
-        if (toDestroy && this.body.getFixtureList().size > 0)
+        if (this.toDestroy && this.body.getFixtureList().size > 0)
             body.destroyFixture(this.body.getFixtureList().get(0));
         this.setDestroyed();
     }

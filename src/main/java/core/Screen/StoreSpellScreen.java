@@ -18,6 +18,9 @@ public class StoreSpellScreen extends Screen {
     private final ArrayList<ButtonObject>   spellButtonObjects;
     private final ButtonObject              downButtonObject;
     private final TextBoxObject             pageTitle;
+    private TextBoxObject                   activeSpell;
+    private TextBoxObject                   spellCountText;
+    private int                             activeSpellCount;
     private final TextBoxObject             moneyBanner;
     private final ArrayList<Spell>          spells;
     private int                             spellArrayIndex;
@@ -98,10 +101,12 @@ public class StoreSpellScreen extends Screen {
 
         if(this.selectedSpell != null) {
             this.spellPrice.render(this.batch);
+            this.activeSpell.render(this.batch);
             this.spellDescription.render(this.batch);
             this.spellName.render(this.batch);
             this.selectedSpellObject.render(this.batch);
             this.buyButtonObject.render(this.batch);
+            this.spellCountText.render(this.batch);
         }
 
         this.batch.end();
@@ -131,15 +136,24 @@ public class StoreSpellScreen extends Screen {
                 this.selectedSpellIndex  = this.spellArrayIndex + i;
                 this.selectedSpell       = this.spells.get(this.selectedSpellIndex);
                 this.spellName           = new TextBoxObject(this.selectedSpell.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
-                this.spellDescription    = new TextBoxObject(this.selectedSpell.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
-                this.selectedSpellObject = new SpellObject(this, this.selectedSpell, 200, 400);
+                this.spellDescription    = new TextBoxObject(this.selectedSpell.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 274, 's');
+                this.selectedSpellObject = new SpellObject(this, this.selectedSpell, 256, 400);
 
                 if(storeMode) {
-                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
-                    this.spellPrice      = new TextBoxObject("Price: " + this.selectedSpell.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 290, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                    this.activeSpell     = new TextBoxObject("", 0,  0, 's');
+                    this.spellCountText  = new TextBoxObject("", 0,  0, 's');
+                    this.spellPrice      = new TextBoxObject("Price: " + this.selectedSpell.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 320, 's');
                 } else {
-                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.selectButton);
+                    this.activeSpellCount = 0;
+                    for (Spell spell: spells)
+                        if(spell.isActive() == 1)
+                            this.activeSpellCount++;
+
+                    this.activeSpell     = new TextBoxObject((this.selectedSpell.isActive() == 1)? "Active" : "Not active", 256,  (Boot.bootInstance.getScreenHeight()) - 320, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 290, (Boot.bootInstance.getScreenHeight()/2), (this.selectedSpell.isActive() == 0)? "Activate" : "Deactivate");
                     this.spellPrice      = new TextBoxObject("", 0,  0, 's');
+                    this.spellCountText  = new TextBoxObject(this.activeSpellCount + "/3 active spells", (Boot.bootInstance.getScreenWidth()/2) - 290, (Boot.bootInstance.getScreenHeight()/2) - 80 , 's');
                 }
             }
         }
@@ -149,8 +163,11 @@ public class StoreSpellScreen extends Screen {
         if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedSpell.getPrice() && storeMode) {
             new SpellController().buy(this.selectedSpell);
             moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedSpell.getPrice()) + " bucks");
-        } else if(this.buyButtonObject.isJustPressed())
-            Boot.bootInstance.setScreen(new HeroScreen(this.camera));
+            Boot.bootInstance.setScreen(new StoreSpellScreen(this.camera, true));
+        } else if(this.buyButtonObject.isJustPressed() && !storeMode && (this.activeSpellCount < 3 || this.selectedSpell.isActive() == 1)) {
+            new SpellController().changeSpellStatus(this.selectedSpell.isActive(), this.selectedSpell.getId());
+            Boot.bootInstance.setScreen(new StoreSpellScreen(this.camera, false));
+        }
 
     }
 

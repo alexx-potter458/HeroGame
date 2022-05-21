@@ -52,7 +52,7 @@ public class Constants {
     public static String forwardBtn                     = "ARW RIGHT";
     public static String backwardText                   = "Go backward";
     public static String backwardBtn                    = "ARW LEFT";
-    public static String spellsBtn                      = "1, 2, 3...9";
+    public static String spellsBtn                      = "1, 2, 3";
     public static String powersBtn                      = "P";
     public static String goButton                       = "GO";
     public static String LevelsScreenTitle              = "LEVEL SELECTOR";

@@ -20,8 +20,9 @@ public class ContactListenerHelper implements ContactListener {
         if(firstObjectFixture.getUserData() == null || secondObjectFixture.getUserData() == null)
             return;
 
-        Fixture heroFixture   = null;
-        Fixture objectFixture = null;
+        Fixture heroFixture       = null;
+        Fixture objectFixture     = null;
+        Fixture heroBulletFixture = null;
 
         if(firstObjectFixture.getUserData() == ObjectType.HERO) {
             heroFixture   = firstObjectFixture;
@@ -29,14 +30,36 @@ public class ContactListenerHelper implements ContactListener {
         } else if(secondObjectFixture.getUserData() == ObjectType.HERO) {
             heroFixture   = secondObjectFixture;
             objectFixture = firstObjectFixture;
+        } else if(firstObjectFixture.getUserData() == ObjectType.HERO_BULLET) {
+            heroBulletFixture   = firstObjectFixture;
+            objectFixture       = secondObjectFixture;
+        } else if(secondObjectFixture.getUserData() == ObjectType.HERO_BULLET) {
+            heroBulletFixture   = secondObjectFixture;
+            objectFixture       = firstObjectFixture;
         }
 
-        if(heroFixture != null) {
+        if(heroFixture != null || heroBulletFixture != null) {
             if(objectFixture.getUserData() == ObjectType.REWARD_MY_XP)
                 this.gameScreen.moneyBoxContact(objectFixture);
 
             if(objectFixture.getUserData() == ObjectType.REWARD_HH)
                 this.gameScreen.healthBoxContact(objectFixture);
+        }
+
+        if(heroFixture != null) {
+            if(objectFixture.getUserData() == ObjectType.ENEMY)
+                this.gameScreen.heroEnemyContact(objectFixture);
+
+            if(objectFixture.getUserData() == ObjectType.ENEMY_BULLET)
+                this.gameScreen.enemyBulletHeroContact(objectFixture);
+        }
+
+        if(heroBulletFixture != null) {
+            if(objectFixture.getUserData() == ObjectType.ENEMY)
+                this.gameScreen.heroBulletEnemyContact(objectFixture, heroBulletFixture);
+
+            if(objectFixture.getUserData() == ObjectType.ENEMY_BULLET)
+                this.gameScreen.heroBulletEnemyBulletContact(objectFixture, heroBulletFixture);
         }
     }
 
@@ -54,4 +77,5 @@ public class ContactListenerHelper implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 
     }
+
 }

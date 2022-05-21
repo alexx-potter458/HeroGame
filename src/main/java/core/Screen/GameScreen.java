@@ -8,32 +8,53 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import core.Boot;
 import core.Controller.HeroController;
+import core.Controller.SpellController;
 import core.Model.Hero;
+import core.Model.Spell;
 import core.Object.*;
 import utils.Config;
 import utils.ContactListenerHelper;
+import utils.ObjectType;
+
 import java.util.ArrayList;
 
 public class GameScreen extends Screen {
-    private final HeroObject            heroObject;
-    private final Hero                  hero;
-    private int                         heroHealth;
-    private int                         heroMoney;
-    private int                         heroExperience;
-    private int                         openedChests;
-    private int                         totalChests;
-    private ArrayList<HealthBoxObject>  healthBoxes;
-    private ArrayList<MoneyBoxObject>   moneyBoxes;
-    private final TextBoxObject         experienceTextBox;
-    private final TextBoxObject         healthTextBox;
-    private final TextBoxObject         moneyTextBox;
-    private final SpriteBatch           contentBatch;
-    private final IconObject            moneyIcon;
-    private final IconObject            heartIcon;
-    private final IconObject            xpIcon;
-    private final IconObject            chestsIcon;
-    private final TextBoxObject         openedChestsTextBox;
-    private final int                   baseScore;
+    private final HeroObject              heroObject;
+    private final Hero                    hero;
+    private int                           heroHealth;
+    private int                           heroMoney;
+    private int                           heroExperience;
+    private int                           openedChests;
+    private int                           enemiesKilled;
+    private int                           totalChests;
+    private int                           totalEnemies;
+    private ArrayList<HealthBoxObject>    healthBoxes;
+    private ArrayList<MoneyBoxObject>     moneyBoxes;
+    private ArrayList<EnemyObject>        enemies;
+    private final ArrayList<BulletObject> heroBullets;
+    private final ArrayList<BulletObject> enemyBullets;
+    private final ArrayList<Integer>      bulletCounters;
+    private final ArrayList<Spell>        spells;
+    private final TextBoxObject           experienceTextBox;
+    private final TextBoxObject           healthTextBox;
+    private final TextBoxObject           moneyTextBox;
+    private final TextBoxObject           rewardInfo;
+    private final TextBoxObject           selectedSpellText;
+    private final SpriteBatch             contentBatch;
+    private final IconObject              moneyIcon;
+    private final IconObject              heartIcon;
+    private final IconObject              xpIcon;
+    private final IconObject              bannerSpell;
+    private final IconObject              chestsIcon;
+    private final IconObject              enemyIcon;
+    private       IconObject              spellIcon;
+    private final IconObject              ribbonIcon;
+    private final TextBoxObject           openedChestsTextBox;
+    private final TextBoxObject           enemiesKilledText;
+    private final int                     baseScore;
+    private int                           timer;
+    private int                           activeSpellIndex;
+    private boolean                       activeSpell;
 
     public GameScreen(OrthographicCamera camera, int level, int baseScore) {
         super(camera,"levels/level" + level, true, level);
@@ -44,29 +65,58 @@ public class GameScreen extends Screen {
         this.heroHealth          = this.hero.getBaseHealth();
         this.heroMoney           = 0;
         this.heroExperience      = 0;
+        this.activeSpell         = false;
+        this.activeSpellIndex    = -1;
         this.baseScore           = baseScore;
+        this.heroBullets         = new ArrayList<>();
+        this.enemyBullets        = new ArrayList<>();
+        this.bulletCounters      = new ArrayList<>();
+        this.spells              = new SpellController().getActiveSpells();
         this.heroObject          = new HeroObject(this, this.hero, 300, Boot.bootInstance.getScreenHeight()/2 + 86);
         this.moneyTextBox        = new TextBoxObject( this.heroMoney + " bucks", 172, Boot.bootInstance.getScreenHeight() - 100, 's');
         this.moneyIcon           = new IconObject("coin", 48, Boot.bootInstance.getScreenHeight() - 100, 38, 38);
+        this.ribbonIcon          = new IconObject("bigRibbon", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 205, 900, 64);
         this.experienceTextBox   = new TextBoxObject( this.heroExperience + " pts", 142, Boot.bootInstance.getScreenHeight() - 154, 's');
         this.heartIcon           = new IconObject("heart", 48, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
         this.healthTextBox       = new TextBoxObject( heroHealth + " / " + this.hero.getBaseHealth(), 172, Boot.bootInstance.getScreenHeight() - 48, 's');
+        this.rewardInfo          = new TextBoxObject("", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 's');
         this.xpIcon              = new IconObject("star", 48, Boot.bootInstance.getScreenHeight() - 154, 38, 38);
-        this.openedChests        = 0;
         this.chestsIcon          = new IconObject("chest", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
+        this.enemyIcon           = new IconObject("orangeEnemy", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 96, 38, 38);
+        this.bannerSpell         = new IconObject("banner", Boot.bootInstance.getScreenWidth() - 220,  32, 400, 48);
+        this.spellIcon           = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 50, 50);
+        this.selectedSpellText   = new TextBoxObject("No spell selected", Boot.bootInstance.getScreenWidth() - 220,  32, 's');
+        this.openedChests        = 0;
+        this.enemiesKilled       = 0;
         this.totalChests         = 0;
+        this.totalEnemies        = 0;
+        this.timer               = 0;
+        this.ribbonIcon.changeVisibility(false);
 
+        for(Spell object: spells)
+            this.bulletCounters.add(object.getBullets());
+
+        if(this.enemies != null)
+            this.totalEnemies += this.enemies.size();
         if(this.healthBoxes != null)
-            this.totalChests += this.healthBoxes.size();
+            this.totalChests  += this.healthBoxes.size();
         if(this.moneyBoxes != null)
-            this.totalChests += this.moneyBoxes.size();
+            this.totalChests  += this.moneyBoxes.size();
 
         this.openedChestsTextBox = new TextBoxObject( this.openedChests + " / " + this.totalChests, Boot.bootInstance.getScreenWidth() - 80, Boot.bootInstance.getScreenHeight() - 48, 's');
+        this.enemiesKilledText   = new TextBoxObject( this.enemiesKilled + " / " + this.totalEnemies, Boot.bootInstance.getScreenWidth() - 80, Boot.bootInstance.getScreenHeight() - 96, 's');
     }
 
     @Override
     public void update() {
         this.beforeWorldStepUpdate();
+        this.timer++;
+
+        if(this.timer > 70) {
+            this.rewardInfo.setText("");
+            this.ribbonIcon.changeVisibility(false);
+            this.timer = 0;
+        }
 
         this.getWorld().step(1/60f, 6, 2);
         this.cameraUpdate();
@@ -74,12 +124,26 @@ public class GameScreen extends Screen {
         this.batch.setProjectionMatrix(camera.combined);
         this.contentBatch.getProjectionMatrix();
         this.pressedButtons();
+        this.enemiesShooting();
 
         if(this.orthogonalTiledMapRenderer != null)
             this.orthogonalTiledMapRenderer.setView(camera);
 
         this.heroObject.update();
         this.healthTextBox.update();
+
+        if(heroBullets != null)
+            for(BulletObject object: heroBullets)
+                object.update();
+
+        if(enemyBullets != null)
+            for(BulletObject object: enemyBullets)
+                object.update();
+
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                object.update(this.heroObject.getX(), this.heroObject.getY());
+
         this.heroObject.checkUserInput();
 
         this.checkHealthStatus();
@@ -101,10 +165,26 @@ public class GameScreen extends Screen {
             for(MoneyBoxObject object: moneyBoxes)
                 object.render(this.batch);
 
+        if(heroBullets != null)
+            for(BulletObject object: heroBullets)
+                object.render(this.batch);
+
+        if(enemyBullets != null)
+            for(BulletObject object: enemyBullets)
+                object.render(this.batch);
+
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                object.render(this.batch);
+
         batch.end();
 
         contentBatch.begin();
+        this.enemyIcon.render(this.contentBatch);
+        this.enemiesKilledText.render(this.contentBatch);
         this.moneyIcon.render(this.contentBatch);
+        this.ribbonIcon.render(this.contentBatch);
+        this.rewardInfo.render(this.contentBatch);
         this.heartIcon.render(this.contentBatch);
         this.xpIcon.render(this.contentBatch);
         this.chestsIcon.render(this.contentBatch);
@@ -112,6 +192,9 @@ public class GameScreen extends Screen {
         this.healthTextBox.render(this.contentBatch);
         this.moneyTextBox.render(this.contentBatch);
         this.experienceTextBox.render(this.contentBatch);
+        this.bannerSpell.render(this.contentBatch);
+        this.spellIcon.render(this.contentBatch);
+        this.selectedSpellText.render(this.contentBatch);
         contentBatch.end();
     }
 
@@ -144,8 +227,70 @@ public class GameScreen extends Screen {
     protected void pressedButtons() {
         super.pressedButtons();
 
+        if(Gdx.input.isKeyPressed(Input.Keys.Q) && spells.size() >= 1)
+            if(bulletCounters.get(0) > 0) {
+                this.activeSpell = true;
+                this.activeSpellIndex = 0;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
+                this.ribbonIcon.changeVisibility(true);
+                this.timer =  0;
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.W) && spells.size() >= 2)
+            if(bulletCounters.get(1) > 0) {
+                this.activeSpell = true;
+                this.activeSpellIndex = 1;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.rewardInfo.setText("You don't have " + this.spells.get(1).getName() + " anymore");
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.E) && spells.size() >= 3)
+            if(bulletCounters.get(2) > 0) {
+                this.activeSpell      = true;
+                this.activeSpellIndex = 2;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
+                this.ribbonIcon.changeVisibility(true);
+                this.timer = 0;
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+            this.activeSpell = false;
+            this.spellIcon = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 48, 48);
+            this.selectedSpellText.setText("No spell selected");
+        }
+
         if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE))
             Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && this.activeSpell) {
+            heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.spells.get(this.activeSpellIndex), this.heroObject.getDirection()));
+            this.bulletCounters.set(this.activeSpellIndex, this.bulletCounters.get(this.activeSpellIndex) - 1);
+            this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            if(this.bulletCounters.get(this.activeSpellIndex) <= 0) {
+                this.activeSpell = false;
+                this.spellIcon   = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 48, 48);
+                this.selectedSpellText.setText("No spell selected");
+            }
+        } else
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+                heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
+    }
+
+    private void enemiesShooting() {
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                if(object.readyToShoot() && timer % (object.getEnemy().getId() * 5 + 40 ) == 0 && object.isNotDestroyed())
+                    enemyBullets.add(new BulletObject(this, object.getX() + (object.getEnemy().getWidth() >> 1), object.getY() + (object.getEnemy().getHeight() >> 1), object.getEnemy().getHitPower(), object.getEnemy().getSpeed(), object.getDirection(), ObjectType.ENEMY_BULLET));
     }
 
     private void passTheFinishLine() {
@@ -167,6 +312,13 @@ public class GameScreen extends Screen {
         this.moneyBoxes.add(moneyBox);
     }
 
+    public void addEnemy(EnemyObject enemy) {
+        if(this.enemies == null)
+            this.enemies = new ArrayList<>();
+
+        this.enemies.add(enemy);
+    }
+
     private void checkHealthStatus() {
         if(this.heroHealth <= 0)
             Boot.bootInstance.setScreen(new LostScreen(this.camera));
@@ -179,14 +331,71 @@ public class GameScreen extends Screen {
     }
 
     public void healthBoxContact(Fixture fixture) {
-        for(HealthBoxObject object: healthBoxes) {
-            if(fixture == object.getFixture()){
+        for(HealthBoxObject object: healthBoxes)
+            if(fixture == object.getFixture())
                 object.flaggedToDestroy();
+    }
+
+    public void heroEnemyContact(Fixture fixture) {
+        for(EnemyObject object: enemies) {
+            if(fixture == object.getFixture()) {
+                this.heroHealth -= object.getEnemy().getHitPower();
+                object.takeDamage(this.hero.getHitPower());
+                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+                System.out.println("bau");
             }
         }
     }
 
+    public void heroBulletEnemyContact(Fixture enemyFixture, Fixture bulletFixture) {
+        int bulletHitPower = 0;
+
+        for(BulletObject object: heroBullets)
+            if(bulletFixture == object.getFixture()) {
+                bulletHitPower = object.getHitPower();
+                object.flaggedToDestroy();
+            }
+
+        for(EnemyObject object: enemies)
+            if(enemyFixture == object.getFixture())
+                object.takeDamage(bulletHitPower);
+    }
+
+    public void heroBulletEnemyBulletContact(Fixture objectFixture, Fixture heroBulletFixture) {
+        for(BulletObject object: heroBullets)
+            if(heroBulletFixture == object.getFixture())
+                object.flaggedToDestroy();
+
+        for(BulletObject object: enemyBullets)
+            if(objectFixture == object.getFixture())
+                object.flaggedToDestroy();
+    }
+
+    public void enemyBulletHeroContact(Fixture fixture) {
+        for(BulletObject object: enemyBullets)
+            if(fixture == object.getFixture()){
+                object.flaggedToDestroy();
+                this.heroHealth -= object.getHitPower();
+                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+            }
+    }
+
     private void beforeWorldStepUpdate() {
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                if(object.isToDestroy() && object.isNotDestroyed()) {
+                    object.safeDestroy();
+                    this.heroMoney += object.getEnemy().getMoneyReward();
+                    this.heroExperience += object.getEnemy().getMoneyReward() >> 2;
+                    this.moneyTextBox.setText(this.heroMoney + " bucks");
+                    this.experienceTextBox.setText(this.heroExperience + " pts");
+                    this.enemiesKilled ++;
+                    this.enemiesKilledText.setText(this.enemiesKilled + " / " + this.totalEnemies);
+                    this.timer =  0;
+                    this.ribbonIcon.changeVisibility(true);
+                    this.rewardInfo.setText("Enemy killed");
+                }
+
         if(moneyBoxes != null)
             for(MoneyBoxObject object: moneyBoxes)
                 if(object.isToDestroy() && !object.isDestroyed()) {
@@ -197,6 +406,9 @@ public class GameScreen extends Screen {
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
                     this.moneyTextBox.setText(this.heroMoney + " bucks");
                     this.experienceTextBox.setText(this.heroExperience + " pts");
+                    this.timer =  0;
+                    this.ribbonIcon.changeVisibility(true);
+                    this.rewardInfo.setText(object.getReward().getName());
                 }
 
         if(healthBoxes != null)
@@ -207,7 +419,20 @@ public class GameScreen extends Screen {
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
                     this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+                    this.timer =  0;
+                    this.ribbonIcon.changeVisibility(true);
+                    this.rewardInfo.setText(object.getReward().getName());
                 }
+
+        if(heroBullets != null)
+            for(BulletObject object: heroBullets)
+                if(object.isToDestroy() && object.isNotDestroyed())
+                    object.safeDestroy();
+
+        if(enemyBullets != null)
+            for(BulletObject object: enemyBullets)
+                if(object.isToDestroy() && object.isNotDestroyed())
+                    object.safeDestroy();
     }
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="3" nextobjectid="161">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="3" nextobjectid="176">
  <tileset firstgid="1" source="../../tiles/tiles.tsx"/>
  <layer id="1" name="background" width="100" height="100">
   <data encoding="csv">
@@ -505,5 +505,14 @@
   <object id="160" x="1800" y="2160">
    <polygon points="0,0 120,0 120,-60 0,-60"/>
   </object>
+  <object id="161" name="E" x="1860" y="5640" width="60" height="60"/>
+  <object id="164" name="E" x="1500" y="5820" width="60" height="60"/>
+  <object id="165" name="E" x="3408" y="4454" width="60" height="60"/>
+  <object id="166" name="E" x="2496" y="5170" width="60" height="60"/>
+  <object id="171" name="E" x="2940" y="4500" width="60" height="60"/>
+  <object id="172" name="E" x="2640" y="3960" width="60" height="60"/>
+  <object id="173" name="E" x="2160" y="3300" width="60" height="60"/>
+  <object id="174" name="E" x="1500" y="3000" width="60" height="60"/>
+  <object id="175" name="E" x="2100" y="2640" width="60" height="60"/>
  </objectgroup>
 </map>
