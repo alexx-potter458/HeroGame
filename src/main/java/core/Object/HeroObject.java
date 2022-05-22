@@ -22,7 +22,7 @@ public class HeroObject {
     private float           y;
     private float           velocityX;
     private final float     velocityY;
-    private final float     speed;
+    private float           speed;
     private final float     jumpPower;
     private final float     width;
     private final float     height;
@@ -151,6 +151,14 @@ public class HeroObject {
 
     public float getY() {
         return y;
+    }
+
+    public void increaseSpeed(int value) {
+        this.speed += value;
+    }
+
+    public void decreaseSpeed(int value) {
+        this.speed -= value;
     }
 
 }

@@ -27,6 +27,14 @@ public class IconObject {
         this.texture = new Texture("textures/spells/inStore/" + name + ".png");
     }
 
+    public void setPowerIcon(String name) {
+        this.texture = new Texture("textures/powers/" + name + ".png");
+    }
+
+    public void setIcon(String name) {
+        this.texture = new Texture("textures/icons/" + name + ".png");
+    }
+
     public void render(SpriteBatch batch) {
         if(isVisible)
             batch.draw(texture, x, y, width, height);

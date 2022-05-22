@@ -47,14 +47,20 @@ public class GameScreen extends Screen {
     private final IconObject              bannerSpell;
     private final IconObject              chestsIcon;
     private final IconObject              enemyIcon;
-    private       IconObject              spellIcon;
+    private final IconObject              spellIcon;
+    private final IconObject              powerIcon;
+    private final IconObject              bannerPower;
+    private final TextBoxObject           powerTextBox;
     private final IconObject              ribbonIcon;
     private final TextBoxObject           openedChestsTextBox;
     private final TextBoxObject           enemiesKilledText;
     private final int                     baseScore;
     private int                           timer;
+    private int                           powerTimer;
+    private int                           enemyTimer;
     private int                           activeSpellIndex;
     private boolean                       activeSpell;
+    private int                           powerStatus;
 
     public GameScreen(OrthographicCamera camera, int level, int baseScore) {
         super(camera,"levels/level" + level, true, level);
@@ -84,13 +90,19 @@ public class GameScreen extends Screen {
         this.chestsIcon          = new IconObject("chest", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
         this.enemyIcon           = new IconObject("orangeEnemy", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 96, 38, 38);
         this.bannerSpell         = new IconObject("banner", Boot.bootInstance.getScreenWidth() - 220,  32, 400, 48);
+        this.bannerPower         = new IconObject("banner", 220,  32, 400, 48);
         this.spellIcon           = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 50, 50);
+        this.powerIcon           = new IconObject("defaultPower", 22,  32, 50, 50);
         this.selectedSpellText   = new TextBoxObject("No spell selected", Boot.bootInstance.getScreenWidth() - 220,  32, 's');
+        this.powerTextBox        = new TextBoxObject("No steroids in", 220,  32, 's');
         this.openedChests        = 0;
         this.enemiesKilled       = 0;
         this.totalChests         = 0;
         this.totalEnemies        = 0;
         this.timer               = 0;
+        this.powerTimer          = 0;
+        this.enemyTimer          = 0;
+        this.powerStatus         = 0;
         this.ribbonIcon.changeVisibility(false);
 
         for(Spell object: spells)
@@ -110,27 +122,28 @@ public class GameScreen extends Screen {
     @Override
     public void update() {
         this.beforeWorldStepUpdate();
-        this.timer++;
-
-        if(this.timer > 70) {
-            this.rewardInfo.setText("");
-            this.ribbonIcon.changeVisibility(false);
-            this.timer = 0;
-        }
+        this.gameTiming();
 
         this.getWorld().step(1/60f, 6, 2);
         this.cameraUpdate();
 
         this.batch.setProjectionMatrix(camera.combined);
         this.contentBatch.getProjectionMatrix();
-        this.pressedButtons();
-        this.enemiesShooting();
 
         if(this.orthogonalTiledMapRenderer != null)
             this.orthogonalTiledMapRenderer.setView(camera);
 
+        this.pressedButtons();
+        this.enemiesShooting();
+        this.checkHealthStatus();
+        this.passTheFinishLine();
+
         this.heroObject.update();
-        this.healthTextBox.update();
+        this.heroObject.checkUserInput();
+
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                object.update(this.heroObject.getX(), this.heroObject.getY());
 
         if(heroBullets != null)
             for(BulletObject object: heroBullets)
@@ -139,15 +152,6 @@ public class GameScreen extends Screen {
         if(enemyBullets != null)
             for(BulletObject object: enemyBullets)
                 object.update();
-
-        if(enemies != null)
-            for(EnemyObject object: enemies)
-                object.update(this.heroObject.getX(), this.heroObject.getY());
-
-        this.heroObject.checkUserInput();
-
-        this.checkHealthStatus();
-        this.passTheFinishLine();
     }
 
     @Override
@@ -155,46 +159,11 @@ public class GameScreen extends Screen {
         super.render(delta);
 
         batch.begin();
-        this.heroObject.render(this.batch);
-
-        if(healthBoxes != null)
-            for(HealthBoxObject object: healthBoxes)
-                object.render(this.batch);
-
-        if(moneyBoxes != null)
-            for(MoneyBoxObject object: moneyBoxes)
-                object.render(this.batch);
-
-        if(heroBullets != null)
-            for(BulletObject object: heroBullets)
-                object.render(this.batch);
-
-        if(enemyBullets != null)
-            for(BulletObject object: enemyBullets)
-                object.render(this.batch);
-
-        if(enemies != null)
-            for(EnemyObject object: enemies)
-                object.render(this.batch);
-
+        this.mainContentRender();
         batch.end();
 
         contentBatch.begin();
-        this.enemyIcon.render(this.contentBatch);
-        this.enemiesKilledText.render(this.contentBatch);
-        this.moneyIcon.render(this.contentBatch);
-        this.ribbonIcon.render(this.contentBatch);
-        this.rewardInfo.render(this.contentBatch);
-        this.heartIcon.render(this.contentBatch);
-        this.xpIcon.render(this.contentBatch);
-        this.chestsIcon.render(this.contentBatch);
-        this.openedChestsTextBox.render(this.contentBatch);
-        this.healthTextBox.render(this.contentBatch);
-        this.moneyTextBox.render(this.contentBatch);
-        this.experienceTextBox.render(this.contentBatch);
-        this.bannerSpell.render(this.contentBatch);
-        this.spellIcon.render(this.contentBatch);
-        this.selectedSpellText.render(this.contentBatch);
+        this.auxiliaryContentRender();
         contentBatch.end();
     }
 
@@ -226,48 +195,8 @@ public class GameScreen extends Screen {
     @Override
     protected void pressedButtons() {
         super.pressedButtons();
-
-        if(Gdx.input.isKeyPressed(Input.Keys.Q) && spells.size() >= 1)
-            if(bulletCounters.get(0) > 0) {
-                this.activeSpell = true;
-                this.activeSpellIndex = 0;
-                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
-                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-            } else {
-                this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
-                this.ribbonIcon.changeVisibility(true);
-                this.timer =  0;
-            }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.W) && spells.size() >= 2)
-            if(bulletCounters.get(1) > 0) {
-                this.activeSpell = true;
-                this.activeSpellIndex = 1;
-                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
-                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-            } else {
-                this.timer =  0;
-                this.ribbonIcon.changeVisibility(true);
-                this.rewardInfo.setText("You don't have " + this.spells.get(1).getName() + " anymore");
-            }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.E) && spells.size() >= 3)
-            if(bulletCounters.get(2) > 0) {
-                this.activeSpell      = true;
-                this.activeSpellIndex = 2;
-                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
-                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-            } else {
-                this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
-                this.ribbonIcon.changeVisibility(true);
-                this.timer = 0;
-            }
-
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            this.activeSpell = false;
-            this.spellIcon = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 48, 48);
-            this.selectedSpellText.setText("No spell selected");
-        }
+        this.heroSpellSelect();
+        this.heroPowerSelect();
 
         if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE))
             Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
@@ -278,106 +207,12 @@ public class GameScreen extends Screen {
             this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
             if(this.bulletCounters.get(this.activeSpellIndex) <= 0) {
                 this.activeSpell = false;
-                this.spellIcon   = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 48, 48);
+                this.spellIcon.setIcon("defaultSpell");
                 this.selectedSpellText.setText("No spell selected");
             }
         } else
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
-                heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
-    }
-
-    private void enemiesShooting() {
-        if(enemies != null)
-            for(EnemyObject object: enemies)
-                if(object.readyToShoot() && timer % (object.getEnemy().getId() * 5 + 40 ) == 0 && object.isNotDestroyed())
-                    enemyBullets.add(new BulletObject(this, object.getX() + (object.getEnemy().getWidth() >> 1), object.getY() + (object.getEnemy().getHeight() >> 1), object.getEnemy().getHitPower(), object.getEnemy().getSpeed(), object.getDirection(), ObjectType.ENEMY_BULLET));
-    }
-
-    private void passTheFinishLine() {
-        if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
-            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroHealth, this.baseScore));
-    }
-
-    public void addHealthBox(HealthBoxObject healthBox) {
-        if(this.healthBoxes == null)
-            this.healthBoxes = new ArrayList<>();
-
-        this.healthBoxes.add(healthBox);
-    }
-
-    public void addMoneyBox(MoneyBoxObject moneyBox) {
-        if(this.moneyBoxes == null)
-            this.moneyBoxes = new ArrayList<>();
-
-        this.moneyBoxes.add(moneyBox);
-    }
-
-    public void addEnemy(EnemyObject enemy) {
-        if(this.enemies == null)
-            this.enemies = new ArrayList<>();
-
-        this.enemies.add(enemy);
-    }
-
-    private void checkHealthStatus() {
-        if(this.heroHealth <= 0)
-            Boot.bootInstance.setScreen(new LostScreen(this.camera));
-    }
-
-    public void moneyBoxContact(Fixture fixture) {
-        for(MoneyBoxObject object: moneyBoxes)
-            if(fixture == object.getFixture())
-                 object.flaggedToDestroy();
-    }
-
-    public void healthBoxContact(Fixture fixture) {
-        for(HealthBoxObject object: healthBoxes)
-            if(fixture == object.getFixture())
-                object.flaggedToDestroy();
-    }
-
-    public void heroEnemyContact(Fixture fixture) {
-        for(EnemyObject object: enemies) {
-            if(fixture == object.getFixture()) {
-                this.heroHealth -= object.getEnemy().getHitPower();
-                object.takeDamage(this.hero.getHitPower());
-                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
-                System.out.println("bau");
-            }
-        }
-    }
-
-    public void heroBulletEnemyContact(Fixture enemyFixture, Fixture bulletFixture) {
-        int bulletHitPower = 0;
-
-        for(BulletObject object: heroBullets)
-            if(bulletFixture == object.getFixture()) {
-                bulletHitPower = object.getHitPower();
-                object.flaggedToDestroy();
-            }
-
-        for(EnemyObject object: enemies)
-            if(enemyFixture == object.getFixture())
-                object.takeDamage(bulletHitPower);
-    }
-
-    public void heroBulletEnemyBulletContact(Fixture objectFixture, Fixture heroBulletFixture) {
-        for(BulletObject object: heroBullets)
-            if(heroBulletFixture == object.getFixture())
-                object.flaggedToDestroy();
-
-        for(BulletObject object: enemyBullets)
-            if(objectFixture == object.getFixture())
-                object.flaggedToDestroy();
-    }
-
-    public void enemyBulletHeroContact(Fixture fixture) {
-        for(BulletObject object: enemyBullets)
-            if(fixture == object.getFixture()){
-                object.flaggedToDestroy();
-                this.heroHealth -= object.getHitPower();
-                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
-            }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+            heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
     }
 
     private void beforeWorldStepUpdate() {
@@ -433,6 +268,237 @@ public class GameScreen extends Screen {
             for(BulletObject object: enemyBullets)
                 if(object.isToDestroy() && object.isNotDestroyed())
                     object.safeDestroy();
+    }
+
+    private void gameTiming() {
+        this.timer ++;
+        this.enemyTimer ++;
+        if(this.powerStatus == 1 || this.powerStatus == 2)
+            this.powerTimer ++;
+        if(this.enemyTimer >= 1000)
+            this.enemyTimer = 0;
+
+        if(this.timer > 70) {
+            this.rewardInfo.setText("");
+            this.ribbonIcon.changeVisibility(false);
+            this.timer = 0;
+        }
+
+        if(this.powerTimer == 100 && this.powerStatus == 1) {
+            this.powerTimer = 0;
+            this.powerStatus = 2;
+            this.powerIcon.setIcon("offlinePower");
+            this.powerTextBox.setText("Steroids refueling");
+            this.heroObject.decreaseSpeed(3);
+        }
+
+        if(this.powerTimer == 100 && this.powerStatus == 2) {
+            this.powerTimer = 0;
+            this.powerStatus = 0;
+            this.powerIcon.setIcon("defaultPower");
+            this.powerTextBox.setText("Steroids ready");
+        }
+    }
+
+    private void mainContentRender() {
+        this.heroObject.render(this.batch);
+
+        if(healthBoxes != null)
+            for(HealthBoxObject object: healthBoxes)
+                object.render(this.batch);
+
+        if(moneyBoxes != null)
+            for(MoneyBoxObject object: moneyBoxes)
+                object.render(this.batch);
+
+        if(heroBullets != null)
+            for(BulletObject object: heroBullets)
+                object.render(this.batch);
+
+        if(enemyBullets != null)
+            for(BulletObject object: enemyBullets)
+                object.render(this.batch);
+
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                object.render(this.batch);
+    }
+
+    private void auxiliaryContentRender() {
+        this.enemyIcon.render(this.contentBatch);
+        this.enemiesKilledText.render(this.contentBatch);
+        this.moneyIcon.render(this.contentBatch);
+        this.ribbonIcon.render(this.contentBatch);
+        this.rewardInfo.render(this.contentBatch);
+        this.heartIcon.render(this.contentBatch);
+        this.xpIcon.render(this.contentBatch);
+        this.chestsIcon.render(this.contentBatch);
+        this.openedChestsTextBox.render(this.contentBatch);
+        this.healthTextBox.render(this.contentBatch);
+        this.moneyTextBox.render(this.contentBatch);
+        this.experienceTextBox.render(this.contentBatch);
+        this.bannerSpell.render(this.contentBatch);
+        this.bannerPower.render(this.contentBatch);
+        this.spellIcon.render(this.contentBatch);
+        this.powerIcon.render(this.contentBatch);
+        this.selectedSpellText.render(this.contentBatch);
+        this.powerTextBox.render(this.contentBatch);
+    }
+
+    private void heroPowerSelect() {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 0) {
+            this.powerIcon.setIcon("activePower");
+            this.powerTextBox.setText("Steroids kicked in");
+            this.heroObject.increaseSpeed(3);
+            this.powerTimer  = 0;
+            this.powerStatus = 1;
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 1) {
+            this.powerIcon.setIcon("defaultPower");
+            this.powerTextBox.setText("Steroids on hold");
+            this.heroObject.decreaseSpeed(3);
+            this.powerStatus = 3;
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 3) {
+            this.powerIcon.setIcon("activePower");
+            this.powerTextBox.setText("Steroids kicked in");
+            this.heroObject.increaseSpeed(3);
+            this.powerStatus = 1;
+        }
+    }
+
+    private void heroSpellSelect() {
+        if(Gdx.input.isKeyPressed(Input.Keys.Q) && spells.size() >= 1)
+            if(bulletCounters.get(0) > 0) {
+                this.activeSpell = true;
+                this.activeSpellIndex = 0;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
+                this.ribbonIcon.changeVisibility(true);
+                this.timer =  0;
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.W) && spells.size() >= 2)
+            if(bulletCounters.get(1) > 0) {
+                this.activeSpell = true;
+                this.activeSpellIndex = 1;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.rewardInfo.setText("You don't have " + this.spells.get(1).getName() + " anymore");
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.E) && spells.size() >= 3)
+            if(bulletCounters.get(2) > 0) {
+                this.activeSpell      = true;
+                this.activeSpellIndex = 2;
+                this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
+                this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            } else {
+                this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
+                this.ribbonIcon.changeVisibility(true);
+                this.timer = 0;
+            }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+            this.activeSpell = false;
+            this.spellIcon.setIcon("defaultSpell");
+            this.selectedSpellText.setText("No spell selected");
+        }
+    }
+
+    private void enemiesShooting() {
+        if(enemies != null)
+            for(EnemyObject object: enemies)
+                if(object.readyToShoot() && this.enemyTimer % (object.getEnemy().getId() * 5 + 48 ) == 0 && object.isNotDestroyed())
+                    enemyBullets.add(new BulletObject(this, object.getX() + (object.getEnemy().getWidth() >> 1), object.getY() + (object.getEnemy().getHeight() >> 1), object.getEnemy().getHitPower(), object.getEnemy().getSpeed(), object.getDirection(), ObjectType.ENEMY_BULLET));
+    }
+
+    private void passTheFinishLine() {
+        if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
+            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroHealth, this.baseScore));
+    }
+
+    private void checkHealthStatus() {
+        if(this.heroHealth <= 0)
+            Boot.bootInstance.setScreen(new LostScreen(this.camera));
+    }
+
+    public void addHealthBox(HealthBoxObject healthBox) {
+        if(this.healthBoxes == null)
+            this.healthBoxes = new ArrayList<>();
+
+        this.healthBoxes.add(healthBox);
+    }
+
+    public void addMoneyBox(MoneyBoxObject moneyBox) {
+        if(this.moneyBoxes == null)
+            this.moneyBoxes = new ArrayList<>();
+
+        this.moneyBoxes.add(moneyBox);
+    }
+
+    public void addEnemy(EnemyObject enemy) {
+        if(this.enemies == null)
+            this.enemies = new ArrayList<>();
+
+        this.enemies.add(enemy);
+    }
+
+    public void moneyBoxContact(Fixture fixture) {
+        for(MoneyBoxObject object: moneyBoxes)
+            if(fixture == object.getFixture())
+                 object.flaggedToDestroy();
+    }
+
+    public void healthBoxContact(Fixture fixture) {
+        for(HealthBoxObject object: healthBoxes)
+            if(fixture == object.getFixture())
+                object.flaggedToDestroy();
+    }
+
+    public void heroEnemyContact(Fixture fixture) {
+        for(EnemyObject object: enemies)
+            if(fixture == object.getFixture()) {
+                this.heroHealth -= object.getEnemy().getHitPower();
+                object.takeDamage(this.hero.getHitPower());
+                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+            }
+    }
+
+    public void heroBulletEnemyContact(Fixture enemyFixture, Fixture bulletFixture) {
+        int bulletHitPower = 0;
+
+        for(BulletObject object: heroBullets)
+            if(bulletFixture == object.getFixture()) {
+                bulletHitPower = object.getHitPower();
+                object.flaggedToDestroy();
+            }
+
+        for(EnemyObject object: enemies)
+            if(enemyFixture == object.getFixture())
+                object.takeDamage(bulletHitPower);
+    }
+
+    public void heroBulletEnemyBulletContact(Fixture objectFixture, Fixture heroBulletFixture) {
+        for(BulletObject object: heroBullets)
+            if(heroBulletFixture == object.getFixture())
+                object.flaggedToDestroy();
+
+        for(BulletObject object: enemyBullets)
+            if(objectFixture == object.getFixture())
+                object.flaggedToDestroy();
+    }
+
+    public void enemyBulletHeroContact(Fixture fixture) {
+        for(BulletObject object: enemyBullets)
+            if(fixture == object.getFixture()){
+                object.flaggedToDestroy();
+                this.heroHealth -= object.getHitPower();
+                this.healthTextBox.setText(heroHealth + " / " + this.hero.getBaseHealth());
+            }
     }
 
 }
