@@ -92,8 +92,10 @@ public class StoreSpellScreen extends Screen {
         this.batch.begin();
         this.moneyBanner.render(this.batch);
         this.backButtonObject.render(this.batch);
-        this.downButtonObject.render(this.batch);
-        this.upButtonObject.render(this.batch);
+        if(spells.size() > 5) {
+            this.downButtonObject.render(this.batch);
+            this.upButtonObject.render(this.batch);
+        }
         this.pageTitle.render(this.batch);
 
         for(ButtonObject buttonObject : spellButtonObjects)
@@ -168,7 +170,6 @@ public class StoreSpellScreen extends Screen {
             new SpellController().changeSpellStatus(this.selectedSpell.isActive(), this.selectedSpell.getId());
             Boot.bootInstance.setScreen(new StoreSpellScreen(this.camera, false));
         }
-
     }
 
 }

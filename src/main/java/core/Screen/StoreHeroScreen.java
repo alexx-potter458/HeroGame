@@ -90,9 +90,12 @@ public class StoreHeroScreen extends Screen {
         this.batch.begin();
         this.moneyBanner.render(this.batch);
         this.backButtonObject.render(this.batch);
-        this.downButtonObject.render(this.batch);
-        this.upButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
+
+        if(heroes.size() > 5) {
+            this.downButtonObject.render(this.batch);
+            this.upButtonObject.render(this.batch);
+        }
 
         for(ButtonObject buttonObject : heroButtonObjects)
             buttonObject.render(this.batch);

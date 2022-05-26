@@ -28,7 +28,7 @@ public class IconObject {
     }
 
     public void setPowerIcon(String name) {
-        this.texture = new Texture("textures/powers/" + name + ".png");
+        this.texture = new Texture("textures/powers/inGame/" + name + ".png");
     }
 
     public void setIcon(String name) {

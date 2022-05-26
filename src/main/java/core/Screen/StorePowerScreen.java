@@ -9,7 +9,6 @@ import core.Object.ButtonObject;
 import core.Object.PowerObject;
 import core.Object.TextBoxObject;
 import utils.Constants;
-
 import java.util.ArrayList;
 
 public class StorePowerScreen extends Screen {
@@ -29,6 +28,9 @@ public class StorePowerScreen extends Screen {
     private TextBoxObject                   powerDescription;
     private TextBoxObject                   powerPrice;
     private final boolean                   storeMode;
+    private TextBoxObject                   activePower;
+    private TextBoxObject                   powerCountText;
+    private int                             activePowerCount;
 
     public StorePowerScreen(OrthographicCamera camera, boolean storeMode) {
         super(camera,"storeCategoryScreen/map", true);
@@ -40,6 +42,7 @@ public class StorePowerScreen extends Screen {
         this.pageTitle          = new TextBoxObject(Constants.PowersScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.moneyBanner        = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.storeMode          = storeMode;
+        this.activePowerCount   = 0;
 
         if (this.storeMode)
             this.powers = new PowerController().getAllPowers();
@@ -89,9 +92,12 @@ public class StorePowerScreen extends Screen {
         this.batch.begin();
         this.moneyBanner.render(this.batch);
         this.backButtonObject.render(this.batch);
-        this.downButtonObject.render(this.batch);
-        this.upButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
+
+        if(powers.size() > 5) {
+            this.downButtonObject.render(this.batch);
+            this.upButtonObject.render(this.batch);
+        }
 
         for(ButtonObject buttonObject : powerButtonObjects)
             buttonObject.render(this.batch);
@@ -102,6 +108,8 @@ public class StorePowerScreen extends Screen {
             this.powerName.render(this.batch);
             this.selectedPowerObject.render(this.batch);
             this.buyButtonObject.render(this.batch);
+            this.activePower.render(this.batch);
+            this.powerCountText.render(this.batch);
         }
 
         this.batch.end();
@@ -135,14 +143,24 @@ public class StorePowerScreen extends Screen {
                 this.selectedPower       = this.powers.get(this.selectedPowerIndex);
                 this.powerName           = new TextBoxObject(this.selectedPower.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');
                 this.powerDescription    = new TextBoxObject(this.selectedPower.getDescription(),256,  (Boot.bootInstance.getScreenHeight()) - 264, 's');
-                this.selectedPowerObject = new PowerObject(this, this.selectedPower, 200, 300);
+                this.selectedPowerObject = new PowerObject(this, this.selectedPower, 256, 400);
 
                 if (this.storeMode) {
                     this.powerPrice      = new TextBoxObject("Price: " + this.selectedPower.getPrice() + " bucks",256,  (Boot.bootInstance.getScreenHeight()) - 300, 's');
                     this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.buyButton);
+                    this.activePower     = new TextBoxObject("", 0,  0, 's');
+                    this.powerCountText  = new TextBoxObject("", 0,  0, 's');
+
                 } else {
-                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), Constants.selectButton);
+                    this.activePowerCount = 0;
+                    for (Power power: powers)
+                        if(power.isActive() == 1)
+                            this.activePowerCount++;
+
+                    this.activePower     = new TextBoxObject((this.selectedPower.isActive() == 1)? "Active" : "Not active", 256,  (Boot.bootInstance.getScreenHeight()) - 320, 's');
+                    this.buyButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 280, (Boot.bootInstance.getScreenHeight()/2), (this.selectedPower.isActive() == 0)? "Activate" : "Deactivate");
                     this.powerPrice      = new TextBoxObject("",0,  0, 's');
+                    this.powerCountText  = new TextBoxObject(this.activePowerCount + "/1 active powers", (Boot.bootInstance.getScreenWidth()/2) - 290, (Boot.bootInstance.getScreenHeight()/2) - 80 , 's');
                 }
             }
         }
@@ -152,8 +170,11 @@ public class StorePowerScreen extends Screen {
         if(this.buyButtonObject.isJustPressed() && User.user.getMoney() >= this.selectedPower.getPrice() && storeMode) {
             new PowerController().buy(this.selectedPower);
             moneyBanner.setText(Constants.moneyBannerLabel + (User.user.getMoney() - this.selectedPower.getPrice()) + " bucks");
-        } else if(this.buyButtonObject.isJustPressed())
-            Boot.bootInstance.setScreen(new HeroScreen(this.camera));
+            Boot.bootInstance.setScreen(new StorePowerScreen(this.camera, true));
+        } else if(this.buyButtonObject.isJustPressed() && !storeMode) {
+            new PowerController().changePowerStatus(this.selectedPower.isActive(), this.selectedPower.getId());
+            Boot.bootInstance.setScreen(new StorePowerScreen(this.camera, false));
+        }
     }
 
 }

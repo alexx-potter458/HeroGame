@@ -23,7 +23,7 @@ public class HeroObject {
     private float           velocityX;
     private final float     velocityY;
     private float           speed;
-    private final float     jumpPower;
+    private       float     jumpPower;
     private final float     width;
     private final float     height;
     private final Body      body;
@@ -31,6 +31,11 @@ public class HeroObject {
     private float           oldVelY;
     private String          direction;
     private int             timer;
+    private int             powerValue;
+    private String          powerType;
+    private int             heroHealth;
+    private boolean         shield;
+
 
     public HeroObject(Screen screen) {
         this.x           = 0;
@@ -40,8 +45,10 @@ public class HeroObject {
         this.velocityX   = 0;
         this.velocityY   = 0;
         this.timer       = 0;
+        this.heroHealth  = 0;
         this.jumpPower   = 0;
         this.speed       = 0;
+        this.powerValue  = 0;
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
         this.firstRight = new Texture("textures/characters/stitch/stationary/stitch.png");
         this.secondRight = new Texture("textures/characters/stitch/stationary/stitch.png");
@@ -50,6 +57,8 @@ public class HeroObject {
         this.texture     = this.firstRight;
         this.jumpCounter = 0;
         this.direction   = "R";
+        this.powerType   = "";
+        this.shield      = false;
     }
 
     public HeroObject(Screen screen, Hero hero, int x, int y) {
@@ -71,6 +80,10 @@ public class HeroObject {
         this.texture     = this.firstRight;
         this.jumpCounter = 0;
         this.oldVelY     = 0;
+        this.heroHealth  = hero.getBaseHealth();
+        this.powerValue  = 0;
+        this.powerType   = "";
+        this.shield      = false;
     }
 
     public void update() {
@@ -153,12 +166,38 @@ public class HeroObject {
         return y;
     }
 
-    public void increaseSpeed(int value) {
-        this.speed += value;
+    public int getHeroHealth() {
+        return heroHealth;
     }
 
-    public void decreaseSpeed(int value) {
-        this.speed -= value;
+    public void addHealth(int value){
+        this.heroHealth += value;
+    }
+
+    public void takeHit(int value) {
+        if(!shield)
+            this.heroHealth -= value;
+    }
+
+    public void activatePower() {
+        switch (this.powerType) {
+            case "speed"  -> this.speed += this.powerValue;
+            case "shield" -> this.shield = true;
+            case "jump"   -> this.jumpPower += this.powerValue;
+        }
+    }
+
+    public void deactivatePower() {
+        switch (powerType) {
+            case "speed"  -> this.speed -= this.powerValue;
+            case "shield" -> this.shield = false;
+            case "jump"   -> this.jumpPower -= this.powerValue;
+        }
+    }
+
+    public void setPower(int value, String type) {
+        this.powerValue = value;
+        this.powerType  = type;
     }
 
 }
