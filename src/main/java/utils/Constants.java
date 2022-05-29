@@ -48,12 +48,12 @@ public class Constants {
     public static String jumpBtn                        = "ARW UP";
     public static String downText                       = "Down";
     public static String downBtn                        = "ARW DOWN";
-    public static String forwardText                    = "Go forward";
+    public static String forwardText                    = "Go right";
     public static String forwardBtn                     = "ARW RIGHT";
-    public static String backwardText                   = "Go backward";
+    public static String backwardText                   = "Go left";
     public static String backwardBtn                    = "ARW LEFT";
-    public static String spellsBtn                      = "1, 2, 3";
-    public static String powersBtn                      = "P";
+    public static String spellsBtn                      = "Q, W, E";
+    public static String powersBtn                      = "L CTRL";
     public static String goButton                       = "GO";
     public static String LevelsScreenTitle              = "LEVEL SELECTOR";
     public static String Won                            = "YOU WON";

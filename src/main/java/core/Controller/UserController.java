@@ -1,5 +1,7 @@
 package core.Controller;
 
+import core.Database.HeroDatabase;
+import core.Database.LevelDatabase;
 import core.Database.UserDatabase;
 import core.Model.User;
 
@@ -20,6 +22,8 @@ public class UserController {
     public void deleteUser() {
         new UserDatabase().deleteAllUsers();
         new User(0,"", 0, 0, 0, 1);
+        new LevelDatabase().resetLevels();
+        new HeroDatabase().deleteBoughtHeroes();
     }
 
     public void setMoney(int money) {

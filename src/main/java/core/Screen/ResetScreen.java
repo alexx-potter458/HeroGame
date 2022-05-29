@@ -17,9 +17,9 @@ public class ResetScreen extends Screen {
         super(camera, "startScreen/map");
 
         this.alert      = new TextBoxObject(Constants.resetQuestion, Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 80, 'm');
-        this.backButton = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
-        this.confirm    = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) - 130, Boot.bootInstance.getScreenHeight()/2, Constants.confirm);
-        this.refuse     = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) + 130, Boot.bootInstance.getScreenHeight()/2, Constants.refuse);
+        this.backButton = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.confirm    = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) - 130, Boot.bootInstance.getScreenHeight()/2, Constants.confirm);
+        this.refuse     = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 130, Boot.bootInstance.getScreenHeight()/2, Constants.refuse);
     }
 
     @Override

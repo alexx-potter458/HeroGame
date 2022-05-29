@@ -22,21 +22,20 @@ public class LobbyScreen extends Screen {
     private final ButtonObject  storeButtonObject;
     private final HeroObject    heroObject;
 
-
     public LobbyScreen(OrthographicCamera camera) {
-        super(camera,"startScreen/map");
+        super(camera,"startScreen/map", true);
 
         this.pageTitle          = new TextBoxObject(Constants.LobbyScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.backButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
-        this.resetButtonObject  = new ButtonObject(this, 144, 160, Constants.resetButtonLabel);
-        this.levelsButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2 - 80) , Constants.newUserButton);
-        this.charButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.charButtonLabel);
-        this.storeButtonObject  = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.storeButtonLabel);
+        this.backButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.resetButtonObject  = new ButtonObject(144, 160, Constants.resetButtonLabel);
+        this.levelsButtonObject = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2 - 80) , Constants.newUserButton);
+        this.charButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.charButtonLabel);
+        this.storeButtonObject  = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.storeButtonLabel);
 
         Hero hero = new HeroController().getMainHero();
 
         if(hero != null)
-            this.heroObject = new HeroObject(this, hero,Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 86);
+            this.heroObject = new HeroObject(this, hero,Boot.bootInstance.getScreenWidth()/2 - 300, Boot.bootInstance.getScreenHeight()/2 - 100);
         else
             this.heroObject = new HeroObject(this);
 
@@ -60,7 +59,7 @@ public class LobbyScreen extends Screen {
         this.storeButtonObject.update();
         this.heroObject.update();
 
-       this.buttonspressed();
+       this.buttonsPressed();
     }
 
     @Override
@@ -81,23 +80,21 @@ public class LobbyScreen extends Screen {
         this.batch.end();
     }
 
-    private void buttonspressed() {
+    private void buttonsPressed() {
         if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new StartScreen(this.camera));
 
-        if(this.charButtonObject.isJustPressed())
+        if(this.charButtonObject.isJustPressed() && heroObject.getHeroHealth() > 0)
             Boot.bootInstance.setScreen(new HeroScreen(this.camera));
 
         if(this.storeButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new StoreScreen(this.camera));
 
-        if(this.levelsButtonObject.isJustPressed()) {
+        if(this.levelsButtonObject.isJustPressed() && heroObject.getHeroHealth() > 0)
             Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
-        }
 
-        if(this.resetButtonObject.isJustPressed()) {
+        if(this.resetButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new ResetScreen(this.camera));
-        }
     }
 
 }

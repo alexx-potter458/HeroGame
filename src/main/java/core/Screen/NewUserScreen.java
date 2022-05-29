@@ -19,8 +19,8 @@ public class NewUserScreen extends Screen {
         super(camera,"startScreen/map");
 
         this.pageTitle              = new TextBoxObject(Constants.newUserScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.backButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
-        this.createUserButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) , Constants.newUserButton);
+        this.backButtonObject       = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.createUserButtonObject = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) , Constants.newUserButton);
         this.nicknameLabel          = new TextBoxObject(Constants.nicknameLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()/2) + 144, 'm');
         this.nicknameField          = new TextFieldObject(this, (Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()/2) + 144);
     }

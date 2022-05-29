@@ -25,10 +25,10 @@ public class HeroScreen extends Screen {
         super(camera,"storeCategoryScreen/map", true);
         Hero hero                   = new HeroController().getMainHero();
         this.pageTitle              = new TextBoxObject(Constants.HeroScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.backButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
-        this.heroButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.heroesLabel);
-        this.spellButtonObject      = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.spellsLabel);
-        this.heroPowerButtonObject  = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) -80, Constants.powersLabel);
+        this.backButtonObject       = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.heroButtonObject       = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.heroesLabel);
+        this.spellButtonObject      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.spellsLabel);
+        this.heroPowerButtonObject  = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) -80, Constants.powersLabel);
         this.moneyBanner            = new TextBoxObject(Constants.moneyBannerLabel + User.user.getMoney() + " bucks", 256,  (Boot.bootInstance.getScreenHeight()) - 160, 'm');
         this.heroObject             = new HeroObject(this, hero,200, 300);
         this.heroName               = new TextBoxObject(hero.getName(),256,  (Boot.bootInstance.getScreenHeight()) - 220, 's');

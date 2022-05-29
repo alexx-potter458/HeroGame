@@ -21,11 +21,11 @@ public class SettingsScreen extends Screen {
         super(camera,"startScreen/map");
 
         this.pageTitle              = new TextBoxObject(Constants.settingsScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
-        this.backButtonObject       = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
+        this.backButtonObject       = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.dayNightText           = new TextBoxObject(Constants.timeLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()/2) + 144, 'm');
-        this.dayNightButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()/2) + 144, this.getTimeLabel());
+        this.dayNightButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()/2) + 144, this.getTimeLabel());
         this.screenModeText         = new TextBoxObject(Constants.displayModeLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()/2) + 64, 'm');
-        this.screenModeButtonObject = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()/2) + 64, this.getDisplayLabel());
+        this.screenModeButtonObject = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()/2) + 64, this.getDisplayLabel());
         this.settingsController     = new SettingsController();
     }
 

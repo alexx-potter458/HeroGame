@@ -38,4 +38,5 @@ public class HeroController {
         heroDatabase.resetUserHeroes();
         heroDatabase.makePrimary(User.user.getId(), selectedHero.getId());
     }
+
 }

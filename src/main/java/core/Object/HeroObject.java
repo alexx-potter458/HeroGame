@@ -21,7 +21,7 @@ public class HeroObject {
     private float           x;
     private float           y;
     private float           velocityX;
-    private final float     velocityY;
+    private float           velocityY;
     private float           speed;
     private       float     jumpPower;
     private final float     width;
@@ -101,6 +101,10 @@ public class HeroObject {
 
         timer ++;
         this.velocityX = 0;
+        float downPower = 0;
+
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            downPower = Math.abs(body.getLinearVelocity().y) * (-0.5f);
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.velocityX = this.speed;
@@ -127,7 +131,7 @@ public class HeroObject {
 
         this.oldVelY = body.getLinearVelocity().y;
 
-        body.setLinearVelocity(velocityX * speed, body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25);
+        body.setLinearVelocity(velocityX * speed, (body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25) + velocityY + downPower);
     }
 
     private void goLeft() {
@@ -184,6 +188,7 @@ public class HeroObject {
             case "speed"  -> this.speed += this.powerValue;
             case "shield" -> this.shield = true;
             case "jump"   -> this.jumpPower += this.powerValue;
+            case "fly"    -> this.velocityY += this.powerValue;
         }
     }
 
@@ -191,6 +196,7 @@ public class HeroObject {
         switch (powerType) {
             case "speed"  -> this.speed -= this.powerValue;
             case "shield" -> this.shield = false;
+            case "fly"    -> this.velocityY -= this.powerValue;
             case "jump"   -> this.jumpPower -= this.powerValue;
         }
     }

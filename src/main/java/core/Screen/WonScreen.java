@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import core.Boot;
 import core.Controller.LevelController;
 import core.Controller.UserController;
+import core.Model.Level;
 import core.Object.ButtonObject;
 import core.Object.IconObject;
 import core.Object.TextBoxObject;
@@ -23,17 +24,23 @@ public class WonScreen extends Screen {
     private final int           money;
     private final int           experience;
     private final IconObject    moneyIcon;
+    private final IconObject    ribbonIcon;
     private final IconObject    xpIcon;
     private final ButtonObject  backButtonObject;
+    private final ButtonObject  nextLvlButtonObject;
+    private final ButtonObject  sameLvlButtonObject;
+    private final int           level;
 
-    public WonScreen(OrthographicCamera camera, int xp, int money, int heroHealth, int baseScore) {
+    public WonScreen(OrthographicCamera camera, int xp, int money, int heroHealth, int baseScore, int level) {
         super(camera, "startScreen/map");
         this.moneyFromHealth      = heroHealth / 10;
         this.experienceFromHealth = heroHealth >> 1;
         this.experienceFromLevel  = baseScore;
         this.moneyFormLevel       = baseScore >> 2;
         this.money                = money;
+        this.level                = level;
         this.experience           = xp;
+        this.ribbonIcon           = new IconObject("bigRibbon", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2) + 298, 900, 80);
         this.pageTitle            = new TextBoxObject(Constants.Won, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2) + 300, 'l');
         this.allMoney             = new TextBoxObject("+" + (this.money + this.moneyFormLevel + this.moneyFromHealth), (Boot.bootInstance.getScreenWidth()/2) + 200,  (Boot.bootInstance.getScreenHeight()/2) - 144, 'm');
         this.allExperience        = new TextBoxObject("+" + (this.experience + this.experienceFromLevel + this.experienceFromHealth), (Boot.bootInstance.getScreenWidth()/2) - 110,  (Boot.bootInstance.getScreenHeight()/2) - 144, 'm');
@@ -42,7 +49,9 @@ public class WonScreen extends Screen {
         this.rewardsFromHealth    = new TextBoxObject("     Health: +" + this.moneyFromHealth + " bucks \n                   +" + this.experienceFromHealth + " pts", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2) - 20, 's');
         this.moneyIcon            = new IconObject("coin", (Boot.bootInstance.getScreenWidth()/2) + 110, Boot.bootInstance.getScreenHeight() / 2 - 144, 48, 48);
         this.xpIcon               = new IconObject("star", (Boot.bootInstance.getScreenWidth()/2) - 200, Boot.bootInstance.getScreenHeight() / 2 - 144, 48, 48);
-        this.backButtonObject     = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), 160, "Levels");
+        this.backButtonObject     = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, "Levels");
+        this.nextLvlButtonObject  = new ButtonObject((Boot.bootInstance.getScreenWidth()/2 + 300), 160, "Next level");
+        this.sameLvlButtonObject  = new ButtonObject((Boot.bootInstance.getScreenWidth()/2 - 300), 160, "Restart");
 
         this.saveProgress();
     }
@@ -59,6 +68,8 @@ public class WonScreen extends Screen {
         this.xpIcon.update();
         this.moneyIcon.update();
         this.backButtonObject.update();
+        this.nextLvlButtonObject.update();
+        this.sameLvlButtonObject.update();
 
         this.buttonsPressed();
     }
@@ -68,6 +79,7 @@ public class WonScreen extends Screen {
         super.render(delta);
 
         this.batch.begin();
+        this.ribbonIcon.render(this.batch);
         this.backButtonObject.render(this.batch);
         this.pageTitle.render(this.batch);
         this.rewards.render(this.batch);
@@ -77,6 +89,8 @@ public class WonScreen extends Screen {
         this.allExperience.render(this.batch);
         this.xpIcon.render(this.batch);
         this.moneyIcon.render(this.batch);
+        this.sameLvlButtonObject.render(this.batch);
+        this.nextLvlButtonObject.render(this.batch);
         this.batch.end();
     }
 
@@ -84,12 +98,22 @@ public class WonScreen extends Screen {
         int moneyToSave      = this.money + this.moneyFormLevel + this.moneyFromHealth;
         int experienceToSave = this.experience + this.experienceFromLevel + this.experienceFromHealth;
         new UserController().addProgress(moneyToSave, experienceToSave);
-        new LevelController().unlockNextLevel();
+        new LevelController().unlockNextLevel(this.level);
     }
 
     private void buttonsPressed() {
         if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+
+        if(this.sameLvlButtonObject.isJustPressed()) {
+            Level levelObject = new LevelController().getLevelById(level);
+            Boot.bootInstance.setScreen(new GameScreen(this.camera, levelObject.getId(), levelObject.getBaseScore()));
+        }
+
+        if(this.nextLvlButtonObject.isJustPressed()) {
+            Level levelObject = new LevelController().getNextLevelById(level);
+            Boot.bootInstance.setScreen(new GameScreen(this.camera, levelObject.getId(), levelObject.getBaseScore()));
+        }
     }
 
 }

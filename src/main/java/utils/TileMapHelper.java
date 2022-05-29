@@ -74,6 +74,8 @@ public class TileMapHelper {
                 if(rectangleName.equals("MY_XP"))
                     ((GameScreen) this.screen).addMoneyBox( new MoneyBoxObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, moneyRewards.get((int)(Math.random() * (moneyRewards.size())))));
 
+                if(rectangleName.equals("HERO"))
+                    ((GameScreen) this.screen).addMainHero(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
                 if(rectangleName.equals("E"))
                     ((GameScreen) this.screen).addEnemy( new EnemyObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, enemies.get((int)(Math.random() * enemies.size()))));
             }

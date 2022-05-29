@@ -104,7 +104,7 @@ public class HeroDatabase extends Database {
     }
 
     public void buyHero(int userId, int heroId) {
-        String query = "INSERT INTO userHero(userId, heroId, isPrimary) VALUES('" + userId + "','" + heroId + "', 1)";
+        String query = "INSERT INTO userHero(userId, heroId, isPrimary) VALUES('" + userId + "','" + heroId + "', '1')";
 
         try(Connection conn = this.connect()) {
             try(Statement stm = conn.createStatement()) {
@@ -167,6 +167,20 @@ public class HeroDatabase extends Database {
         }   catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void deleteBoughtHeroes() {
+        String query = "DELETE FROM userHero; DELETE FROM userHeroSpell; DELETE FROM userHeroPower;";
+
+        try(Connection conn = this.connect()) {
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

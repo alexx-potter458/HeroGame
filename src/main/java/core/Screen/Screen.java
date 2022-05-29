@@ -1,7 +1,6 @@
 package core.Screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -72,9 +71,7 @@ public abstract  class Screen extends ScreenAdapter {
     protected void update() {
         this.world.step(1/60f, 6, 2);
         this.cameraUpdate();
-
         this.batch.setProjectionMatrix(camera.combined);
-        this.pressedButtons();
 
         if(this.orthogonalTiledMapRenderer != null)
             this.orthogonalTiledMapRenderer.setView(camera);
@@ -91,11 +88,6 @@ public abstract  class Screen extends ScreenAdapter {
 
     public TileMapHelper getTileMapHelper() {
         return tileMapHelper;
-    }
-
-    protected void pressedButtons() {
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
-            Gdx.app.exit();
     }
 
 }

@@ -23,10 +23,10 @@ public class StartScreen extends Screen {
 
         this.cloudsObject           = new CloudsObject(this);
         this.pageTitle              = new TextBoxObject(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
-        this.startButtonObject      = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
-        this.settingsButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
-        this.controlsButtonObject   = new ButtonObject(this, (Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
-        this.quitButtonObject       = new ButtonObject(this, 144, 160, Constants.quitButton);
+        this.startButtonObject      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
+        this.settingsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
+        this.controlsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
+        this.quitButtonObject       = new ButtonObject(144, 160, Constants.quitButton);
         this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
 
         String greetingMessage = "";

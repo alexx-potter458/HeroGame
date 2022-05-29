@@ -17,12 +17,11 @@ import core.Object.*;
 import utils.Config;
 import utils.ContactListenerHelper;
 import utils.ObjectType;
-
 import java.util.ArrayList;
 
 public class GameScreen extends Screen {
-    private final HeroObject              heroObject;
-    private final Hero                    hero;
+    private HeroObject                    heroObject;
+    private Hero                          hero;
     private int                           heroMoney;
     private int                           heroExperience;
     private int                           openedChests;
@@ -37,7 +36,6 @@ public class GameScreen extends Screen {
     private final ArrayList<Integer>      bulletCounters;
     private final ArrayList<Spell>        spells;
     private final TextBoxObject           experienceTextBox;
-    private final TextBoxObject           healthTextBox;
     private final TextBoxObject           moneyTextBox;
     private final TextBoxObject           rewardInfo;
     private final TextBoxObject           selectedSpellText;
@@ -51,20 +49,27 @@ public class GameScreen extends Screen {
     private final IconObject              spellIcon;
     private final IconObject              powerIcon;
     private final IconObject              bannerPower;
+    private final IconObject              pauseBanner;
     private final TextBoxObject           powerTextBox;
     private final IconObject              ribbonIcon;
     private final TextBoxObject           openedChestsTextBox;
     private final TextBoxObject           enemiesKilledText;
     private final int                     baseScore;
     private int                           timer;
+    private final ButtonObject            resume;
+    private final ButtonObject            restart;
+    private final ButtonObject            quit;
+    private final TextBoxObject           onPause;
     private int                           powerTimer;
     private int                           enemyTimer;
     private int                           activeSpellIndex;
     private boolean                       activeSpell;
+    private boolean                       pause;
     private int                           powerStatus;
     private final int                     powerActiveTime;
     private final int                     powerRefuelTime;
     private final Power                   power;
+    private final int                     level;
 
 
     public GameScreen(OrthographicCamera camera, int level, int baseScore) {
@@ -72,7 +77,6 @@ public class GameScreen extends Screen {
         this.getWorld().setContactListener( new ContactListenerHelper(this));
 
         this.contentBatch        = new SpriteBatch();
-        this.hero                = new HeroController().getMainHero();
         this.heroMoney           = 0;
         this.heroExperience      = 0;
         this.openedChests        = 0;
@@ -84,19 +88,24 @@ public class GameScreen extends Screen {
         this.enemyTimer          = 0;
         this.powerStatus         = 0;
         this.activeSpell         = false;
+        this.pause               = false;
         this.activeSpellIndex    = -1;
         this.baseScore           = baseScore;
+        this.level               = level;
         this.heroBullets         = new ArrayList<>();
         this.enemyBullets        = new ArrayList<>();
         this.bulletCounters      = new ArrayList<>();
         this.spells              = new SpellController().getActiveSpells();
-        this.heroObject          = new HeroObject(this, this.hero, 300, Boot.bootInstance.getScreenHeight()/2 + 86);
+        this.quit                = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 128, "Quit");
+        this.resume              = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 68, "Resume");
+        this.restart             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 28, "Restart");
+        this.onPause             = new TextBoxObject("PAUSED", Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 150, 'm');
         this.moneyTextBox        = new TextBoxObject( this.heroMoney + " bucks", 172, Boot.bootInstance.getScreenHeight() - 100, 's');
         this.moneyIcon           = new IconObject("coin", 48, Boot.bootInstance.getScreenHeight() - 100, 38, 38);
         this.ribbonIcon          = new IconObject("bigRibbon", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 205, 900, 64);
         this.experienceTextBox   = new TextBoxObject( this.heroExperience + " pts", 142, Boot.bootInstance.getScreenHeight() - 154, 's');
-        this.heartIcon           = new IconObject("heart", 48, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
-        this.healthTextBox       = new TextBoxObject( heroObject.getHeroHealth() + " / " + this.hero.getBaseHealth(), 172, Boot.bootInstance.getScreenHeight() - 48, 's');
+        this.heartIcon           = new IconObject("life100", 164, Boot.bootInstance.getScreenHeight() - 48, 273, 38);
+        this.pauseBanner         = new IconObject("pauseBanner", Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2, 602, 602);
         this.rewardInfo          = new TextBoxObject("", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 's');
         this.xpIcon              = new IconObject("star", 48, Boot.bootInstance.getScreenHeight() - 154, 38, 38);
         this.chestsIcon          = new IconObject("chest", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
@@ -149,25 +158,31 @@ public class GameScreen extends Screen {
         if(this.orthogonalTiledMapRenderer != null)
             this.orthogonalTiledMapRenderer.setView(camera);
 
-        this.pressedButtons();
-        this.enemiesShooting();
-        this.checkHealthStatus();
-        this.passTheFinishLine();
-
         this.heroObject.update();
-        this.heroObject.checkUserInput();
 
-        if(enemies != null)
-            for(EnemyObject object: enemies)
-                object.update(this.heroObject.getX(), this.heroObject.getY());
+        if(this.pause) {
+            this.pauseBanner.update();
+            this.pressedOnPauseButtons();
+        } else {
+            this.pressedButtons();
+            this.enemiesShooting();
+            this.checkHealthStatus();
+            this.passTheFinishLine();
 
-        if(heroBullets != null)
-            for(BulletObject object: heroBullets)
-                object.update();
+            this.heroObject.checkUserInput();
 
-        if(enemyBullets != null)
-            for(BulletObject object: enemyBullets)
-                object.update();
+            if(enemies != null)
+                for(EnemyObject object: enemies)
+                    object.update(this.heroObject.getX(), this.heroObject.getY());
+
+            if(heroBullets != null)
+                for(BulletObject object: heroBullets)
+                    object.update();
+
+            if(enemyBullets != null)
+                for(BulletObject object: enemyBullets)
+                    object.update();
+        }
     }
 
     @Override
@@ -208,14 +223,12 @@ public class GameScreen extends Screen {
         camera.update();
     }
 
-    @Override
     protected void pressedButtons() {
-        super.pressedButtons();
         this.heroSpellSelect();
         this.heroPowerSelect();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE))
-            Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+            this.pause = !this.pause;
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && this.activeSpell) {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.spells.get(this.activeSpellIndex), this.heroObject.getDirection()));
@@ -268,7 +281,6 @@ public class GameScreen extends Screen {
                     this.heroObject.addHealth(object.getReward().getValue());
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
-                    this.healthTextBox.setText(this.heroObject.getHeroHealth() + " / " + this.hero.getBaseHealth());
                     this.timer =  0;
                     this.ribbonIcon.changeVisibility(true);
                     this.rewardInfo.setText(object.getReward().getName());
@@ -283,6 +295,18 @@ public class GameScreen extends Screen {
             for(BulletObject object: enemyBullets)
                 if(object.isToDestroy() && object.isNotDestroyed())
                     object.safeDestroy();
+    }
+
+    private void pressedOnPauseButtons() {
+
+        if(this.restart.isJustPressed())
+            Boot.bootInstance.setScreen(new GameScreen(this.camera, this.level, this.baseScore));
+
+        if(this.quit.isJustPressed())
+            Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || this.resume.isJustPressed())
+            this.pause = !this.pause;
     }
 
     private void gameTiming() {
@@ -350,7 +374,6 @@ public class GameScreen extends Screen {
         this.xpIcon.render(this.contentBatch);
         this.chestsIcon.render(this.contentBatch);
         this.openedChestsTextBox.render(this.contentBatch);
-        this.healthTextBox.render(this.contentBatch);
         this.moneyTextBox.render(this.contentBatch);
         this.experienceTextBox.render(this.contentBatch);
         this.bannerSpell.render(this.contentBatch);
@@ -359,6 +382,14 @@ public class GameScreen extends Screen {
         this.powerIcon.render(this.contentBatch);
         this.selectedSpellText.render(this.contentBatch);
         this.powerTextBox.render(this.contentBatch);
+
+        if(pause) {
+            this.pauseBanner.render(this.contentBatch);
+            this.onPause.render(this.contentBatch);
+            this.restart.render(this.contentBatch);
+            this.resume.render(this.contentBatch);
+            this.quit.render(this.contentBatch);
+        }
     }
 
     private void heroPowerSelect() {
@@ -438,12 +469,24 @@ public class GameScreen extends Screen {
 
     private void passTheFinishLine() {
         if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
-            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroObject.getHeroHealth(), this.baseScore));
+            Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroObject.getHeroHealth(), this.baseScore, this.level));
     }
 
     private void checkHealthStatus() {
-        if(this.heroObject.getHeroHealth() <= 0)
-            Boot.bootInstance.setScreen(new LostScreen(this.camera));
+
+        if(this.heroObject.getHeroHealth() > 75)
+            this.heartIcon.setIcon("life100");
+        else if(this.heroObject.getHeroHealth() > 51)
+            this.heartIcon.setIcon("life75");
+        else if(this.heroObject.getHeroHealth() > 30)
+            this.heartIcon.setIcon("life50");
+        else if(this.heroObject.getHeroHealth() > 16)
+            this.heartIcon.setIcon("life25");
+        else
+            this.heartIcon.setIcon("life15");
+
+        if(this.heroObject.getHeroHealth() <= 0 || this.heroObject.getY() + this.hero.getHeight() < 0)
+            Boot.bootInstance.setScreen(new LostScreen(this.camera, this.level));
     }
 
     public void addHealthBox(HealthBoxObject healthBox) {
@@ -484,7 +527,6 @@ public class GameScreen extends Screen {
             if(fixture == object.getFixture()) {
                 this.heroObject.takeHit(object.getEnemy().getHitPower());
                 object.takeDamage(this.hero.getHitPower());
-                this.healthTextBox.setText(this.heroObject.getHeroHealth() + " / " + this.hero.getBaseHealth());
             }
     }
 
@@ -517,8 +559,13 @@ public class GameScreen extends Screen {
             if(fixture == object.getFixture()){
                 object.flaggedToDestroy();
                 this.heroObject.takeHit(object.getHitPower());
-                this.healthTextBox.setText(heroObject.getHeroHealth() + " / " + this.hero.getBaseHealth());
             }
+    }
+
+    public void addMainHero(float heroX, float heroY) {
+        this.hero                = new HeroController().getMainHero();
+        this.heroObject          = new HeroObject(this, this.hero, (int) heroX, (int) heroY);
+
     }
 
 }
