@@ -45,4 +45,16 @@ public class SettingsController {
         this.changeBackground();
     }
 
+    public void setMenuMusic() {
+        new SettingsDatabase().setMenuMusic(Config.menuMusic);
+    }
+
+    public void setInGameMusic() {
+        new SettingsDatabase().setInGameMusic(Config.inGameMusic);
+    }
+
+    public void setInGameSound() {
+        new SettingsDatabase().setInGameSound(Config.inGameSound);
+    }
+
 }

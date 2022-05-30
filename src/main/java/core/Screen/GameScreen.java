@@ -99,7 +99,7 @@ public class GameScreen extends Screen {
         this.enemyBullets        = new ArrayList<>();
         this.bulletCounters      = new ArrayList<>();
         this.spells              = new SpellController().getActiveSpells();
-        this.music               = Gdx.audio.newMusic(Gdx.files.internal("audio/1.mp3"));
+        this.music               = Gdx.audio.newMusic(Gdx.files.internal("audio/" + (int)(Math.random() * Config.songsNumber + 1) + ".mp3"));
         this.quit                = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 128, "Quit");
         this.resume              = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 68, "Resume");
         this.restart             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 28, "Restart");
@@ -124,7 +124,7 @@ public class GameScreen extends Screen {
 
         this.ribbonIcon.changeVisibility(false);
         this.music.play();
-        this.music.setVolume(0.1f);
+        this.music.setVolume(Config.inGameMusic);
         this.music.isLooping();
 
         if(power != null) {
@@ -244,6 +244,8 @@ public class GameScreen extends Screen {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.spells.get(this.activeSpellIndex), this.heroObject.getDirection()));
             this.bulletCounters.set(this.activeSpellIndex, this.bulletCounters.get(this.activeSpellIndex) - 1);
             this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+            this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/gun.wav"));
+            this.sound.setVolume(this.sound.play(), Config.inGameSound);
             if(this.bulletCounters.get(this.activeSpellIndex) <= 0) {
                 this.activeSpell = false;
                 this.spellIcon.setIcon("defaultSpell");
@@ -252,7 +254,8 @@ public class GameScreen extends Screen {
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
             this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/gun.wav"));
-            this.sound.play();
+            this.sound.setVolume(this.sound.play(), Config.inGameSound);
+
         }
     }
 
@@ -271,7 +274,7 @@ public class GameScreen extends Screen {
                     this.ribbonIcon.changeVisibility(true);
                     this.rewardInfo.setText("Enemy killed");
                     this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/enemyHit.wav"));
-                    this.sound.play();
+                    this.sound.setVolume(this.sound.play(), Config.inGameSound);
                 }
 
         if(moneyBoxes != null)
@@ -316,7 +319,6 @@ public class GameScreen extends Screen {
 
         if(this.restart.isJustPressed()) {
             this.music.dispose();
-            Boot.bootInstance.playDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, this.level, this.baseScore));
         }
 
@@ -424,7 +426,7 @@ public class GameScreen extends Screen {
                 this.powerTimer  = 0;
                 this.powerStatus = 1;
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 1) {
                 this.powerIcon.setPowerIcon(this.power.getNameSlug());
                 this.powerTextBox.setText(this.power.getName() + " on hold");
@@ -446,7 +448,7 @@ public class GameScreen extends Screen {
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             } else {
                 this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
@@ -461,7 +463,7 @@ public class GameScreen extends Screen {
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             } else {
                 this.timer =  0;
                 this.ribbonIcon.changeVisibility(true);
@@ -476,7 +478,7 @@ public class GameScreen extends Screen {
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             } else {
                 this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
@@ -558,7 +560,7 @@ public class GameScreen extends Screen {
             if(fixture == object.getFixture()){
                 object.flaggedToDestroy();
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/moneyReward.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             }
     }
 
@@ -571,7 +573,7 @@ public class GameScreen extends Screen {
             if(fixture == object.getFixture()){
                 object.flaggedToDestroy();
                 this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/healthReward.wav"));
-                this.sound.play();
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             }
     }
 

@@ -37,7 +37,6 @@ public class HeroObject {
     private int             heroHealth;
     private boolean         shield;
 
-
     public HeroObject(Screen screen) {
         this.x           = 0;
         this.y           = 0;
@@ -123,7 +122,7 @@ public class HeroObject {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && this.jumpCounter < 2) {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/jump.wav"));
-            sound.play();
+            sound.setVolume(sound.play(), Config.inGameSound);
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
             body.applyLinearImpulse(new Vector2(0, body.getMass() * this.jumpPower), body.getPosition(), true);
             jumpCounter++;
@@ -187,12 +186,17 @@ public class HeroObject {
     }
 
     public void activatePower() {
-        switch (this.powerType) {
-            case "speed"  -> this.speed += this.powerValue;
-            case "shield" -> this.shield = true;
-            case "jump"   -> this.jumpPower += this.powerValue;
-            case "fly"    -> this.velocityY += this.powerValue;
-        }
+        if(this.powerType.contains("speed"))
+            this.speed += this.powerValue;
+
+        if(this.powerType.contains("shield"))
+            this.shield = true;
+
+        if(this.powerType.contains("jump"))
+            this.jumpPower += this.powerValue;
+
+        if(this.powerType.contains("fly"))
+            this.velocityY += this.powerValue;
     }
 
     public void deactivatePower() {

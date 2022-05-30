@@ -81,7 +81,7 @@ public class EnemyObject {
             if(heroY - this.y > 100 && timer % 23 == 0)
                 this.goUp();
         } else {
-            this.readyToShoot = false;
+            this.readyToShoot = true;
             this.stay();
         }
     }

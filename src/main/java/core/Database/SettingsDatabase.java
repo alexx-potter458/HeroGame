@@ -20,6 +20,15 @@ public class SettingsDatabase extends Database {
 
                     if(name.equals("time"))
                         Config.time = value;
+
+                    if(name.equals("menuMusic"))
+                        Config.menuMusic = Float.parseFloat(value);
+
+                    if(name.equals("inGameMusic"))
+                        Config.inGameMusic = Float.parseFloat(value);
+
+                    if(name.equals("inGameSound"))
+                        Config.inGameSound = Float.parseFloat(value);
                 }
 
                 rs.close();
@@ -52,6 +61,48 @@ public class SettingsDatabase extends Database {
             try(Statement stm = conn.createStatement()) {
                 stm.executeUpdate(query);
 
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMenuMusic(float menuMusic) {
+        String query = "UPDATE config SET value ='" + menuMusic + "' WHERE name = 'menuMusic'";
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setInGameMusic(float inGameMusic) {
+        String query = "UPDATE config SET value ='" + inGameMusic + "' WHERE name = 'inGameMusic'";
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setInGameSound(float inGameSound) {
+        String query = "UPDATE config SET value ='" + inGameSound + "' WHERE name = 'inGameSound'";
+
+        try(Connection conn = this.connect()){
+            try(Statement stm = conn.createStatement()) {
+                stm.executeUpdate(query);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -6,9 +6,7 @@ import core.Controller.SettingsController;
 import utils.Constants;
 import utils.Config;
 
-
 public class Launcher {
-
     public static void main(String[] args) {
         new SettingsController().loadSettings();
 
@@ -24,4 +22,5 @@ public class Launcher {
 
         new Lwjgl3Application(new Boot(), configuration);
     }
+
 }
