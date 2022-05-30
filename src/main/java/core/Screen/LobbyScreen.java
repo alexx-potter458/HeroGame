@@ -35,7 +35,7 @@ public class LobbyScreen extends Screen {
         Hero hero = new HeroController().getMainHero();
 
         if(hero != null)
-            this.heroObject = new HeroObject(this, hero,Boot.bootInstance.getScreenWidth()/2 - 300, Boot.bootInstance.getScreenHeight()/2 - 100);
+            this.heroObject = new HeroObject(this, hero,Boot.bootInstance.getScreenWidth()/4, Boot.bootInstance.getScreenHeight()/2 - 100);
         else
             this.heroObject = new HeroObject(this);
 

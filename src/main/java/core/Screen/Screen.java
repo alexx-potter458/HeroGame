@@ -20,8 +20,8 @@ public abstract  class Screen extends ScreenAdapter {
     private final World                     world;
     private final Box2DDebugRenderer        box2DDebugRenderer;
     protected OrthogonalTiledMapRenderer    orthogonalTiledMapRenderer;
-    private boolean                         gameMode;
     private TileMapHelper                   tileMapHelper;
+    private boolean                         gameMode;
 
     public Screen(OrthographicCamera camera) {
         this.camera             = camera;

@@ -56,6 +56,7 @@ public class LostScreen extends Screen {
 
         if(this.sameLvlButtonObject.isJustPressed()) {
             Level levelObject = new LevelController().getLevelById(level);
+            Boot.bootInstance.pauseDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, levelObject.getId(), levelObject.getBaseScore()));
         }
     }

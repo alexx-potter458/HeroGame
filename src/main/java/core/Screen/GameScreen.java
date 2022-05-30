@@ -2,6 +2,8 @@ package core.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -20,17 +22,6 @@ import utils.ObjectType;
 import java.util.ArrayList;
 
 public class GameScreen extends Screen {
-    private HeroObject                    heroObject;
-    private Hero                          hero;
-    private int                           heroMoney;
-    private int                           heroExperience;
-    private int                           openedChests;
-    private int                           enemiesKilled;
-    private int                           totalChests;
-    private int                           totalEnemies;
-    private ArrayList<HealthBoxObject>    healthBoxes;
-    private ArrayList<MoneyBoxObject>     moneyBoxes;
-    private ArrayList<EnemyObject>        enemies;
     private final ArrayList<BulletObject> heroBullets;
     private final ArrayList<BulletObject> enemyBullets;
     private final ArrayList<Integer>      bulletCounters;
@@ -54,23 +45,35 @@ public class GameScreen extends Screen {
     private final IconObject              ribbonIcon;
     private final TextBoxObject           openedChestsTextBox;
     private final TextBoxObject           enemiesKilledText;
-    private final int                     baseScore;
-    private int                           timer;
     private final ButtonObject            resume;
     private final ButtonObject            restart;
     private final ButtonObject            quit;
     private final TextBoxObject           onPause;
+    private final Power                   power;
+    private final Music                   music;
+    private Sound                         sound;
+    private final int                     baseScore;
+    private final int                     powerActiveTime;
+    private final int                     powerRefuelTime;
+    private final int                     level;
+    private ArrayList<HealthBoxObject>    healthBoxes;
+    private ArrayList<MoneyBoxObject>     moneyBoxes;
+    private ArrayList<EnemyObject>        enemies;
+    private HeroObject                    heroObject;
+    private Hero                          hero;
+    private boolean                       activeSpell;
+    private boolean                       pause;
+    private int                           heroMoney;
+    private int                           heroExperience;
+    private int                           openedChests;
+    private int                           enemiesKilled;
+    private int                           totalChests;
+    private int                           totalEnemies;
+    private int                           timer;
     private int                           powerTimer;
     private int                           enemyTimer;
     private int                           activeSpellIndex;
-    private boolean                       activeSpell;
-    private boolean                       pause;
     private int                           powerStatus;
-    private final int                     powerActiveTime;
-    private final int                     powerRefuelTime;
-    private final Power                   power;
-    private final int                     level;
-
 
     public GameScreen(OrthographicCamera camera, int level, int baseScore) {
         super(camera,"levels/level" + level, true, level);
@@ -96,6 +99,7 @@ public class GameScreen extends Screen {
         this.enemyBullets        = new ArrayList<>();
         this.bulletCounters      = new ArrayList<>();
         this.spells              = new SpellController().getActiveSpells();
+        this.music               = Gdx.audio.newMusic(Gdx.files.internal("audio/1.mp3"));
         this.quit                = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 128, "Quit");
         this.resume              = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 68, "Resume");
         this.restart             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 28, "Restart");
@@ -117,7 +121,11 @@ public class GameScreen extends Screen {
         this.selectedSpellText   = new TextBoxObject("No spell selected", Boot.bootInstance.getScreenWidth() - 220,  32, 's');
         this.powerTextBox        = new TextBoxObject("No power", 220,  32, 's');
         this.power               = new PowerController().getActivePower();
+
         this.ribbonIcon.changeVisibility(false);
+        this.music.play();
+        this.music.setVolume(0.1f);
+        this.music.isLooping();
 
         if(power != null) {
             powerActiveTime = power.getActiveTime();
@@ -227,8 +235,10 @@ public class GameScreen extends Screen {
         this.heroSpellSelect();
         this.heroPowerSelect();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             this.pause = !this.pause;
+            this.music.pause();
+        }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && this.activeSpell) {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.spells.get(this.activeSpellIndex), this.heroObject.getDirection()));
@@ -239,8 +249,11 @@ public class GameScreen extends Screen {
                 this.spellIcon.setIcon("defaultSpell");
                 this.selectedSpellText.setText("No spell selected");
             }
-        } else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE))
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
+            this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/gun.wav"));
+            this.sound.play();
+        }
     }
 
     private void beforeWorldStepUpdate() {
@@ -257,6 +270,8 @@ public class GameScreen extends Screen {
                     this.timer =  0;
                     this.ribbonIcon.changeVisibility(true);
                     this.rewardInfo.setText("Enemy killed");
+                    this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/enemyHit.wav"));
+                    this.sound.play();
                 }
 
         if(moneyBoxes != null)
@@ -299,14 +314,22 @@ public class GameScreen extends Screen {
 
     private void pressedOnPauseButtons() {
 
-        if(this.restart.isJustPressed())
+        if(this.restart.isJustPressed()) {
+            this.music.dispose();
+            Boot.bootInstance.playDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, this.level, this.baseScore));
+        }
 
-        if(this.quit.isJustPressed())
+        if(this.quit.isJustPressed()) {
+            this.music.dispose();
+            Boot.bootInstance.playDefaultMusic();
             Boot.bootInstance.setScreen(new LevelSelectorScreen(this.camera));
+        }
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || this.resume.isJustPressed())
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || this.resume.isJustPressed()) {
+            this.music.play();
             this.pause = !this.pause;
+        }
     }
 
     private void gameTiming() {
@@ -400,6 +423,8 @@ public class GameScreen extends Screen {
                 this.heroObject.activatePower();
                 this.powerTimer  = 0;
                 this.powerStatus = 1;
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound.play();
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 1) {
                 this.powerIcon.setPowerIcon(this.power.getNameSlug());
                 this.powerTextBox.setText(this.power.getName() + " on hold");
@@ -414,12 +439,14 @@ public class GameScreen extends Screen {
     }
 
     private void heroSpellSelect() {
-        if(Gdx.input.isKeyPressed(Input.Keys.Q) && spells.size() >= 1)
+        if(Gdx.input.isKeyJustPressed(Input.Keys.Q) && spells.size() >= 1)
             if(bulletCounters.get(0) > 0) {
                 this.activeSpell = true;
                 this.activeSpellIndex = 0;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound.play();
             } else {
                 this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
@@ -427,12 +454,14 @@ public class GameScreen extends Screen {
                 this.timer =  0;
             }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W) && spells.size() >= 2)
+        if(Gdx.input.isKeyJustPressed(Input.Keys.W) && spells.size() >= 2)
             if(bulletCounters.get(1) > 0) {
                 this.activeSpell = true;
                 this.activeSpellIndex = 1;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound.play();
             } else {
                 this.timer =  0;
                 this.ribbonIcon.changeVisibility(true);
@@ -440,12 +469,14 @@ public class GameScreen extends Screen {
                 this.rewardInfo.setText("You don't have " + this.spells.get(1).getName() + " anymore");
             }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.E) && spells.size() >= 3)
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E) && spells.size() >= 3)
             if(bulletCounters.get(2) > 0) {
                 this.activeSpell      = true;
                 this.activeSpellIndex = 2;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound.play();
             } else {
                 this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
@@ -468,8 +499,11 @@ public class GameScreen extends Screen {
     }
 
     private void passTheFinishLine() {
-        if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM)
+        if(this.heroObject.getBody().getPosition().x > this.getTileMapHelper().getMapWidth() / Config.PPM) {
+            this.music.dispose();
+            Boot.bootInstance.playDefaultMusic();
             Boot.bootInstance.setScreen(new WonScreen(this.camera, this.heroMoney, this.heroExperience, this.heroObject.getHeroHealth(), this.baseScore, this.level));
+        }
     }
 
     private void checkHealthStatus() {
@@ -485,8 +519,11 @@ public class GameScreen extends Screen {
         else
             this.heartIcon.setIcon("life15");
 
-        if(this.heroObject.getHeroHealth() <= 0 || this.heroObject.getY() + this.hero.getHeight() < 0)
+        if(this.heroObject.getHeroHealth() <= 0 || this.heroObject.getY() + this.hero.getHeight() < 0) {
+            this.music.dispose();
+            Boot.bootInstance.playDefaultMusic();
             Boot.bootInstance.setScreen(new LostScreen(this.camera, this.level));
+        }
     }
 
     public void addHealthBox(HealthBoxObject healthBox) {
@@ -510,16 +547,32 @@ public class GameScreen extends Screen {
         this.enemies.add(enemy);
     }
 
+    public void addMainHero(float heroX, float heroY) {
+        this.hero                = new HeroController().getMainHero();
+        this.heroObject          = new HeroObject(this, this.hero, (int) heroX, (int) heroY);
+
+    }
+
     public void moneyBoxContact(Fixture fixture) {
         for(MoneyBoxObject object: moneyBoxes)
-            if(fixture == object.getFixture())
-                 object.flaggedToDestroy();
+            if(fixture == object.getFixture()){
+                object.flaggedToDestroy();
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/moneyReward.wav"));
+                this.sound.play();
+            }
+    }
+
+    public void killerHeroContact() {
+        this.heroObject.takeHit(this.heroObject.getHeroHealth());
     }
 
     public void healthBoxContact(Fixture fixture) {
         for(HealthBoxObject object: healthBoxes)
-            if(fixture == object.getFixture())
+            if(fixture == object.getFixture()){
                 object.flaggedToDestroy();
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/healthReward.wav"));
+                this.sound.play();
+            }
     }
 
     public void heroEnemyContact(Fixture fixture) {
@@ -562,10 +615,10 @@ public class GameScreen extends Screen {
             }
     }
 
-    public void addMainHero(float heroX, float heroY) {
-        this.hero                = new HeroController().getMainHero();
-        this.heroObject          = new HeroObject(this, this.hero, (int) heroX, (int) heroY);
-
+    public void killEnemy(Fixture enemyFixture) {
+        for(EnemyObject object: enemies)
+            if(enemyFixture == object.getFixture())
+                object.takeDamage(object.getEnemy().getHealth());
     }
 
 }

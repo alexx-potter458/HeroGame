@@ -15,12 +15,14 @@ public class ControlsScreen extends Screen {
     private final TextBoxObject spells;
     private final TextBoxObject power;
     private final TextBoxObject pageTitle;
+    private final TextBoxObject exit;
     private final ButtonObject  jump;
     private final ButtonObject  front;
     private final ButtonObject  down;
     private final ButtonObject  back;
     private final ButtonObject  powersBtn;
     private final ButtonObject  spellsBtn;
+    private final ButtonObject  exitBtn;
 
     public ControlsScreen(OrthographicCamera camera) {
         super(camera,"startScreen/map");
@@ -28,38 +30,24 @@ public class ControlsScreen extends Screen {
         this.pageTitle      = new TextBoxObject(Constants.controlsScreenTitle, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 200, 'm');
         this.backButton     = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), 160, Constants.backButton);
         this.jumpText       = new TextBoxObject(Constants.jumpText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 270, 'm');
-        this.downText       = new TextBoxObject(Constants.downText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 370, 'm');
-        this.forwardText    = new TextBoxObject(Constants.forwardText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 470, 'm');
-        this.backwardText   = new TextBoxObject(Constants.backwardText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 570, 'm');
-        this.spells         = new TextBoxObject(Constants.spellsLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight())  - 670, 'm');
-        this.power          = new TextBoxObject(Constants.powersLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 770, 'm');
+        this.downText       = new TextBoxObject(Constants.downText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 360, 'm');
+        this.forwardText    = new TextBoxObject(Constants.forwardText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 450, 'm');
+        this.backwardText   = new TextBoxObject(Constants.backwardText, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 540, 'm');
+        this.spells         = new TextBoxObject(Constants.spellsLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight())  - 630, 'm');
+        this.power          = new TextBoxObject(Constants.powersLabel, (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 720, 'm');
+        this.exit           = new TextBoxObject("Exit", (Boot.bootInstance.getScreenWidth()/2) - 144, (Boot.bootInstance.getScreenHeight()) - 810, 'm');
         this.jump           = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 270, Constants.jumpBtn);
-        this.down           = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 370, Constants.downBtn);
-        this.front          = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 470, Constants.forwardBtn);
-        this.back           = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 570, Constants.backwardBtn);
-        this.spellsBtn      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 670, Constants.spellsBtn);
-        this.powersBtn      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 770, Constants.powersBtn);
+        this.down           = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 360, Constants.downBtn);
+        this.front          = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 450, Constants.forwardBtn);
+        this.back           = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 540, Constants.backwardBtn);
+        this.spellsBtn      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 630, Constants.spellsBtn);
+        this.powersBtn      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 720, Constants.powersBtn);
+        this.exitBtn        = new ButtonObject((Boot.bootInstance.getScreenWidth()/2) + 144, (Boot.bootInstance.getScreenHeight()) - 810, "ESC");
     }
 
     @Override
     protected void update() {
         super.update();
-
-        this.pageTitle.update();
-        this.backButton.update();
-        this.backwardText.update();
-        this.forwardText.update();
-        this.spells.update();
-        this.jumpText.update();
-        this.power.update();
-        this.downText.update();
-        this.back.update();
-        this.front.update();
-        this.jump.update();
-        this.down.update();
-        this.powersBtn.update();
-        this.spellsBtn.update();
-
         this.buttonsPressed();
     }
 
@@ -82,6 +70,8 @@ public class ControlsScreen extends Screen {
         this.down.render(this.batch);
         this.powersBtn.render(this.batch);
         this.spellsBtn.render(this.batch);
+        this.exit.render(this.batch);
+        this.exitBtn.render(this.batch);
         this.batch.end();
     }
 

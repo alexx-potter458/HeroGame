@@ -36,6 +36,9 @@ public class ContactListenerHelper implements ContactListener {
         } else if(secondObjectFixture.getUserData() == ObjectType.HERO_BULLET) {
             heroBulletFixture   = secondObjectFixture;
             objectFixture       = firstObjectFixture;
+        } else if(secondObjectFixture.getUserData() == ObjectType.KILLER) {
+            heroBulletFixture   = secondObjectFixture;
+            objectFixture       = firstObjectFixture;
         }
 
         if(heroFixture != null || heroBulletFixture != null) {
@@ -52,6 +55,9 @@ public class ContactListenerHelper implements ContactListener {
 
             if(objectFixture.getUserData() == ObjectType.ENEMY_BULLET)
                 this.gameScreen.enemyBulletHeroContact(objectFixture);
+
+            if(objectFixture.getUserData() == ObjectType.KILLER)
+                this.gameScreen.killerHeroContact();
         }
 
         if(heroBulletFixture != null) {
@@ -61,6 +67,15 @@ public class ContactListenerHelper implements ContactListener {
             if(objectFixture.getUserData() == ObjectType.ENEMY_BULLET)
                 this.gameScreen.heroBulletEnemyBulletContact(objectFixture, heroBulletFixture);
         }
+
+        if(firstObjectFixture.getUserData() == ObjectType.KILLER || secondObjectFixture.getUserData() == ObjectType.KILLER) {
+            if(firstObjectFixture.getUserData() == ObjectType.ENEMY)
+                this.gameScreen.killEnemy(firstObjectFixture);
+            else if(secondObjectFixture.getUserData() == ObjectType.ENEMY)
+                this.gameScreen.killEnemy(firstObjectFixture);
+
+        }
+
     }
 
     @Override

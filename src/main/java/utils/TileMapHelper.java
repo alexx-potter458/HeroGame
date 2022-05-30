@@ -17,6 +17,7 @@ import core.Controller.EnemyController;
 import core.Controller.RewardController;
 import core.Model.Enemy;
 import core.Model.Reward;
+import core.Object.DeadlyObject;
 import core.Object.EnemyObject;
 import core.Object.HealthBoxObject;
 import core.Object.MoneyBoxObject;
@@ -76,8 +77,12 @@ public class TileMapHelper {
 
                 if(rectangleName.equals("HERO"))
                     ((GameScreen) this.screen).addMainHero(rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2);
+
                 if(rectangleName.equals("E"))
                     ((GameScreen) this.screen).addEnemy( new EnemyObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, enemies.get((int)(Math.random() * enemies.size()))));
+
+                if(rectangleName.equals("K"))
+                    new DeadlyObject(this.screen, rectangle.getX() + rectangle.getWidth() / 2, rectangle.getY() + rectangle.getHeight() / 2, rectangle.getWidth(), rectangle.getHeight());
             }
         }
     }

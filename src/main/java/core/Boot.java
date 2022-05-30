@@ -2,6 +2,7 @@ package core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,6 +18,7 @@ public class Boot extends Game {
     BitmapFont          fontSmall;
     BitmapFont          fontMedium;
     BitmapFont          fontLarge;
+    private Music       defaultMusic;
 
     public Boot() {
         bootInstance = this;
@@ -45,6 +47,9 @@ public class Boot extends Game {
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, screenWidth, screenHeight);
 
+        this.defaultMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/2.mp3"));
+        this.defaultMusic.isLooping();
+
         setScreen(new LoadingScreen(camera));
     }
 
@@ -61,5 +66,13 @@ public class Boot extends Game {
     public BitmapFont getFontMedium() { return this.fontMedium; }
 
     public BitmapFont getFontLarge() { return this.fontLarge; }
+
+    public void playDefaultMusic() {
+        this.defaultMusic.play();
+    }
+
+    public void pauseDefaultMusic() {
+        this.defaultMusic.pause();
+    }
 
 }

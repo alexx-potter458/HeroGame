@@ -2,6 +2,7 @@ package core.Object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -121,6 +122,8 @@ public class HeroObject {
         }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.UP) && this.jumpCounter < 2) {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/jump.wav"));
+            sound.play();
             body.setLinearVelocity(body.getLinearVelocity().x, 0);
             body.applyLinearImpulse(new Vector2(0, body.getMass() * this.jumpPower), body.getPosition(), true);
             jumpCounter++;

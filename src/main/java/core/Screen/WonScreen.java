@@ -107,11 +107,13 @@ public class WonScreen extends Screen {
 
         if(this.sameLvlButtonObject.isJustPressed()) {
             Level levelObject = new LevelController().getLevelById(level);
+            Boot.bootInstance.pauseDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, levelObject.getId(), levelObject.getBaseScore()));
         }
 
         if(this.nextLvlButtonObject.isJustPressed()) {
             Level levelObject = new LevelController().getNextLevelById(level);
+            Boot.bootInstance.pauseDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, levelObject.getId(), levelObject.getBaseScore()));
         }
     }

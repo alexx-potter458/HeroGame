@@ -30,6 +30,7 @@ public class StartScreen extends Screen {
         this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
 
         String greetingMessage = "";
+        Boot.bootInstance.playDefaultMusic();
 
         if(!User.user.isFirstTime())
             greetingMessage    = "Hello, " + User.user.getNickname();

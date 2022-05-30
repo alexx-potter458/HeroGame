@@ -123,8 +123,10 @@ public class LevelSelectorScreen extends Screen {
         if(this.backButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new LobbyScreen(this.camera));
 
-        if(this.startButtonObject.isJustPressed() && this.selectedLevel != null && this.selectedLevel.getUnlocked() == 1)
+        if(this.startButtonObject.isJustPressed() && this.selectedLevel != null && this.selectedLevel.getUnlocked() == 1) {
+            Boot.bootInstance.pauseDefaultMusic();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, this.selectedLevel.getId(), this.selectedLevel.getBaseScore()));
+        }
 
         if(this.downButtonObject.isJustPressed() && levels.size() > 5 + this.levelArrayIndex) {
             this.levelArrayIndex++;
