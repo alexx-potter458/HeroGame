@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import core.Boot;
 import org.lwjgl.opengl.GL20;
@@ -18,7 +17,6 @@ public abstract  class Screen extends ScreenAdapter {
     protected OrthographicCamera            camera;
     protected SpriteBatch                   batch;
     private final World                     world;
-    private final Box2DDebugRenderer        box2DDebugRenderer;
     protected OrthogonalTiledMapRenderer    orthogonalTiledMapRenderer;
     private TileMapHelper                   tileMapHelper;
     private boolean                         gameMode;
@@ -28,7 +26,7 @@ public abstract  class Screen extends ScreenAdapter {
         this.camera.position.set(new Vector3(Boot.bootInstance.getScreenWidth() >> 1, Boot.bootInstance.getScreenHeight() >> 1, 0));
         this.batch              = new SpriteBatch();
         this.world              = new World(new Vector2(0,-30), false);
-        this.box2DDebugRenderer = new Box2DDebugRenderer();
+
     }
 
     public Screen(OrthographicCamera camera, String mapPath) {
@@ -64,8 +62,6 @@ public abstract  class Screen extends ScreenAdapter {
 
         this.batch.begin();
         this.batch.end();
-
-        this.box2DDebugRenderer.render(world, camera.combined.scl(Config.PPM));
     }
 
     protected void update() {
