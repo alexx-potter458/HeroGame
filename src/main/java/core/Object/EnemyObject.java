@@ -169,6 +169,7 @@ public class EnemyObject {
 
     public void takeDamage(int value) {
         this.inGameHealth -= value;
+        System.out.println("here");
     }
 
     public boolean isToDestroy() {

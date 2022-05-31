@@ -115,11 +115,11 @@ public class GameScreen extends Screen {
         this.chestsIcon          = new IconObject("chest", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 48, 38, 38);
         this.enemyIcon           = new IconObject("orangeEnemy", Boot.bootInstance.getScreenWidth() - 180, Boot.bootInstance.getScreenHeight() - 96, 38, 38);
         this.bannerSpell         = new IconObject("banner", Boot.bootInstance.getScreenWidth() - 220,  32, 400, 48);
-        this.bannerPower         = new IconObject("banner", 220,  32, 400, 48);
+        this.bannerPower         = new IconObject("banner", 230,  32, 400, 48);
         this.spellIcon           = new IconObject("defaultSpell", Boot.bootInstance.getScreenWidth() - 420,  32, 50, 50);
-        this.powerIcon           = new IconObject("noPower", 22,  32, 50, 50);
+        this.powerIcon           = new IconObject("noPower", 32,  32, 50, 50);
         this.selectedSpellText   = new TextBoxObject("No spell selected", Boot.bootInstance.getScreenWidth() - 220,  32, 's');
-        this.powerTextBox        = new TextBoxObject("No power", 220,  32, 's');
+        this.powerTextBox        = new TextBoxObject("No power", 230,  32, 's');
         this.power               = new PowerController().getActivePower();
 
         this.ribbonIcon.changeVisibility(false);
@@ -247,6 +247,12 @@ public class GameScreen extends Screen {
             this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/gun.wav"));
             this.sound.setVolume(this.sound.play(), Config.inGameSound);
             if(this.bulletCounters.get(this.activeSpellIndex) <= 0) {
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
+                this.timer = 0;
+                this.ribbonIcon.changeVisibility(true);
+                this.ribbonIcon.setIcon("bigBadRibbon");
+                this.rewardInfo.setText("You are out of " + this.spells.get(this.activeSpellIndex).getName() + "!");
                 this.activeSpell = false;
                 this.spellIcon.setIcon("defaultSpell");
                 this.selectedSpellText.setText("No spell selected");
@@ -355,6 +361,12 @@ public class GameScreen extends Screen {
             this.powerIcon.setPowerIcon("offline" + this.power.getNameSlug());
             this.powerTextBox.setText(this.power.getName() + " off");
             this.heroObject.deactivatePower();
+            this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+            this.sound.setVolume(this.sound.play(), Config.inGameSound);
+            this.timer =  0;
+            this.ribbonIcon.changeVisibility(true);
+            this.ribbonIcon.setIcon("bigBadRibbon");
+            this.rewardInfo.setText("You are out of power!");
         }
 
         if(this.powerTimer == this.powerRefuelTime && this.powerStatus == 2) {
@@ -432,8 +444,12 @@ public class GameScreen extends Screen {
                 this.powerTextBox.setText(this.power.getName() + " on hold");
                 this.heroObject.deactivatePower();
                 this.powerStatus = 3;
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/holdPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 3) {
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
                 this.powerIcon.setPowerIcon("active" + this.power.getNameSlug());
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
                 this.powerTextBox.setText(this.power.getName() + " on");
                 this.heroObject.activatePower();
                 this.powerStatus = 1;
@@ -447,9 +463,15 @@ public class GameScreen extends Screen {
                 this.activeSpellIndex = 0;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/holdPower.wav"));
                 this.sound.setVolume(this.sound.play(), Config.inGameSound);
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.ribbonIcon.setIcon("bigRibbon");
+                this.rewardInfo.setText(this.spells.get(this.activeSpellIndex).getName() + " activated!");
             } else {
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
                 this.rewardInfo.setText("You don't have " + this.spells.get(0).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
                 this.ribbonIcon.changeVisibility(true);
@@ -462,13 +484,19 @@ public class GameScreen extends Screen {
                 this.activeSpellIndex = 1;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/holdPower.wav"));
                 this.sound.setVolume(this.sound.play(), Config.inGameSound);
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.ribbonIcon.setIcon("bigRibbon");
+                this.rewardInfo.setText(this.spells.get(this.activeSpellIndex).getName() + " activated!");
             } else {
                 this.timer =  0;
                 this.ribbonIcon.changeVisibility(true);
                 this.ribbonIcon.setIcon("bigBadRibbon");
                 this.rewardInfo.setText("You don't have " + this.spells.get(1).getName() + " anymore");
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
             }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E) && spells.size() >= 3)
@@ -477,9 +505,15 @@ public class GameScreen extends Screen {
                 this.activeSpellIndex = 2;
                 this.spellIcon.setSpellIcon(this.spells.get(this.activeSpellIndex).getNameSlug());
                 this.selectedSpellText.setText(this.spells.get(this.activeSpellIndex).getName() + " (" + this.bulletCounters.get(this.activeSpellIndex) + ")");
-                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/power.wav"));
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/holdPower.wav"));
                 this.sound.setVolume(this.sound.play(), Config.inGameSound);
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.ribbonIcon.setIcon("bigRibbon");
+                this.rewardInfo.setText(this.spells.get(this.activeSpellIndex).getName() + " activated!");
             } else {
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
                 this.rewardInfo.setText("You don't have " + this.spells.get(2).getName() + " anymore");
                 this.ribbonIcon.setIcon("bigBadRibbon");
                 this.ribbonIcon.changeVisibility(true);

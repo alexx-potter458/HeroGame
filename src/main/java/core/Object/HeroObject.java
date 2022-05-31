@@ -133,7 +133,11 @@ public class HeroObject {
 
         this.oldVelY = body.getLinearVelocity().y;
 
-        body.setLinearVelocity(velocityX * speed, (body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25) + velocityY + downPower);
+        float flyPower = 0;
+        if(Gdx.input.isKeyPressed(Input.Keys.UP) && velocityY > 0)
+            flyPower = velocityY;
+
+        body.setLinearVelocity(velocityX * speed, (body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25) + flyPower + downPower);
     }
 
     private void goLeft() {
@@ -200,12 +204,17 @@ public class HeroObject {
     }
 
     public void deactivatePower() {
-        switch (powerType) {
-            case "speed"  -> this.speed -= this.powerValue;
-            case "shield" -> this.shield = false;
-            case "fly"    -> this.velocityY -= this.powerValue;
-            case "jump"   -> this.jumpPower -= this.powerValue;
-        }
+        if(this.powerType.contains("speed"))
+            this.speed -= this.powerValue;
+
+        if(this.powerType.contains("shield"))
+            this.shield = false;
+
+        if(this.powerType.contains("jump"))
+            this.jumpPower -= this.powerValue;
+
+        if(this.powerType.contains("fly"))
+            this.velocityY -= this.powerValue;
     }
 
     public void setPower(int value, String type) {

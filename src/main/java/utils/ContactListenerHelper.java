@@ -72,7 +72,7 @@ public class ContactListenerHelper implements ContactListener {
             if(firstObjectFixture.getUserData() == ObjectType.ENEMY)
                 this.gameScreen.killEnemy(firstObjectFixture);
             else if(secondObjectFixture.getUserData() == ObjectType.ENEMY)
-                this.gameScreen.killEnemy(firstObjectFixture);
+                this.gameScreen.killEnemy(secondObjectFixture);
 
         }
 

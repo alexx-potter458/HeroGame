@@ -31,15 +31,15 @@ public class WonScreen extends Screen {
     private final ButtonObject  sameLvlButtonObject;
     private final int           level;
 
-    public WonScreen(OrthographicCamera camera, int xp, int money, int heroHealth, int baseScore, int level) {
+    public WonScreen(OrthographicCamera camera, int money, int xp, int heroHealth, int baseScore, int level) {
         super(camera, "startScreen/map");
-        this.moneyFromHealth      = heroHealth / 10;
-        this.experienceFromHealth = heroHealth >> 1;
+        this.moneyFromHealth      = heroHealth >> 1;
+        this.experienceFromHealth = heroHealth;
         this.experienceFromLevel  = baseScore;
         this.moneyFormLevel       = baseScore >> 2;
         this.money                = money;
         this.level                = level;
-        this.experience           = xp;
+        this.experience           = xp + money >> 1;
         this.ribbonIcon           = new IconObject("bigRibbon", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2) + 298, 900, 80);
         this.pageTitle            = new TextBoxObject(Constants.Won, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2) + 300, 'l');
         this.allMoney             = new TextBoxObject("+" + (this.money + this.moneyFormLevel + this.moneyFromHealth), (Boot.bootInstance.getScreenWidth()/2) + 200,  (Boot.bootInstance.getScreenHeight()/2) - 144, 'm');
