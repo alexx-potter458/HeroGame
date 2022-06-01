@@ -19,6 +19,10 @@ public class HeroObject {
     private final Texture   firstLeft;
     private final Texture   secondRight;
     private final Texture   secondLeft;
+    private final Texture   shootLeft;
+    private final Texture   flyLeft;
+    private final Texture   flyRight;
+    private final Texture   shootRight;
     private float           x;
     private float           y;
     private float           velocityX;
@@ -50,10 +54,14 @@ public class HeroObject {
         this.speed       = 0;
         this.powerValue  = 0;
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
-        this.firstRight = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.secondRight = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.firstLeft = new Texture("textures/characters/stitch/stationary/stitch.png");
-        this.secondLeft = new Texture("textures/characters/stitch/stationary/stitch.png");
+        this.firstRight  = new Texture("textures/button.png");
+        this.secondRight = new Texture("textures/button.png");
+        this.firstLeft   = new Texture("textures/button.png");
+        this.secondLeft  = new Texture("textures/button.png");
+        this.shootLeft   = new Texture("textures/button.png");
+        this.shootRight  = new Texture("textures/button.png");
+        this.flyRight    = new Texture("textures/button.png");
+        this.flyLeft     = new Texture("textures/button.png");
         this.texture     = this.firstRight;
         this.jumpCounter = 0;
         this.direction   = "R";
@@ -73,10 +81,14 @@ public class HeroObject {
         this.speed       = hero.getSpeed();
         this.jumpPower   = hero.getJumpPower();
         this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 2, screen.getWorld(), ObjectType.HERO);
-        this.firstRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstRight.png");
-        this.firstLeft = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstLeft.png");
+        this.firstRight  = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstRight.png");
+        this.firstLeft   = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstLeft.png");
         this.secondRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondRight.png");
-        this.secondLeft = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondLeft.png");
+        this.secondLeft  = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondLeft.png");
+        this.shootRight  = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/shootRight.png");
+        this.shootLeft   = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/shootLeft.png");
+        this.flyRight    = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/flyRight.png");
+        this.flyLeft     = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/flyLeft.png");
         this.texture     = this.firstRight;
         this.jumpCounter = 0;
         this.oldVelY     = 0;
@@ -134,8 +146,24 @@ public class HeroObject {
         this.oldVelY = body.getLinearVelocity().y;
 
         float flyPower = 0;
-        if(Gdx.input.isKeyPressed(Input.Keys.UP) && velocityY > 0)
+        if(Gdx.input.isKeyPressed(Input.Keys.UP) && velocityY > 0) {
             flyPower = velocityY;
+        }
+
+        if(Math.abs(this.getBody().getLinearVelocity().y) > 0.3) {
+            if(this.direction.contains("R"))
+                this.goUpRight();
+            else
+                this.goUpLeft();
+        }
+
+        if(Math.abs(this.getBody().getLinearVelocity().x) < 0.2 && Math.abs(this.getBody().getLinearVelocity().y) < 0.2) {
+            if(timer % 17 == 0)
+                if(this.direction.contains("R"))
+                    this.stayRight();
+                else
+                    this.stayLeft();
+        }
 
         body.setLinearVelocity(velocityX * speed, (body.getLinearVelocity().y < 25 ? body.getLinearVelocity().y : 25) + flyPower + downPower);
     }
@@ -158,6 +186,34 @@ public class HeroObject {
             this.direction  = "FR";
             this.texture    = this.firstRight;
         }
+    }
+
+    private void goUpLeft() {
+        this.texture = this.flyLeft;
+    }
+
+    private void goUpRight() {
+        this.texture = this.flyRight;
+    }
+
+    private void stayLeft() {
+        this.direction  = "FL";
+        this.texture = this.firstLeft;
+    }
+
+    private void stayRight() {
+        this.direction  = "FR";
+        this.texture = this.firstRight;
+    }
+
+    public void shootLeft() {
+        this.direction  = "FL";
+        this.texture = this.shootLeft;
+    }
+
+    public void shootRight() {
+        this.direction  = "FR";
+        this.texture = this.shootRight;
     }
 
     public Body getBody() {

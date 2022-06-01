@@ -261,7 +261,13 @@ public class GameScreen extends Screen {
             heroBullets.add(new BulletObject(this, this.heroObject.getX() + (this.hero.getWidth() >> 1), this.heroObject.getY() + (this.hero.getHeight() >> 1), this.hero.getHitPower(), this.hero.getSpeed(), this.heroObject.getDirection()));
             this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/gun.wav"));
             this.sound.setVolume(this.sound.play(), Config.inGameSound);
+        }
 
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if(this.heroObject.getDirection().contains("R"))
+                this.heroObject.shootRight();
+            else
+                this.heroObject.shootLeft();
         }
     }
 
@@ -271,7 +277,7 @@ public class GameScreen extends Screen {
                 if(object.isToDestroy() && object.isNotDestroyed()) {
                     object.safeDestroy();
                     this.heroMoney += object.getEnemy().getMoneyReward();
-                    this.heroExperience += object.getEnemy().getMoneyReward() >> 2;
+                    this.heroExperience += object.getEnemy().getMoneyReward();
                     this.moneyTextBox.setText(this.heroMoney + " bucks");
                     this.experienceTextBox.setText(this.heroExperience + " pts");
                     this.enemiesKilled ++;
@@ -453,6 +459,13 @@ public class GameScreen extends Screen {
                 this.powerTextBox.setText(this.power.getName() + " on");
                 this.heroObject.activatePower();
                 this.powerStatus = 1;
+            } else if(Gdx.input.isKeyJustPressed(Input.Keys.CONTROL_LEFT) && this.powerStatus == 2) {
+                this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+                this.sound.setVolume(this.sound.play(), Config.inGameSound);
+                this.timer =  0;
+                this.ribbonIcon.changeVisibility(true);
+                this.ribbonIcon.setIcon("bigBadRibbon");
+                this.rewardInfo.setText("You are out of power!");
             }
     }
 

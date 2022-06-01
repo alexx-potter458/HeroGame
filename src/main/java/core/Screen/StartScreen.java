@@ -12,6 +12,8 @@ import utils.Constants;
 public class StartScreen extends Screen {
     private final CloudsObject  cloudsObject;
     private final TextBoxObject pageTitle;
+    private final TextBoxObject settingsInfo;
+    private final TextBoxObject controlsInfo;
     private final TextBoxObject greetingsBanner;
     private final ButtonObject  startButtonObject;
     private final ButtonObject  settingsButtonObject;
@@ -23,6 +25,8 @@ public class StartScreen extends Screen {
 
         this.cloudsObject           = new CloudsObject(this);
         this.pageTitle              = new TextBoxObject(Constants.gameTitleCaps, (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()/2), 'l');
+        this.settingsInfo           = new TextBoxObject("<- A few options here", (Boot.bootInstance.getScreenWidth()/2 + 340),  (Boot.bootInstance.getScreenHeight()/2) - 8, 's');
+        this.controlsInfo           = new TextBoxObject("Here you can see how to play ->", (Boot.bootInstance.getScreenWidth()/2 - 430),  (Boot.bootInstance.getScreenHeight()/2) - 80, 's');
         this.startButtonObject      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
         this.settingsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
         this.controlsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
@@ -65,6 +69,8 @@ public class StartScreen extends Screen {
         this.batch.begin();
         this.cloudsObject.render(this.batch);
         this.greetingsBanner.render(this.batch);
+        this.settingsInfo.render(this.batch);
+        this.controlsInfo.render(this.batch);
         this.pageTitle.render(this.batch);
         this.startButtonObject.render(this.batch);
         this.settingsButtonObject.render(this.batch);
