@@ -54,7 +54,7 @@ public class EnemyObject {
     }
 
     public void update(float heroX, float heroY) {
-        if(timer == 200)
+        if(timer == 1000)
             timer = 0;
 
         this.timer ++;
@@ -66,11 +66,14 @@ public class EnemyObject {
         if(this.inGameHealth <= 0)
             this.toDestroy = true;
 
-        if(Math.abs(heroX - this.x) > 1200) {
+        if(Math.abs(heroX - this.x) > 1200 && Math.abs(heroY - this.y) > 300) {
             this.readyToShoot = false;
             this.stay();
-        } else if(Math.abs(heroX - this.x) > 150 && Math.abs(heroY - this.y) < 300) {
-            this.readyToShoot = true;
+        }
+
+        if(Math.abs(heroX - this.x) < 1150 && Math.abs(heroX - this.x) > 150) {
+
+            this.readyToShoot = Math.abs(heroY - this.y) < 100;
 
             if(heroX < this.x)
                 this.goLeft();
@@ -78,11 +81,28 @@ public class EnemyObject {
             if (heroX > this.x)
                 this.goRight();
 
-            if(heroY - this.y > 100 && timer % 23 == 0)
+            if(heroY - this.y > 100 && Math.abs(heroY - this.y) < 290 && timer % 23 == 0)
                 this.goUp();
-        } else {
-            this.readyToShoot = true;
-            this.stay();
+        }
+
+        if(Math.abs(heroX - this.x) < 150 ) {
+            if( Math.abs(heroY - this.y) < 100) {
+                this.readyToShoot = true;
+                this.stay();
+            } else {
+                this.readyToShoot = false;
+                if(this.y - heroY < 100 && this.timer % (int)(Math.random()*15 + 10) == 0)
+                    this.goUp();
+
+                if(Math.abs(heroX - this.x) >= 0 && this.timer % (int)(Math.random()*15 + 10) == 0) {
+                    if(heroX < this.x)
+                        this.goLeft();
+
+                    if (heroX > this.x)
+                        this.goRight();
+                }
+            }
+
         }
     }
 

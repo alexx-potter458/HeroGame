@@ -13,7 +13,8 @@ public abstract class Database {
         }
 
         try {
-            String url = "jdbc:sqlite::resource:database/database.sqlite";
+//            String url = "jdbc:sqlite::resource:database/database.sqlite";
+            String url = "jdbc:sqlite:src/main/resources/database/database.sqlite";
             return DriverManager.getConnection(url);
         } catch (SQLException e) {
             e.printStackTrace();
