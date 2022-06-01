@@ -39,7 +39,7 @@ public class UserDatabase extends Database {
     }
 
     public void createUser(String nickname) {
-        String query = "INSERT INTO user(nickname, money, firstTime) VALUES('" + nickname + "', 100, 0)";
+        String query = "INSERT INTO user(nickname, money, firstTime) VALUES('" + nickname + "', 666, 0)";
 
         try(Connection conn = this.connect()){
             try(Statement stm = conn.createStatement()) {
