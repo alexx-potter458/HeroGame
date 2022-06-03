@@ -47,10 +47,11 @@ public class GameScreen extends Screen {
     private final TextBoxObject           enemiesKilledText;
     private final ButtonObject            resume;
     private final ButtonObject            restart;
+    private final ButtonObject            shuffle;
     private final ButtonObject            quit;
     private final TextBoxObject           onPause;
     private final Power                   power;
-    private final Music                   music;
+    private Music                         music;
     private Sound                         sound;
     private final int                     baseScore;
     private final int                     powerActiveTime;
@@ -100,10 +101,11 @@ public class GameScreen extends Screen {
         this.bulletCounters      = new ArrayList<>();
         this.spells              = new SpellController().getActiveSpells();
         this.music               = Gdx.audio.newMusic(Gdx.files.internal("audio/" + (int)(Math.random() * Config.songsNumber + 1) + ".mp3"));
-        this.quit                = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 128, "Quit");
-        this.resume              = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 68, "Resume");
-        this.restart             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 28, "Restart");
-        this.onPause             = new TextBoxObject("PAUSED", Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 150, 'm');
+        this.quit                = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 143, "Quit");
+        this.resume              = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 108, "Resume");
+        this.restart             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 25, "Restart");
+        this.shuffle             = new ButtonObject(Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 - 58, "Song shuffle");
+        this.onPause             = new TextBoxObject("PAUSED", Boot.bootInstance.getScreenWidth()/2, Boot.bootInstance.getScreenHeight()/2 + 170, 'm');
         this.moneyTextBox        = new TextBoxObject( this.heroMoney + " bucks", 172, Boot.bootInstance.getScreenHeight() - 100, 's');
         this.moneyIcon           = new IconObject("coin", 48, Boot.bootInstance.getScreenHeight() - 100, 38, 38);
         this.ribbonIcon          = new IconObject("bigRibbon", (Boot.bootInstance.getScreenWidth()/2),  (Boot.bootInstance.getScreenHeight()) - 205, 900, 64);
@@ -272,10 +274,13 @@ public class GameScreen extends Screen {
     }
 
     private void beforeWorldStepUpdate() {
-        if(enemies != null)
+        if(enemies != null) {
+            EnemyObject enemyObject = null;
+
             for(EnemyObject object: enemies)
                 if(object.isToDestroy() && object.isNotDestroyed()) {
                     object.safeDestroy();
+                    enemyObject = object;
                     this.heroMoney += object.getEnemy().getMoneyReward();
                     this.heroExperience += object.getEnemy().getMoneyReward();
                     this.moneyTextBox.setText(this.heroMoney + " bucks");
@@ -290,10 +295,17 @@ public class GameScreen extends Screen {
                     this.sound.setVolume(this.sound.play(), Config.inGameSound);
                 }
 
-        if(moneyBoxes != null)
+            if(enemyObject != null)
+                this.enemies.remove(enemyObject);
+        }
+
+        if(moneyBoxes != null) {
+            MoneyBoxObject moneyBoxObject = null;
+
             for(MoneyBoxObject object: moneyBoxes)
                 if(object.isToDestroy() && !object.isDestroyed()) {
                     object.safeDestroy();
+                    moneyBoxObject = object;
                     this.heroMoney += object.getReward().getValue();
                     this.heroExperience += object.getReward().getValue();
                     this.openedChests += 1;
@@ -306,10 +318,17 @@ public class GameScreen extends Screen {
                     this.rewardInfo.setText(object.getReward().getName());
                 }
 
-        if(healthBoxes != null)
+            if(moneyBoxObject != null)
+                this.moneyBoxes.remove(moneyBoxObject);
+        }
+
+        if(healthBoxes != null) {
+            HealthBoxObject healthBoxObject = null;
+
             for(HealthBoxObject object: healthBoxes)
                 if(object.isToDestroy() && !object.isDestroyed()) {
                     object.safeDestroy();
+                    healthBoxObject = object;
                     this.heroObject.addHealth(object.getReward().getValue());
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
@@ -319,15 +338,36 @@ public class GameScreen extends Screen {
                     this.rewardInfo.setText(object.getReward().getName());
                 }
 
-        if(heroBullets != null)
-            for(BulletObject object: heroBullets)
-                if(object.isToDestroy() && object.isNotDestroyed())
-                    object.safeDestroy();
+            if(healthBoxObject != null)
+                this.healthBoxes.remove(healthBoxObject);
+        }
 
-        if(enemyBullets != null)
-            for(BulletObject object: enemyBullets)
-                if(object.isToDestroy() && object.isNotDestroyed())
+        if(heroBullets != null) {
+            BulletObject bulletToDelete = null;
+
+            for(BulletObject object: heroBullets)
+                if(object.isToDestroy() && object.isNotDestroyed()) {
                     object.safeDestroy();
+                    bulletToDelete = object;
+                }
+
+            if(bulletToDelete != null)
+                heroBullets.remove(bulletToDelete);
+        }
+
+        if(enemyBullets != null) {
+            BulletObject bulletToDelete = null;
+
+            for(BulletObject object: enemyBullets)
+                if(object.isToDestroy() && object.isNotDestroyed()) {
+                    object.safeDestroy();
+                    bulletToDelete = object;
+                }
+
+            if(bulletToDelete != null)
+                enemyBullets.remove(bulletToDelete);
+        }
+
     }
 
     private void pressedOnPauseButtons() {
@@ -335,6 +375,11 @@ public class GameScreen extends Screen {
         if(this.restart.isJustPressed()) {
             this.music.dispose();
             Boot.bootInstance.setScreen(new GameScreen(this.camera, this.level, this.baseScore));
+        }
+
+        if(this.shuffle.isJustPressed()) {
+            this.shuffle();
+            this.pause = !this.pause;
         }
 
         if(this.quit.isJustPressed()) {
@@ -434,6 +479,7 @@ public class GameScreen extends Screen {
             this.onPause.render(this.contentBatch);
             this.restart.render(this.contentBatch);
             this.resume.render(this.contentBatch);
+            this.shuffle.render(this.contentBatch);
             this.quit.render(this.contentBatch);
         }
     }
@@ -677,6 +723,15 @@ public class GameScreen extends Screen {
         for(EnemyObject object: enemies)
             if(enemyFixture == object.getFixture())
                 object.takeDamage(object.getEnemy().getHealth());
+    }
+
+    public void shuffle() {
+        this.music.dispose();
+        this.music = Gdx.audio.newMusic(Gdx.files.internal("audio/" + (int)(Math.random() * Config.songsNumber + 1) + ".mp3"));
+        this.music.setVolume(Config.menuMusic);
+        this.music.setVolume(Config.inGameMusic);
+        this.music.play();
+        this.music.isLooping();
     }
 
 }

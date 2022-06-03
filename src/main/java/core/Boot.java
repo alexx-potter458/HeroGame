@@ -73,6 +73,14 @@ public class Boot extends Game {
         this.defaultMusic.play();
     }
 
+    public void shuffle() {
+        this.defaultMusic.dispose();
+        this.defaultMusic = Gdx.audio.newMusic(Gdx.files.internal("audio/" + (int)(Math.random() * Config.songsNumber + 1) + ".mp3"));
+        this.defaultMusic.setVolume(Config.menuMusic);
+        this.defaultMusic.play();
+        this.defaultMusic.isLooping();
+    }
+
     public void setMenuMusic(float value) {
         this.defaultMusic.setVolume(value);
     }

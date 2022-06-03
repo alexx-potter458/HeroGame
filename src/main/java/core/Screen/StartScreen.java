@@ -18,6 +18,7 @@ public class StartScreen extends Screen {
     private final ButtonObject  startButtonObject;
     private final ButtonObject  settingsButtonObject;
     private final ButtonObject  controlsButtonObject;
+    private final ButtonObject  shuffleButtonObject;
     private final ButtonObject  quitButtonObject;
 
     public StartScreen(OrthographicCamera camera) {
@@ -30,6 +31,7 @@ public class StartScreen extends Screen {
         this.startButtonObject      = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) + 64, Constants.startButton);
         this.settingsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 8, Constants.settingsButton);
         this.controlsButtonObject   = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 80, Constants.controlsButton);
+        this.shuffleButtonObject    = new ButtonObject((Boot.bootInstance.getScreenWidth()/2), (Boot.bootInstance.getScreenHeight()/2) - 152, "Song shuffle");
         this.quitButtonObject       = new ButtonObject(144, 160, Constants.quitButton);
         this.pageTitle.setY(Boot.bootInstance.getScreenHeight()/2 + 200);
 
@@ -57,6 +59,7 @@ public class StartScreen extends Screen {
         this.startButtonObject.update();
         this.settingsButtonObject.update();
         this.controlsButtonObject.update();
+        this.shuffleButtonObject.update();
         this.quitButtonObject.update();
 
         this.buttonsPressed();
@@ -76,6 +79,7 @@ public class StartScreen extends Screen {
         this.settingsButtonObject.render(this.batch);
         this.controlsButtonObject.render(this.batch);
         this.quitButtonObject.render(this.batch);
+        this.shuffleButtonObject.render(this.batch);
         this.batch.end();
     }
 
@@ -88,6 +92,9 @@ public class StartScreen extends Screen {
 
         if(this.controlsButtonObject.isJustPressed())
             Boot.bootInstance.setScreen(new ControlsScreen(this.camera));
+
+        if(this.shuffleButtonObject.isJustPressed())
+            Boot.bootInstance.shuffle();
 
         if(this.startButtonObject.isJustPressed())
             if(User.user.isFirstTime())

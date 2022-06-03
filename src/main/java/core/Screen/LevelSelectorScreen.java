@@ -28,6 +28,8 @@ public class LevelSelectorScreen extends Screen {
     private final TextBoxObject           playedLevel;
     private final TextBoxObject           notPlayedLevel;
     private TextBoxObject                 levelUnlocked;
+    private final TextBoxObject           nothingHerePlayed;
+    private final TextBoxObject           nothingHereNotPlayed;
     private final TextBoxObject           pageTitle;
 
     public LevelSelectorScreen(OrthographicCamera camera) {
@@ -54,6 +56,9 @@ public class LevelSelectorScreen extends Screen {
 
         for(int i = 0; i < Math.min(playedLevels.size(), 5); i++)
             playedLevelButtonObjects.add(new ButtonObject(640, (Boot.bootInstance.getScreenHeight()) - 428 - i * 72, ""));
+
+        this.nothingHerePlayed    = new TextBoxObject(levels.size() == 0 ? "Nothing here..." : "", 320, (Boot.bootInstance.getScreenHeight())/2, 'm');
+        this.nothingHereNotPlayed = new TextBoxObject(playedLevels.size() == 0 ? "Nothing here..." : "", 640, (Boot.bootInstance.getScreenHeight())/2, 'm');
 
         for(int i = this.levelArrayIndex; i < (Math.min(levels.size(), 5)); i++)
             levelButtonObjects.get(i).changeText(levels.get(i).getName());
@@ -91,6 +96,8 @@ public class LevelSelectorScreen extends Screen {
         this.notPlayedLevel.render(this.batch);
         this.playedLevel.render(this.batch);
         this.backButtonObject.render(this.batch);
+        this.nothingHerePlayed.render(this.batch);
+        this.nothingHereNotPlayed.render(this.batch);
 
         if(levels.size() > 5) {
             this.upButtonObject.render(this.batch);
