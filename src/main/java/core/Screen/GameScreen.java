@@ -284,6 +284,7 @@ public class GameScreen extends Screen {
                     this.enemiesKilledText.setText(this.enemiesKilled + " / " + this.totalEnemies);
                     this.timer =  0;
                     this.ribbonIcon.changeVisibility(true);
+                    this.ribbonIcon.setIcon("bigRibbon");
                     this.rewardInfo.setText("Enemy killed");
                     this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/enemyHit.wav"));
                     this.sound.setVolume(this.sound.play(), Config.inGameSound);
@@ -300,6 +301,7 @@ public class GameScreen extends Screen {
                     this.moneyTextBox.setText(this.heroMoney + " bucks");
                     this.experienceTextBox.setText(this.heroExperience + " pts");
                     this.timer =  0;
+                    this.ribbonIcon.setIcon("bigRibbon");
                     this.ribbonIcon.changeVisibility(true);
                     this.rewardInfo.setText(object.getReward().getName());
                 }
@@ -312,6 +314,7 @@ public class GameScreen extends Screen {
                     this.openedChests += 1;
                     this.openedChestsTextBox.setText(this.openedChests + " / " + this.totalChests);
                     this.timer =  0;
+                    this.ribbonIcon.setIcon("bigRibbon");
                     this.ribbonIcon.changeVisibility(true);
                     this.rewardInfo.setText(object.getReward().getName());
                 }
@@ -533,7 +536,13 @@ public class GameScreen extends Screen {
                 this.timer = 0;
             }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            this.sound = Gdx.audio.newSound(Gdx.files.internal("audio/inGame/outOfPower.wav"));
+            this.sound.setVolume(this.sound.play(), Config.inGameSound);
+            this.rewardInfo.setText("You deactivated the spell!");
+            this.ribbonIcon.setIcon("bigBadRibbon");
+            this.ribbonIcon.changeVisibility(true);
+            this.timer = 0;
             this.activeSpell = false;
             this.spellIcon.setIcon("defaultSpell");
             this.selectedSpellText.setText("No spell selected");

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="Industrial" tilewidth="60" tileheight="60" tilecount="81" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="Industrial" tilewidth="60" tileheight="64" tilecount="125" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="81">
   <image width="60" height="60" source="Industrial/IndustrialTile_01 (Custom).png"/>
@@ -243,5 +243,137 @@
  </tile>
  <tile id="161">
   <image width="60" height="60" source="Industrial/IndustrialTile_81 (Tiles).png"/>
+ </tile>
+ <tile id="163">
+  <image width="32" height="36" source="Industrial/Objects/0.png"/>
+ </tile>
+ <tile id="164">
+  <image width="32" height="36" source="Industrial/Objects/1.png"/>
+ </tile>
+ <tile id="165">
+  <image width="32" height="36" source="Industrial/Objects/2.png"/>
+ </tile>
+ <tile id="166">
+  <image width="32" height="36" source="Industrial/Objects/3.png"/>
+ </tile>
+ <tile id="167">
+  <image width="32" height="36" source="Industrial/Objects/4.png"/>
+ </tile>
+ <tile id="168">
+  <image width="32" height="36" source="Industrial/Objects/5.png"/>
+ </tile>
+ <tile id="169">
+  <image width="32" height="36" source="Industrial/Objects/6.png"/>
+ </tile>
+ <tile id="170">
+  <image width="32" height="36" source="Industrial/Objects/7.png"/>
+ </tile>
+ <tile id="171">
+  <image width="32" height="36" source="Industrial/Objects/8.png"/>
+ </tile>
+ <tile id="172">
+  <image width="32" height="36" source="Industrial/Objects/9.png"/>
+ </tile>
+ <tile id="173">
+  <image width="18" height="26" source="Industrial/Objects/Barrel1.png"/>
+ </tile>
+ <tile id="174">
+  <image width="18" height="26" source="Industrial/Objects/Barrel2.png"/>
+ </tile>
+ <tile id="175">
+  <image width="18" height="26" source="Industrial/Objects/Barrel3.png"/>
+ </tile>
+ <tile id="176">
+  <image width="18" height="26" source="Industrial/Objects/Barrel4.png"/>
+ </tile>
+ <tile id="177">
+  <image width="32" height="36" source="Industrial/Objects/Bench.png"/>
+ </tile>
+ <tile id="178">
+  <image width="32" height="32" source="Industrial/Objects/Board1.png"/>
+ </tile>
+ <tile id="179">
+  <image width="32" height="32" source="Industrial/Objects/Board2.png"/>
+ </tile>
+ <tile id="180">
+  <image width="32" height="32" source="Industrial/Objects/Board3.png"/>
+ </tile>
+ <tile id="181">
+  <image width="32" height="32" source="Industrial/Objects/Box1.png"/>
+ </tile>
+ <tile id="182">
+  <image width="32" height="32" source="Industrial/Objects/Box2.png"/>
+ </tile>
+ <tile id="183">
+  <image width="32" height="32" source="Industrial/Objects/Box3.png"/>
+ </tile>
+ <tile id="184">
+  <image width="32" height="32" source="Industrial/Objects/Box4.png"/>
+ </tile>
+ <tile id="185">
+  <image width="32" height="32" source="Industrial/Objects/Box5.png"/>
+ </tile>
+ <tile id="186">
+  <image width="32" height="32" source="Industrial/Objects/Box6.png"/>
+ </tile>
+ <tile id="187">
+  <image width="32" height="32" source="Industrial/Objects/Box7.png"/>
+ </tile>
+ <tile id="188">
+  <image width="32" height="32" source="Industrial/Objects/Box8.png"/>
+ </tile>
+ <tile id="189">
+  <image width="32" height="36" source="Industrial/Objects/Bucket.png"/>
+ </tile>
+ <tile id="190">
+  <image width="32" height="32" source="Industrial/Objects/Fence1.png"/>
+ </tile>
+ <tile id="191">
+  <image width="32" height="32" source="Industrial/Objects/Fence2.png"/>
+ </tile>
+ <tile id="192">
+  <image width="32" height="32" source="Industrial/Objects/Fence3.png"/>
+ </tile>
+ <tile id="193">
+  <image width="32" height="36" source="Industrial/Objects/Fire-extinguisher1.png"/>
+ </tile>
+ <tile id="194">
+  <image width="32" height="36" source="Industrial/Objects/Fire-extinguisher2.png"/>
+ </tile>
+ <tile id="195">
+  <image width="32" height="36" source="Industrial/Objects/Fire-extinguisher3.png"/>
+ </tile>
+ <tile id="196">
+  <image width="32" height="64" source="Industrial/Objects/Flag.png"/>
+ </tile>
+ <tile id="197">
+  <image width="32" height="32" source="Industrial/Objects/Ladder1.png"/>
+ </tile>
+ <tile id="198">
+  <image width="32" height="32" source="Industrial/Objects/Ladder2.png"/>
+ </tile>
+ <tile id="199">
+  <image width="32" height="32" source="Industrial/Objects/Ladder3.png"/>
+ </tile>
+ <tile id="200">
+  <image width="32" height="32" source="Industrial/Objects/Locker1.png"/>
+ </tile>
+ <tile id="201">
+  <image width="32" height="32" source="Industrial/Objects/Locker2.png"/>
+ </tile>
+ <tile id="202">
+  <image width="32" height="32" source="Industrial/Objects/Locker3.png"/>
+ </tile>
+ <tile id="203">
+  <image width="32" height="36" source="Industrial/Objects/Locker4.png"/>
+ </tile>
+ <tile id="204">
+  <image width="32" height="36" source="Industrial/Objects/Mop.png"/>
+ </tile>
+ <tile id="205">
+  <image width="32" height="32" source="Industrial/Objects/Pointer1.png"/>
+ </tile>
+ <tile id="206">
+  <image width="32" height="32" source="Industrial/Objects/Pointer2.png"/>
  </tile>
 </tileset>

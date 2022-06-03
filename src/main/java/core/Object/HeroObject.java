@@ -121,14 +121,14 @@ public class HeroObject {
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             this.velocityX = this.speed;
 
-            if(timer % 13 == 0 )
+            if(timer % 13 == 0 || this.direction.contains("L"))
                 this.goRight();
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && this.getBody().getPosition().x >=  (this.width / (Config.PPM * 2))) {
             this.velocityX = -1 * this.speed;
 
-            if(timer % 13 == 0)
+            if(timer % 13 == 0 || this.direction.contains("R"))
                 this.goLeft();
         }
 
