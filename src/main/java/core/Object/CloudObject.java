@@ -26,7 +26,7 @@ public class CloudObject {
         this.width   = 240;
         this.height  = 135;
         this.opacity = 0f;
-        this.body    = BodyHelper.createBody(x, y, width, height, 0, 1, screen.getWorld(), ObjectType.CLOUD);
+        this.body    = BodyHelper.initBody(x, y, width, height, 0, 1, screen.getWorld(), ObjectType.CLOUD);
         this.texture = new Texture("textures/icons/cloud.png");
     }
 

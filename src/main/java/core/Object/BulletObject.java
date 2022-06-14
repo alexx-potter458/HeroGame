@@ -36,7 +36,7 @@ public class BulletObject {
         this.height    = 10;
         this.hitPower  = hitPower;
         this.texture   = (this.velX == 1)? new Texture("textures/spells/inGame/defaultRight.png") : new Texture("textures/spells/inGame/defaultLeft.png");
-        this.body      = BodyHelper.createBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), ObjectType.HERO_BULLET);
+        this.body      = BodyHelper.initBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), ObjectType.HERO_BULLET);
         this.destroyed = false;
         this.toDestroy = false;
         this.body.setLinearVelocity(this.speed * this.velX, this.body.getMass());
@@ -55,7 +55,7 @@ public class BulletObject {
         this.height    = 15;
         this.hitPower  = hitPower;
         this.texture   = (this.velX == 1)? new Texture("textures/spells/inGame/enemyDefaultRight.png") : new Texture("textures/spells/inGame/enemyDefaultLeft.png");
-        this.body      = BodyHelper.createBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), bulletType);
+        this.body      = BodyHelper.initBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), bulletType);
         this.destroyed = false;
         this.toDestroy = false;
         this.body.setLinearVelocity(this.speed * this.velX, this.body.getMass());
@@ -74,7 +74,7 @@ public class BulletObject {
         this.height    = 10;
         this.hitPower  = hitPower + spell.getHitPower();
         this.texture   = (this.velX == 1)? new Texture("textures/spells/inGame/" + spell.getNameSlug() + "Right.png") : new Texture("textures/spells/inGame/" + spell.getNameSlug() + "Left.png");
-        this.body      = BodyHelper.createBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), ObjectType.HERO_BULLET);
+        this.body      = BodyHelper.initBody(this.x, this.y, this.width, this.height, 0, 2, gameScreen.getWorld(), ObjectType.HERO_BULLET);
         this.destroyed = false;
         this.toDestroy = false;
         this.body.setLinearVelocity(this.speed * this.velX, this.body.getMass());

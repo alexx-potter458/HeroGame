@@ -3,31 +3,31 @@ package utils;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class BodyHelper {
-    public static Body createBody(float x, float y, float width, float height, float density, int bodyType, World world, ObjectType type) {
-        BodyDef bodyDef = new BodyDef();
+    public static Body initBody(float x, float y, float width, float height, float density, int bodyType, World world, ObjectType type) {
+        BodyDef bodyInit = new BodyDef();
 
         if(bodyType == 0)
-            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyInit.type = BodyDef.BodyType.StaticBody;
         else if(bodyType == 1)
-            bodyDef.type = BodyDef.BodyType.KinematicBody;
+            bodyInit.type = BodyDef.BodyType.KinematicBody;
         else
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyInit.type = BodyDef.BodyType.DynamicBody;
 
-        bodyDef.position.set(x / Config.PPM, y / Config.PPM);
-        bodyDef.fixedRotation   = true;
+        bodyInit.position.set(x / Config.PPM, y / Config.PPM);
+        bodyInit.fixedRotation   = true;
 
-        Body body               = world.createBody(bodyDef);
-        PolygonShape shape      = new PolygonShape();
+        Body body               = world.createBody(bodyInit);
+        PolygonShape polygonShape      = new PolygonShape();
 
-        shape.setAsBox(width / 2 / Config.PPM, height / 2 / Config.PPM);
+        polygonShape.setAsBox(width / 2 / Config.PPM, height / 2 / Config.PPM);
 
-        FixtureDef fixtureDef   = new FixtureDef();
-        fixtureDef.shape        = shape;
-        fixtureDef.friction     = 0;
-        fixtureDef.density      = density;
+        FixtureDef fixtureInit   = new FixtureDef();
+        fixtureInit.shape        = polygonShape;
+        fixtureInit.friction     = 0;
+        fixtureInit.density      = density;
 
-        body.createFixture(fixtureDef).setUserData(type);
-        shape.dispose();
+        body.createFixture(fixtureInit).setUserData(type);
+        polygonShape.dispose();
 
         return body;
     }

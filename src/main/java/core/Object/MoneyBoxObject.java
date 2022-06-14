@@ -26,7 +26,7 @@ public class MoneyBoxObject {
         this.height     = 60;
         this.x          = x;
         this.y          = y;
-        this.body       = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.REWARD_MY_XP);
+        this.body       = BodyHelper.initBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.REWARD_MY_XP);
         this.texture    =  new Texture("textures/rewards/moneyAndExperience.png");
         this.x          = body.getPosition().x * Config.PPM - (width /2);
         this.y          = body.getPosition().y * Config.PPM - (height /2);

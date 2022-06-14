@@ -23,7 +23,7 @@ public class PowerObject {
         this.y       = y;
         this.width   = 60;
         this.height  = 60;
-        this.body    = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
+        this.body    = BodyHelper.initBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.NONOBJECT);
         this.texture = new Texture("textures/powers/inStore/" + power.getNameSlug() + ".png");
     }
 

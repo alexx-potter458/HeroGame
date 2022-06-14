@@ -39,7 +39,7 @@ public class EnemyObject {
         this.direction    = "FL";
         this.timer        = 0;
         this.velocityX    = 0;
-        this.body         = BodyHelper.createBody(this.x, this.y, this.enemy.getWidth(), this.enemy.getHeight(), 0, 2, screen.getWorld(), ObjectType.ENEMY);
+        this.body         = BodyHelper.initBody(this.x, this.y, this.enemy.getWidth(), this.enemy.getHeight(), 0, 2, screen.getWorld(), ObjectType.ENEMY);
         this.firstRight   = new Texture("textures/enemies/" + enemy.getName() + "/firstRight.png");
         this.firstLeft    = new Texture("textures/enemies/" + enemy.getName() + "/firstLeft.png");
         this.secondRight  = new Texture("textures/enemies/" + enemy.getName() + "/secondRight.png");

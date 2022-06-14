@@ -53,7 +53,7 @@ public class HeroObject {
         this.jumpPower   = 0;
         this.speed       = 0;
         this.powerValue  = 0;
-        this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
+        this.body        = BodyHelper.initBody(this.x, this.y, width, height, 0, 1, screen.getWorld(), ObjectType.BUTTON);
         this.firstRight  = new Texture("textures/button.png");
         this.secondRight = new Texture("textures/button.png");
         this.firstLeft   = new Texture("textures/button.png");
@@ -80,7 +80,7 @@ public class HeroObject {
         this.velocityY   = 0;
         this.speed       = hero.getSpeed();
         this.jumpPower   = hero.getJumpPower();
-        this.body        = BodyHelper.createBody(this.x, this.y, width, height, 0, 2, screen.getWorld(), ObjectType.HERO);
+        this.body        = BodyHelper.initBody(this.x, this.y, width, height, 0, 2, screen.getWorld(), ObjectType.HERO);
         this.firstRight  = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstRight.png");
         this.firstLeft   = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/firstLeft.png");
         this.secondRight = new Texture("textures/characters/" + hero.getNameSlug() + "/inGame/secondRight.png");
