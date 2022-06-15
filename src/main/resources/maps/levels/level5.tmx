@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="3" nextobjectid="270">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="4" nextobjectid="270">
  <tileset firstgid="1" source="../../tiles/Nature.tsx"/>
  <tileset firstgid="289" source="../../tiles/Minecraft.tsx"/>
+ <imagelayer id="3" name="Image Layer 1" offsetx="72" offsety="-248">
+  <image source="../backgrounds/level6.png" width="15000" height="6000"/>
+ </imagelayer>
  <layer id="1" name="Tile Layer 1" width="250" height="100">
   <data encoding="csv">
 195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,200,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,
@@ -699,7 +702,6 @@
   <object id="261" name="E" x="12960" y="3120" width="60" height="60"/>
   <object id="262" name="E" x="12720" y="3120" width="60" height="60"/>
   <object id="263" name="MY_XP" x="13260" y="3180" width="60" height="60"/>
-  <object id="264" x="-3156" y="1924"/>
   <object id="265" x="9060" y="4260">
    <polygon points="0,0 60,0 60,60 0,60"/>
   </object>

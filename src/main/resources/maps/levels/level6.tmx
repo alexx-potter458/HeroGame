@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="4" nextobjectid="132">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="120" height="18" tilewidth="128" tileheight="128" infinite="0" nextlayerid="6" nextobjectid="132">
  <tileset firstgid="1" name="Dessert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="../../tiles/Dessert.png" width="640" height="1024"/>
  </tileset>
+ <imagelayer id="4" name="Image Layer 1" offsetx="-33.3333" offsety="1212.61">
+  <image source="../backgrounds/level3.png" width="9100" height="1074"/>
+ </imagelayer>
+ <imagelayer id="5" name="Copy of Image Layer 1" offsetx="9060.73" offsety="1209.58">
+  <image source="../backgrounds/level3.png" width="9100" height="1074"/>
+ </imagelayer>
  <layer id="1" name="background" width="120" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

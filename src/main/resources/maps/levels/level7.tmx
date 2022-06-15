@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="4" nextobjectid="210">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="250" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="9" nextobjectid="210">
  <tileset firstgid="1" source="../../tiles/Minecraft.tsx"/>
+ <imagelayer id="7" name="Copy of Copy of Image Layer 1" offsetx="9341.21" offsety="2448.48">
+  <image source="../backgrounds/level1.png" width="5120" height="3200"/>
+ </imagelayer>
+ <imagelayer id="8" name="Copy of Copy of Copy of Image Layer 1" offsetx="13880.6" offsety="2303.03">
+  <image source="../backgrounds/level1.png" width="5120" height="3200"/>
+ </imagelayer>
+ <imagelayer id="6" name="Copy of Image Layer 1" offsetx="7032.36" offsety="2445.94">
+  <image source="../backgrounds/level1.png" width="5120" height="3200"/>
+ </imagelayer>
+ <imagelayer id="5" name="Image Layer 1" offsetx="5552" offsety="3045.33">
+  <image source="../backgrounds/level1.png" width="5120" height="3200"/>
+ </imagelayer>
  <layer id="1" name="Tile Layer 1" width="250" height="100">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="82" height="93" tilewidth="60" tileheight="60" infinite="0" nextlayerid="4" nextobjectid="116">
  <tileset firstgid="1" source="../../tiles/Minecraft.tsx"/>
- <imagelayer id="3" name="Image Layer 1" offsetx="-88" offsety="1488">
+ <imagelayer id="3" name="Image Layer 1" offsetx="-24" offsety="1396">
   <image source="../backgrounds/level1.png" width="5120" height="3200"/>
  </imagelayer>
  <layer id="1" name="background" width="82" height="93">

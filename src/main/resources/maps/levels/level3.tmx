@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="5" nextobjectid="229">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="150" height="100" tilewidth="60" tileheight="60" infinite="0" nextlayerid="6" nextobjectid="229">
  <tileset firstgid="1" source="../../tiles/Minecraft.tsx"/>
+ <imagelayer id="5" name="Image Layer 1" offsetx="-4.5" offsety="1936.5">
+  <image source="../backgrounds/level3.png" width="9100" height="1074"/>
+ </imagelayer>
  <layer id="1" name="Tile Layer 1" width="150" height="100">
   <data encoding="csv">
 0,0,0,0,0,0,177,177,177,231,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,117,117,117,117,0,0,0,117,117,117,0,0,0,0,0,0,0,0,0,117,117,117,117,117,0,0,0,0,
